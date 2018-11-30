@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hacktiv To Do</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+        body {
+            min-height: 75rem;
+            padding-top: 6rem;
+        }
+    </style>
+</head>
+<body onload="getTask()">
+    
+    <div class="navbar navbar-light fixed-top" style="background-color: #e3f2fd;">
+        <span class="navbar-brand">
+            <img src="./logo.png" class="rounded" style="width: 50px; height: auto;" />
+            <span><b>Hacktiv To Do</b></span>
+        </span>
+        <div class="form-inline mt-2 mt-md-0">
+            <form action="">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search Task" id="searchRepo" autocomplete="off" />
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-info" type="submit" id="buttonSearchRepo">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <button class="btn btn-outline-info">
+                <i class="fa fa-user"></i> login
+            </button>
+            <button class="btn btn-outline-info" onclick="signOut()">
+                <i class="fa fa-user-alt-slash"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="container-fluid row">
+        <div class="col-3 border">
+            <div class="card-header mb-2 rounded" style="background-color: #e3f2fd;">
+                <h5>
+                    <span><b>List Task</b></span>
+                    <button
+                        class="btn btn-sm btn-outline-info float-right"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        data-datamodal="add"
+                    >
+                        <i class="fa fa-arrow-alt-circle-down"> Add</i>
+                    </button>
+                </h5>
+            </div>
+            <div id="listTask">
+                <div class="card mb-2">
+                    <div class="card-header">No Tasks</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9 border">
+            <div class="card-header mb-2 rounded" style="background-color: #e3f2fd;"><h5><b>Detail Task</b></h5></div>
+            <div class="card p-2" id="detailTask"></div>
+        </div>
+    </div>
+      
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary">Delete</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+        $(document).on('click', '.view', function() {
+            detailTask($(this).attr('id'));
+        });
+
+        $('#myModal').on('show.bs.modal', function (e) {
+            let button = $(e.relatedTarget);
+            
+            let taskid = button.data('taskid');
+            let name = button.data('name');
+            let datamodal = button.data('datamodal');
+            
+            if (datamodal === 'add') {
+                $('.modal-header').text('Add Task');
+                $('.modal-body').html(`
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Name</label>
+                        <label class="col-sm-1 col-form-label">:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Description</label>
+                        <label class="col-sm-1 col-form-label">:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Due Date</label>
+                        <label class="col-sm-1 col-form-label">:</label>
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" id="due_date" />
+                        </div>
+                    </div>
+                `);
+            } else if (datamodal === 'edit') {
+                $('.modal-header').text('Edit Task');
+                $('.modal-body').html(`
+                    <table>
+                        <tr>
+                            <td>Id</td>
+                            <td>:</td>
+                            <td>${taskid}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>:</td>
+                            <td>${name}</td>
+                        </tr>
+                    </table>
+                `);
+            } else if (datamodal === 'delete') {
+                $('.modal-header').text('Are You Sure Delete Task ?');
+                $('.modal-body').html(`
+                    <table>
+                        <tr>
+                            <td>Id</td>
+                            <td>:</td>
+                            <td>${taskid}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>:</td>
+                            <td>${name}</td>
+                        </tr>
+                    </table>
+                `);
+            }
+        });
+        
+        function saveTask() {
+            $('#loadingSaveTask').html('<img src="./loading.gif" />');
+            $.ajax({
+                method: 'POST',
+                url: 'http://localhost:3000/tasks',
+                data: {
+                    name : $("#name").val(),
+                    description : $("#description").val(),
+                    due_date : $("#due_date").val(),
+                },
+            })
+                .done(function(response) {
+                    console.log(response)
+                    $('#addTaskModal').modal('hide');
+                    getTask();
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
+        }
+
+        function getTask() {
+            $('#listTask').html('<img src="./loading.gif" />');
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost:3000/tasks',
+            })
+                .done(function(response) {
+                    let data = '';
+                    for(let i = 0; i < response.length; i++) {
+                        data += `
+                            <div class="card mb-3">
+                                <div class="card-header">${response[i].name}</div>
+                                <div class="p-2">
+                                    <button class="btn btn-sm btn-outline-primary view" id="${response[i]._id}">
+                                        <i class="fa fa-id-card"> View</i>
+                                    </button>
+                                    <button
+                                        class="btn btn-sm btn-outline-warning"
+                                        data-toggle="modal"
+                                        data-target="#myModal"
+                                        data-datamodal="edit"
+                                        data-taskid="${response[i]._id}"
+                                        data-name="${response[i].name}"
+                                    >
+                                        <i class="fa fa-edit"> Edit</i>
+                                    </button>
+                                    <button
+                                        class="btn btn-sm btn-outline-danger"
+                                        data-toggle="modal"
+                                        data-target="#myModal"
+                                        data-datamodal="delete"
+                                        data-taskid="${response[i]._id}"
+                                        data-name="${response[i].name}"
+                                    >
+                                        <i class="fa fa-trash"> Delete</i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    $("#listTask").html(data);
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
+        }
+
+        function detailTask(TaskId) {
+            $('#detailTask').html('<img src="./loading.gif" />');
+            $.ajax({
+                method: 'GET',
+                url: `http://localhost:3000/tasks/detail/${TaskId}`,
+            })
+                .done(function(response) {
+                    $('#detailTask').html(`
+                        <table cellpaddding="5">
+                            <tr>
+                                <td>Name</td>
+                                <td>:</td>
+                                <td>${response.name}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>:</td>
+                                <td>${response.status}</td>
+                            </tr>
+                            <tr>
+                                <td>Due Date</td>
+                                <td>:</td>
+                                <td>${response.due_date}</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>:</td>
+                                <td>${response.description}</td>
+                            </tr>
+                        </table>
+                    `);
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
+        }
+    </script>
+
+</body>
+</html>
