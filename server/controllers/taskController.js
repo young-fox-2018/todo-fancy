@@ -88,6 +88,7 @@ class TaskController {
         userId : req.currentUser.id
       })
       .then(tasks => {
+        tasks = tasks.filter(data => !(data.groupId))
         res.status(200).json(tasks)
       })
       .catch(err => {

@@ -19,6 +19,9 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     </ul>
+    <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#createGroup">
+      Create Group
+    </button>
     <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#createModal">
       Create Task
     </button>
@@ -34,6 +37,12 @@
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="container mt-3 mb-3">
             <form id="update" >
                 <input type="hidden" id="taskId">
@@ -68,9 +77,15 @@
   <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="container mt-3 mb-3">
-            <form id="update" >
-                <input type="hidden" id="taskId">
+            <form>
+                <input type="hidden" id="groupId">
                 <div class="form-group">
                     <label>Title</label>
                     <input type="text" class="form-control" id="name" >
@@ -99,6 +114,67 @@
   </div>
 
 
+  <div class="modal fade" id="addTaskGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Task for Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="container mt-3 mb-3">
+            <form>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" id="nameTaskGroup" >
+                  </div>
+                  <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control" id="descTaskGroup" >
+                  </div>
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control form-control-sm" id="statusTaskGroup">
+                        <option value="working">just started</option>
+                        <option value="finish">finish</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                      <label>Date</label>
+                      <input type="date" class="form-control form-control-sm" id="dateTaskGroup">
+                  </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" href="#" class="btn btn-primary" data-dismiss="modal" id="createTaskToGroup">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="container mt-3 mb-3">
+            <form id="update" >
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="groupName" >
+                  </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" href="#" class="btn btn-primary" data-dismiss="modal" id="createGroupButton">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 <div class="container mt-3">
@@ -118,10 +194,10 @@
         <div class="row" id="userContent">
                 <div class="col-lg-3">
                     <div  id="toDoForm">
-                        <h5 class="bg-primary text-white rounded text-center">Filter by Status</h3>
+                        <h5 class="bg-primary text-white rounded text-center py-2">Filter by Status</h3>
                           <div class="form-group">
                               <select class="form-control form-control-sm" id="statusFilter">
-                                  <option value="all" <selected></selected>>all task</option>
+                                  <option value="all" selected>all task</option>
                                   <option value="save">save</option>
                                   <option value="danger">danger</option>
                                   <option value="warning">warning</option>
@@ -136,7 +212,7 @@
                           </div>
                           <div class="row">
                             <div class="col mt-3"><h5>Save</h5><p>7/more days</p></div>
-                            <div class="col bg-primary mr-3 my-3"></div>
+                            <div class="col bg-info mr-3 my-3"></div>
                           </div>
                           <div class="row">
                             <div class="col mt-3"><h5>Warning</h5><p>3-6 days</p></div>
@@ -146,14 +222,25 @@
                             <div class="col mt-3"><h5>Danger</h5><p> 0-2 days</p></div>
                             <div class="col bg-danger mr-3 my-3"></div>
                           </div>
+                        <h5 class="bg-primary text-white rounded text-center px-2 py-2">My Group List</h3>
+                        <div id="groupList">
+                          <select class="custom-select mb-2" id="groupPick" >
+
+                          </select>
+                          <button type="button" class="btn btn-outline-primary" id="chooseGroup">submit</button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <h5 class="bg-primary text-white rounded text-center">Task List</h3>
+                    <h5 class="bg-primary text-white rounded text-center py-2" id="taskContainer">Task List</h3>
+                      <div id="btnplaceholder" class="mb-3">
+                        <button class="btn btn-outline-primary"  data-toggle="modal" data-target="#addTaskGroupModal">Add Group Task</button>
+                      </div>
+
                       <div id="toDoList"></div>
                 </div>
                 <div class="col-lg-4">
-                    <h5 class="bg-primary text-white rounded text-center">Meal Recommendation</h3>
+                    <h5 class="bg-primary text-white rounded text-center py-2">Meal Recommendation</h3>
                         <div class="input-group input-group-sm mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="inputGroup-sizing-sm">Find</span>
