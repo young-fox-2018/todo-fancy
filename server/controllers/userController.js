@@ -24,6 +24,32 @@ class UserController {
       })
   }
 
+  static registerWithGoogle(req, res, next) {
+      User.findOne({
+          email: req.decoded.email
+      })
+      .then((result) => {
+          if(!result){
+              User.create({
+                  email: req.decoded.email,
+                  username: req.decoded.username,
+                  password: process.env.PASS,
+                  isGoogle: true
+              })
+              .then((result) => {
+                next()
+              })
+              .catch((err) => {
+                  res.status(500).json({err: err.message})
+              });
+          } else {
+              next()
+          }
+      }).catch((err) => {
+          res.status(500).json({err: err.message})
+      });
+  }
+
   static login(req, res) {
     User
       .findOne({
@@ -46,7 +72,20 @@ class UserController {
       .catch(err => {
         res.status(500).json(err)
       })
-    //res.status(200).json(req.body)
+  }
+
+  static loginWithGoogle(req, res) {
+    const token = Helpers.generateToken({ email : req.decoded.email})
+    if(token) {
+      res.status(200).json({
+        token : token,
+        msg : 'Login success'
+      })
+    } else {
+      res.status(500).json({
+        msg : 'Internal server error'
+      })
+    }
   }
 
   static showInvitation(req, res) {

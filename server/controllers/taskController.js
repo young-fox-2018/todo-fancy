@@ -9,13 +9,14 @@ class TaskController {
         name : req.body.name,
         description : req.body.description,
         status : req.body.status,
-        deadline : req.body.deadline,
+        deadline : new Date(req.body.deadline),
         userId : req.currentUser.id
       })
       .then(task => {
         res.status(201).json(task)
       })
       .catch(err => {
+        console.log(err)
         res.status(500).json(err)
       })
   }

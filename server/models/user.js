@@ -5,14 +5,13 @@ const bcrypt = require('bcryptjs')
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    minLength: 5,
-    maxLength: 12,
+    minlength: 5,
+    maxlength: 12,
     required: true
   },
   email: {
     type: String,
-    minLength: 7,
-    maxLength: 20,
+    minlength: 7,
     required: true,
     validate: [{
       isAsync: true,

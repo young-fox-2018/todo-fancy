@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken')
 const Task = require('../models/task')
 const Group = require('../models/group')
 const Invitation = require('../models/invitation')
+const {OAuth2Client} = require('google-auth-library')
+const CLIENT_ID = process.env.CLIENT_ID
+const client = new OAuth2Client(CLIENT_ID)
 
 class Auth {
   static isLogin(req, res, next) {
@@ -104,6 +107,26 @@ class Auth {
           err : err.message
         })
       })
+  }
+
+  static googleValidation(req, res, next) {
+    client.verifyIdToken({
+        idToken: req.body.gToken,
+        audience: CLIENT_ID
+    }, function(err, result) {
+        if(err){
+          console.log(err)
+            res.send(500).json(err)
+        } else {
+            const payload = result.getPayload();
+            let user = {
+                email: payload.email,
+                username: payload.name
+            }
+            req.decoded = user
+            next()
+        }
+    })
   }
 }
 
