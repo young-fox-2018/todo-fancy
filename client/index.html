@@ -62,12 +62,9 @@
                     data: {token: response.authResponse.accessToken},
                     url: `http://localhost:3000/loginFB`
                 }).done(token => {
+                    console.log(token, "token")
                     localStorage.setItem("token", token)
-                    localStorage.setItem("id", token.id)
-                    localStorage.setItem("name", token.name)
-                    localStorage.setItem("email", token.email)
                     isLogIn()
-                    starredRepo()
                 }).fail(function(err){
                     alert(err.message)
                 })

@@ -8,6 +8,7 @@ const axios = require('axios')
 
 module.exports = {
     newTask: function(req, res, next){
+        console.log("masuk new task loh")
         let data = verToken(req.body.token)
         console.log(data, "data abis verify di newTask")
         User.findById(data.id,function(err, user){

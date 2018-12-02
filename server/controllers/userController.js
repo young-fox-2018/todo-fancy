@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const objectId = require('mongodb').ObjectID
+const objectId = require('mongodb').ObjectId
 const {genToken} = require('../helpers/genToken')
 const {checkPass} = require('../helpers/checkPass')
 const {inputGen} = require('../helpers/inputGen')
@@ -89,7 +89,6 @@ module.exports = {
         }
         axios(options)
         .then(response => {
-            console.log(response,"************************")
             User.findOne({email: response.data.email}, function(err, user){
                 if(err){
                     res.status(500).json({
@@ -100,7 +99,7 @@ module.exports = {
                 else{
                     if(user){
                         let token = genToken(user)
-                        console.log(token,"token existing userFB++++++++++++++")
+                        console.log(token,"token JWT existing userFB++++++++++++++")
                         res.status(200).json({token})
                     }
                     else{
@@ -109,7 +108,6 @@ module.exports = {
 
                         User.create(input, function(err, newFBUser){
                             if(err){
-                                console.log(err,"---------------")
                                 res.status(500).json({
                                     message:"Errornya di create new FBUser",
                                     details: err.response.data.message
@@ -117,7 +115,6 @@ module.exports = {
                             }
                             else{
                                 let token = genToken(user)
-                                console.log(token,"token userFB Baru----------------------")
                                 res.status(200).json({
                                     message:"created a new account using FB login",
                                     details: newFBUser,
