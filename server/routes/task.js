@@ -11,5 +11,6 @@ router.delete('/:TaskId', TaskController.delete);
 
 router.get('/detail/:TaskId', TaskController.detail);
 router.post('/projects', isAuth, TaskController.createTaskProject);
+router.post('/save-todo', isAuth, TaskController.saveTodo);
 
 module.exports = router;

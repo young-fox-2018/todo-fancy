@@ -9,5 +9,7 @@ router.get('/', isAuth, UserController.read);
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.get('/token-check/:token', UserController.tokenCheck);
+router.get('/verify-facebook/:tokenFacebook', UserController.verifyFacebook);
+
 
 module.exports = router;
