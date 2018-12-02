@@ -6,7 +6,7 @@ CLIENT_ID=612011361820-fko24n9tmhrjkrm8n31jjen1ct9dfcs9.apps.googleusercontent.c
 ----
 PASS=rahasia
 ----
-PLACE_KEY=AIzaSyDtRsQTIOnsIeSCDAhTdcgjdUruNcCCphQ`
+PLACE_KEY=AIzaSyDtRsQTIOnsIeSCDAhTdcgjdUruNcCCphQ
 ----
 Link Deploy : Menyusul
 ----
