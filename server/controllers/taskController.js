@@ -8,7 +8,7 @@ const axios = require('axios')
 
 module.exports = {
     newTask: function(req, res, next){
-        console.log("masuk new task loh")
+        console.log(req.body.token, "masuk new task loh")
         let data = verToken(req.body.token)
         console.log(data, "data abis verify di newTask")
         User.findById(data.id,function(err, user){
@@ -34,6 +34,7 @@ module.exports = {
                             })
                         }
                         else{
+                            console.log(newJob,"ini input untuk create")
                             res.status(200).json({
                                 message: "You have successfully register a new task up!",
                                 task: newJob

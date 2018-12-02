@@ -61,10 +61,10 @@
                     method: `POST`,
                     data: {token: response.authResponse.accessToken},
                     url: `http://localhost:3000/loginFB`
-                }).done(token => {
-                    console.log(token, "token")
-                    localStorage.setItem("token", token)
+                }).done(input => {
+                    localStorage.setItem("token", input.token)
                     isLogIn()
+                    allTasks(input.token)
                 }).fail(function(err){
                     alert(err.message)
                 })
@@ -220,7 +220,7 @@
         let name = $('#taskName').val()
         let description = $('#taskDescription').val()
         let dueDate = $('#taskDueDate').val()
-
+        console.log(localStorage.token, "ini token")
         $.ajax({
             method: `POST`,
             data: {token: localStorage.token, name, description, dueDate},
