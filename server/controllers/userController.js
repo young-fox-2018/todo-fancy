@@ -60,5 +60,71 @@ module.exports = {
                 }
             }       
         })
+    },
+
+    googleSignin: (req, res) => {
+        let options = {
+            url: ` https://www.googleapis.com/oauth2/v3/tokeninfo`,
+            method: 'GET',
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            qs: {
+                id_token: req.body.token
+            }
+        }
+
+        request(options, (err, response, body) => {
+            if (err) {
+                res.status(501).json( {
+                    err: err,
+                    msg: "please try again later"
+                })
+            } else {
+                body = JSON.parse(body)
+                if (body.email_verified) {
+                    User.findOne( {
+                        email: body.email  
+                    }, (err, user) => {
+                        if (err) {
+                            res.status(501).json( {
+                                err: err,
+                                msg: "please try again later"
+                            })
+                        } else {
+                            if (user) {
+                                let token = auth.generateToken(user)
+
+                                res.status(200).json( {
+                                token: token
+                                })
+                            } else {
+                                User.create( {
+                                    email: body.email,
+                                    loginType: 'google'
+                                }, (err, user) => {
+                                    if (err) {
+                                        res.status(501).json( {
+                                            msg: 'Please try again'
+                                        })
+                                    } else {
+                                        let token = auth.generateToken(user)
+
+                                        res.status(200).json( {
+                                            token: token
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    })
+                } else {
+                    res.status(404).json( {
+                        err: err,
+                        msg: "Please check again your email"
+                    })
+                }
+            }
+        })
     }
 }

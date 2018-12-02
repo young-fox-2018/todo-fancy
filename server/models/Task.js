@@ -11,6 +11,8 @@ let taskSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 
-const Task = mongoose.model('Task', taskSchema);
+
+const Task = mongoose.model('Task', taskSchema)
+
 
 module.exports = Task
