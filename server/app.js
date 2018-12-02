@@ -1,0 +1,34 @@
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 3000
+const mongoose = require('mongoose')
+const cors = require('cors')
+//routes
+const toDoRoute = require('./routes/todo')
+const registerationRoute = require('./routes/registeration')
+const projectRoute = require('./routes/project')
+const userRoute = require('./routes/user')
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cors())
+
+//connect mongoose
+mongoose.connect('mongodb://localhost:27017/todoYF', {useNewUrlParser:true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log(('You are Mongected'));
+});
+
+//path
+app.use('/todo', toDoRoute)
+app.use('/registeration', registerationRoute)
+app.use('/project', projectRoute)
+app.use('/user', userRoute)
+
+app.listen(port, () => {
+    console.log(`Listening to port ${port}`);
+})
+
+

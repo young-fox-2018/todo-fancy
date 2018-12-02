@@ -1,0 +1,112 @@
+body {
+    background-color: lightgoldenrodyellow
+}
+
+#personaltodo, #projecttodo, #addpersonaltodo, #invitationList {
+    margin: 10px;
+    padding: 10px;
+    background-color: white;
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+}
+
+.hover {
+    cursor: pointer;
+}
+.fb-login-button {
+    margin-top: 10px
+}
+
+#nameEditProject, #nameStatusProject, #nameDueProject, #nameDescProject {
+    font-size:  22px;
+    color: slategrey
+}
+
+#loggedout {
+    margin: 20px
+} 
+
+/*Registeration CSS*/
+.panel-login {
+	border-color: #ccc;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+}
+.panel-login>.panel-heading {
+	color: #00415d;
+	background-color: #fff;
+	border-color: #fff;
+	text-align:center;
+}
+.panel-login>.panel-heading a{
+	text-decoration: none;
+	color: #666;
+	font-weight: bold;
+	font-size: 15px;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	transition: all 0.1s linear;
+}
+.panel-login>.panel-heading a.active{
+	color: #029f5b;
+	font-size: 18px;
+}
+
+#login-form, #register-form{
+    margin: 10px;
+    height: 400px
+}
+/*Registeration CSS Ending*/
+
+.current{
+    color: #029f5b
+}
+
+h3 {
+    font-size: 22px
+}
+h1 {
+    font-size: 34px
+}
+.separator {
+    border: 1px solid lightslategrey;
+}
+#nameEdit, #statusEdit, #descEdit, #dueEdit {
+    font-size:  22px;
+    color: slategrey;
+    margin-bottom: 23px
+}
+
+.link {
+    text-decoration: underline;
+    color: blue;
+    width: fit-content
+}
+.link:hover {
+    text-decoration: underline;
+    color: 	#87A96B;
+    cursor: pointer;
+}
+#invitebtn {
+    position: absolute;
+    right: 10px;
+    display: none
+}
+
+/*animated border*/
+.border {
+    background: linear-gradient(90deg, blue 50%, transparent 50%), linear-gradient(90deg, blue 50%, transparent 50%), linear-gradient(0deg, blue 50%, transparent 50%), linear-gradient(0deg, blue 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+    background-position: 0px 0px, 100px 100%, 0px 100px, 100% 0px;
+    animation: border-dance 4s infinite linear;
+  }
+  @keyframes border-dance {
+    0% {
+        background-position: 0px 0px, 50px 100%, 0px 50px, 100% 0px;    }
+    100% {
+      background-position: 50px 0px, 0px 100%, 0px 0px, 100% 50px;
+    }
+  }

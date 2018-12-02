@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDo</title>
+    <!--BootStrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./main.css">
+    <!--JQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous">
+    </script>
+
+    <!--FaceBook-->
+    <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '736665386707488',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v3.2'
+          });
+            
+          FB.AppEvents.logPageView();   
+        };
+      
+        (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "https://connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+    </script>
+</head>
+
+<body>
+
+    <div id="error" style="display:none">
+        <div id="error_msg" class="alert alert-danger" role="alert">
+        </div>
+    </div>
+    <div id="success" style="display:none">
+        <div id="success_msg" class="alert alert-success" role="alert">
+        </div>
+    </div>
+
+    <div id="loggedout">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-login">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="#" class="active" id="login-form-link">Login</a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="#" id="register-form-link">Register</a>
+                                </div>
+                            </div>
+                            <div class="separator"></div>
+                        </div>
+                        <div class="panel-body" style="background-color:white">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!--SignIn-->
+                                    <div id="login-form" class="col-6">
+                                        <h1>Signin</h1>
+                                        <form class="form" id="signinform">
+                                            <div class="form-label">
+                                                <label>Email</label>
+                                                <input type="email" id="emailIn" class="form-control" placeholder="Email address"
+                                                    required>
+                                            </div>
+                                            <br>
+                                            <div class="form-label">
+                                                <label>Password</label>
+                                                <input type="password" id="passwordIn" class="form-control" placeholder="Password"
+                                                    required>
+                                            </div>
+                                            <br>
+                                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign In</button>
+                                            <div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" scope="public_profile,email" onlogin="checkLoginState();"></div>
+                                        </form>
+                                    </div>
+                                    <!--SignUp-->
+                                    <div id="register-form" class="col-6">
+                                        <h1>Signup</h1>
+                                        <form class="form" id="signupform">
+                                            <div class="form-label">
+                                                <label>Name</label>
+                                                <input type="text" id="nameUp" class="form-control" placeholder="Name"
+                                                    required>
+                                            </div>
+                                            <br>
+                                            <div class="form-label">
+                                                <label>Email</label>
+                                                <input type="email" id="emailUp" class="form-control" placeholder="Email address"
+                                                    required>
+                                            </div>
+                                            <br>
+                                            <div class="form-label">
+                                                <label>Password</label>
+                                                <input type="password" id="passwordUp" class="form-control" placeholder="Password"
+                                                    required>
+                                            </div>
+                                            <br>
+                                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign
+                                                Up</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loggedin">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white">
+            <a class="navbar-brand">ToDo</a>
+            <a id="currentUser" class="navbar-brand"></a>
+            <button type="button" id="logout" class="btn btn-outline-warning ml-auto">Log Out</button>
+        </nav>
+
+        <!--BreadCrumbs-->
+        <nav aria-label="breadcrumb">
+            <div class="breadcrumb row">
+                    <div id="personalCrumb" class="breadcrumb-item current hover">Personal</div>
+                    <div id="addpersonalCrumb" class="breadcrumb-item hover">Add Personal Todo</div>
+                    <div id="projectCrumb" class="breadcrumb-item hover">Projects</div>
+                    <div id="invitationCrumb" class="breadcrumb-item hover">Invitations</div>
+                    <button id="invitebtn" class="btn btn-primary btn-sm"> Invite Member</button>
+            </div>
+        </nav>
+
+        <!--Project & Invitation Section-->
+        <div id="addpersonaltodo" style="display:none">
+            <form id="addPersonalForm">
+                <div class="form-group">
+                    <label >Name</label>
+                    <input id="addPersonalName" type="text" class="form-control" placeholder="Task Name">
+                </div>
+                <div class="form-group">
+                    <label >Description</label>
+                    <input id="addPersonalDesc" type="text" class="form-control" placeholder="Task Description">
+                </div>
+                <div class="form-group">
+                    <label >Due Date</label>
+                    <input id="addPersonalDue" type="date" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Task</button>
+            </form>
+        </div>
+
+        <div id="personaltodo" class="row">
+                <div class="col-4" style="border-right: 1px solid silver">
+                    <h1>Task List:</h1>
+                    <div id="personaltodo_list">
+                        <!--filled via Jquery-->
+                    </div>
+                </div>
+                <div id="personalcontent" class="row col-8">
+                    <div id="personaltodo_tag" class="col-4">
+                        <!--filled via Jquery-->
+                    </div>
+
+                    <div id="personaltodo_detail" class="col-8">
+                        <div id="nameEdit"></div>
+                        <div id="statusEdit"></div>
+                        <div id="dueEdit"></div>
+                        <div id="descEdit"></div>
+                        <!--filled via Jquery-->
+                    </div>
+                </div>
+                <div class="col-4" style="border-right: 1px solid silver">
+                </div>
+                <div class="row col-8">
+                    <div id="personalDelete" class="col-4"></div>
+                    <div id="personalEdit" class="col-8"></div>
+                </div>
+        </div>
+
+        <!--Project & Invitation Section-->
+        <div id="projecttodo" class="row" style="display:none">
+            <div class="col-3" style="border-right: 1px solid silver">
+                <div>
+                    <form id="createProjectForm">
+                        <div class="form-group">
+                            <h3>Project Name</h3>
+                            <input id="createProjectName" type="text" class="form-control" placeholder="Task Name">
+                        </div>
+                        <button class="btn btn-primary"> Create New Project</button>
+                    </form>
+                </div>
+
+                <br>
+                <div class="separator"></div>
+                <br>
+
+                <div>
+                    View Projects:
+                    <div id="projectList">
+                        <!--filled via Jquery-->
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="projectTodoList" class="col-4" style="border-right: 1px solid silver">
+                <div id="createProjectToDo">
+                    <!--filled via Jquery-->
+                </div>
+                <br>
+                <div id="indivProjectTodo">
+                    <!--filled via Jquery-->
+                </div>
+            </div>
+
+            <div id="projectDetails" class="col-5" style="display:none">
+                <!--filled via Jquery-->
+            </div>
+            
+            <div id="projectInvite" class="col-5" style="display:none">
+                <form id="memberForm">
+                    <div class="form-group">
+                        <h3>Invite Member</h3>
+                        <select class="form-control" id="memberselect">
+                            <!--filled via Jquery-->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="invitationList" style="display:none">
+            <table class="table table-striped">
+                <thead style="background-color:white">
+                    <tr>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">Creator</th>
+                    <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invitebody" style="background-color:azure">
+                    <!--filled via Jquery-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        //On Load /General 
+        $(document).ready(function () {
+            $("#register-form").hide();
+            islogged()
+            if(localStorage.getItem('token')) {
+                getuserName()
+                getPersonalTodo()
+            }
+        })
+     
+        function islogged() {
+            let token = localStorage.getItem('token')
+            if (token) {
+                $('#loggedout').hide()
+                $('#loggedin').show()
+            } else {
+                $('#loggedout').show()
+                $('#loggedin').hide()
+            }
+        }
+
+        function getuserName() {
+            $('#currentUser').html(`Welcome ${localStorage.getItem('name')}`)
+        }
+      
+        function showError(error) {
+            $("#success").hide()
+            $("#error_msg").html(error.responseJSON.message)
+            $("#error").show()
+            setTimeout(function () {
+                $('#error').hide();
+            }, 3000);
+        }
+      
+        function showSuccess(response) {
+            $("#error").hide()
+            $("#success_msg").html(response.message)
+            $("#success").show()
+            setTimeout(function () {
+                $('#success').hide();
+            }, 3000);
+        }
+      
+        //Registeration
+        $("#signupform").on('submit', function (e) {
+            e.preventDefault()
+            let name = $("#nameUp").val()
+            let email = $("#emailUp").val()
+            let password = $("#passwordUp").val()
+            $.ajax({
+                method: "POST",
+                url: `http://localhost:3000/registeration/signup`,
+                data: {
+                    name: name,
+                    email: email,
+                    password: password
+                }
+            })
+                .done(function (response) {
+                    showSuccess(response)
+                })
+                .fail(function (err) {
+                    console.log(err)
+                    showError(err)
+                })
+        })
+       
+        $("#signinform").on('submit', function (e) {
+            e.preventDefault()
+            let email = $("#emailIn").val()
+            let password = $("#passwordIn").val()
+            $.ajax({
+                method: "POST",
+                url: `http://localhost:3000/registeration/signin`,
+                data: {
+                    email: email,
+                    password: password
+                }
+            })
+                .done(function (response) {
+                    localStorage.setItem('token', response.token)
+                    localStorage.setItem('name', response.name)
+                    $("#error").hide()
+                    getuserName()
+                    getPersonalTodo()
+                    checkInivitation()
+                    islogged()
+                })
+                .fail(function (error) {
+                    showError(error)
+                })
+        })
+      
+        $('#logout').on('click', function (event) {
+            FB.logout(function(response) {
+                console.log('FB Out, Peace!')
+                localStorage.removeItem('accessToken')
+            });
+            localStorage.clear();
+            location.reload()
+        })
+
+        $('#login-form-link').click(function (e) {
+            $("#login-form").delay(100).fadeIn(100);
+            $("#register-form").fadeOut(100);
+            $('#register-form-link').removeClass('active');
+            $(this).addClass('active');
+            e.preventDefault();
+        });
+       
+        $('#register-form-link').click(function (e) {
+            $("#register-form").delay(100).fadeIn(100);
+            $("#login-form").fadeOut(100);
+            $('#login-form-link').removeClass('active');
+            $(this).addClass('active');
+            e.preventDefault();
+        });
+
+        $('#get').on('click', function (event) {
+            getPersonalTodo()
+        })
+
+        //BreadCrumbs
+        $('#personalCrumb').click(function () {
+            getPersonalTodo()
+            $('#personaltodo').show()
+            $('#projecttodo').hide()
+            $('#invitationList').hide()
+            $('#addpersonaltodo').hide()
+            $('#invitebtn').hide()
+
+            $('#projectCrumb').removeClass('current')
+            $('#addpersonalCrumb').removeClass('current')
+            $('#invitationCrumb').removeClass('current')
+            $('#personalCrumb').addClass('current')
+        })
+
+        $('#projectCrumb').click(function () {
+            getProjectList()
+            $('#projecttodo').show()
+            $('#personaltodo').hide()
+            $('#addpersonaltodo').hide()
+            $('#projectTodoList').hide()
+            $('#projectDetails').hide()
+            $('#projectInvite').hide()
+            $('#invitationList').hide()
+
+            $('#personalCrumb').removeClass('current')
+            $('#invitationCrumb').removeClass('current')
+            $('#addpersonalCrumb').removeClass('current')
+            $('#projectCrumb').addClass('current')
+        })
+
+        $('#addpersonalCrumb').click(function () {
+            $('#personaltodo').hide()
+            $('#projecttodo').hide()
+            $('#invitebtn').hide()
+            $('#invitationList').hide()
+            $('#addpersonaltodo').show()
+
+            $('#projectCrumb').removeClass('current')
+            $('#personalCrumb').removeClass('current')
+            $('#invitationCrumb').removeClass('current')
+            $('#addpersonalCrumb').addClass('current')
+        })
+       
+        $('#invitationCrumb').click(function() {
+            $('#personaltodo').hide()
+            $('#projecttodo').hide()
+            $('#invitebtn').hide()
+            $('#addpersonaltodo').hide()
+            $('#invitationList').show()
+
+            $('#invitationCrumb').addClass('current')
+            $('#projectCrumb').removeClass('current')
+            $('#personalCrumb').removeClass('current')
+            $('#addpersonalCrumb').removeClass('current')
+        })
+
+        //Personal Todo Section
+        $(document).on('click', '#personalEdit', function () {
+            $("#personalEdit").html(
+                `<button class="btn btn-success" > Submit </button>`
+            )
+            let content = document.querySelector('#personaltodo_detail');
+            let content_name = document.querySelector('#nameEdit');
+            let content_status = document.querySelector('#statusEdit');
+            let content_due = document.querySelector('#dueEdit');
+            let content_desc = document.querySelector('#descEdit');
+
+            content.classList.add('border')
+            content_name.contentEditable = !content_name.isContentEditable;
+            content_status.contentEditable = !content_status.isContentEditable;
+            content_due.contentEditable = !content_due.isContentEditable;
+            content_desc.contentEditable = !content_desc.isContentEditable;
+
+            content_name.focus()
+
+            if (content_name.contentEditable === 'false') {
+                $("#personalEdit").html(
+                    `<button class="btn btn-warning" > Edit </button>`
+                )
+                localStorage.setItem('content_name', content_name.innerHTML);
+                localStorage.setItem('content_status', content_status.innerHTML);
+                localStorage.setItem('content_due', content_due.innerHTML);
+                localStorage.setItem('content_desc', content_desc.innerHTML);
+                content.classList.remove('border')
+
+                //push to db for edit
+                let taskId = localStorage.getItem('taskId')
+                let name = localStorage.getItem('content_name')
+                let status = localStorage.getItem('content_status')
+                let due_date = localStorage.getItem('content_due')
+                let description = localStorage.getItem('content_desc')
+                let token = localStorage.getItem('token')
+                $.ajax({
+                    method: "PUT",
+                    url: `http://localhost:3000/todo/${taskId}`,
+                    headers: { token: token },
+                    data: {
+                        name: name,
+                        description: description,
+                        status: status,
+                        due_date: due_date
+                    }
+                })
+                    .done(response => {
+                        console.log(response)
+                        getPersonalTodo()
+                    })
+                    .fail(err => {
+                        console.log(err)
+                        showError(err)
+                    })
+            }
+        });
+
+        $(document).on('click', '#personalDelete', function () {
+            let taskId = localStorage.getItem('taskId')
+            let token = localStorage.getItem('token')
+            $.ajax({
+                method: "Delete",
+                url: `http://localhost:3000/todo/${taskId}`,
+                headers: { token: token },
+            })
+                .done(response => {
+                    $('#personalcontent').hide()
+                    $('#personalEdit').html('')
+                    $('#personalDelete').html('')
+                    getPersonalTodo()
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        });
+       
+        $('#addPersonalForm').on('submit', function(e) {
+            e.preventDefault()
+            let token = localStorage.getItem('token')
+            let name = $('#addPersonalName').val()
+            let description = $('#addPersonalDesc').val()
+            let due_date = $('#addPersonalDue').val()
+            $.ajax({
+                method: "POST",
+                url: `http://localhost:3000/todo`,
+                headers: {token:token},
+                data: {
+                    name: name,
+                    description: description,
+                    due_date: due_date
+                }
+            })
+            .done(function (response) {
+                console.log(response)
+                showSuccess(response)
+            })
+            .fail(function (error) {
+                showError(error)
+            })
+        })
+
+        function getPersonalTodo() {
+            let token = localStorage.getItem('token')
+            $.ajax({
+                method: "GET",
+                url: `http://localhost:3000/todo/`,
+                headers: {
+                    token: token
+                }
+            })
+                .done(todo => {
+                    $("#personaltodo_list").html("")
+                    $.each(todo.data, function (index, content) {
+                        if(!content.project) {
+                            $("#personaltodo_list").append(
+                            `
+                            <li class="link" onclick="seeDetail('${content.name}', '${content.description}', '${content.created_date}', '${content.due_date}', '${content.status}', '${content._id}')"> ${content.name} </li>
+                            `)
+                        }
+                    })
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        }
+        
+        function seeDetail(name, description, created, due, status, id) {
+            //to remove animated border and editability of detail when we click to another task List
+            removeBorderAnimation()
+
+            $('#personalcontent').show()
+            localStorage.setItem('taskId', id)
+            $("#personaltodo_tag").html(
+                `
+                <h3>Task Name: </h3> <br> 
+                <h3>Status: </h3> <br>
+                <h3>Due: </h3> <br>
+                <h3>Description: </h3>
+                `
+            )
+            $("#nameEdit").html(
+                `${name}`
+            )
+            $("#statusEdit").html(
+                `${status}`
+            )
+            $("#dueEdit").html(
+                `${due}`
+            )
+            $("#descEdit").html(
+                `${description}`
+            )
+            $("#personalEdit").html(
+                `<button class="btn btn-warning" > Edit </button>`
+            )
+            $("#personalDelete").html(
+                `<button class="btn btn-danger" > Delete </button>`
+            )
+        }
+       
+        function removeBorderAnimation() {
+            //to remove animated border and editability of detail when we click to another task List
+            let content = document.querySelector('#personaltodo_detail');
+            let content_name = document.querySelector('#nameEdit');
+            let content_status = document.querySelector('#statusEdit');
+            let content_due = document.querySelector('#dueEdit');
+            let content_desc = document.querySelector('#descEdit');
+            content.classList.remove('border')
+            content_name.contentEditable = false;
+            content_status.contentEditable = false;
+            content_due.contentEditable = false;
+            content_desc.contentEditable = false;
+        }
+
+        //Projects Todo Section
+        $('#createProjectForm').on('submit', function(e) {
+            e.preventDefault()
+            let token = localStorage.getItem('token')
+            let name = $('#createProjectName').val()
+
+            $.ajax({
+                method: "POST",
+                url: `http://localhost:3000/project`,
+                headers: {token:token},
+                data: {
+                    name: name,
+                }
+            })
+            .done(function (response) {
+                getProjectList()
+            })
+            .fail(function (error) {
+                showError(error)
+            })
+        })
+
+        function getProjectList() {
+            let token = localStorage.getItem('token')
+            $.ajax({
+                method: "GET",
+                url: `http://localhost:3000/project`,
+                headers: {
+                    token: token
+                }
+            })
+                .done(projects => {
+                    $("#projectList").html("")
+                    $.each(projects.data, function (index, content) {
+                        $("#projectList").append(
+                            `
+                        <li class="link" onclick="seeProjectTodo('${content._id}', '${content.name}')"> ${content.name} </li>
+                        `)
+                    })
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        }
+      
+        function seeProjectTodo(id, name) {
+            localStorage.setItem('projectId', id)
+            $('#createProjectToDo').html(`
+            <h3>Create Todo for <b>${name}</b></h3>
+            <form id="createProjectToDoForm">
+                <div class="form-group">
+                    <label >Name</label>
+                    <input id="addProjectName" type="text" class="form-control" placeholder="Task Name">
+                </div>
+                <div class="form-group">
+                    <label >Description</label>
+                    <input id="addProjectDesc" type="text" class="form-control" placeholder="Task Description">
+                </div>
+                <div class="form-group">
+                    <label >Due Date</label>
+                    <input id="addProjectDue" type="date" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Todo</button>
+            </form>
+            `)
+            $('#projectDetails').hide()
+            $('#invitebtn').show()
+            $("#projectTodoList").show()
+            getProjectTodo()
+        }
+
+        $(document).on('submit', '#createProjectToDoForm', function (e) {
+            e.preventDefault()
+            let token = localStorage.getItem('token')
+            let name = $('#addProjectName').val()
+            let description = $('#addProjectDesc').val()
+            let due_date = $('#addProjectDue').val()
+            let projectId = localStorage.getItem('projectId')
+            $.ajax({
+                method: "POST",
+                url: `http://localhost:3000/todo`,
+                headers: {token:token},
+                data: {
+                    name: name,
+                    description: description,
+                    due_date: due_date,
+                    projectId: projectId
+                }
+            })
+            .done(function (response) {
+                getProjectTodo()
+            })
+            .fail(function (error) {
+                showError(error)
+            })
+        })
+
+        function getProjectTodo() {
+            let token = localStorage.getItem('token')
+            let projectId = localStorage.getItem('projectId')
+            $.ajax({
+                method: "GET",
+                url: `http://localhost:3000/project/${projectId}`,
+                headers: {
+                    token: token
+                }
+            })
+                .done(projects => {
+                    console.log(projects)
+                    $("#indivProjectTodo").html(`<h3>Project Todo List: </h3>`)
+                    $.each(projects.data, function (index, content) {
+                            $("#indivProjectTodo").append(
+                                `
+                            <li class="link" onclick="seeProjectTodoDetail('${content.name}', '${content.description}', '${content.created_date}', '${content.due_date}', '${content.status}', '${content._id}')"> ${content.name} </li>
+                            `)
+                    })
+                    $("#error").hide()
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        }
+       
+        function seeProjectTodoDetail(name, description, created, due, status, id) {
+            removeBorderAnimationProject()
+
+            $('#projectInvite').hide()
+            localStorage.setItem('projectTaskId', id)
+            $('#projectDetails').html('')
+            $('#projectDetails').append(`
+                <h3>Task Name: </h3>
+                    <div id="nameEditProject"> ${name} </div> <br>
+                <h3>Status: </h3>
+                     <div id="nameStatusProject"> ${status} </div> <br>
+                <h3>Due: </h3>
+                    <div id="nameDueProject"> ${due} </div> <br>
+                <h3>Description: </h3>
+                    <div id="nameDescProject"> ${description} </div> <br>
+                <button id="deleteProjectTodo" class="btn btn-danger" > Delete </button>
+                <button id="editProjectTodo" class="btn btn-warning" > Edit </button>
+            `)
+            $('#projectDetails').show()
+        }
+       
+        $(document).on('click', '#deleteProjectTodo', function () {
+            let projectTaskId = localStorage.getItem('projectTaskId')
+            let token = localStorage.getItem('token')
+            $.ajax({
+                method: "Delete",
+                url: `http://localhost:3000/todo/${projectTaskId}`,
+                headers: { token: token },
+            })
+                .done(response => {
+                    $('#projectDetails').hide()
+                    $('#editProjectTodo').html('')
+                    $('#personalDelete').html('')
+                    getProjectTodo()
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        });
+       
+        $(document).on('click', '#editProjectTodo', function () {
+            $("#editProjectTodo").removeClass('btn-warning')
+            $("#editProjectTodo").addClass('btn-success')
+            $("#editProjectTodo").html('Submit')
+            
+            let content = document.querySelector('#projectDetails');
+            let content_name = document.querySelector('#nameEditProject');
+            let content_status = document.querySelector('#nameStatusProject');
+            let content_due = document.querySelector('#nameDueProject');
+            let content_desc = document.querySelector('#nameDescProject');
+
+            content.classList.add('border')
+            content_name.contentEditable = !content_name.isContentEditable;
+            content_status.contentEditable = !content_status.isContentEditable;
+            content_due.contentEditable = !content_due.isContentEditable;
+            content_desc.contentEditable = !content_desc.isContentEditable;
+            content_name.focus()
+
+            if (content_name.contentEditable === 'false') {
+                $("#editProjectTodo").addClass('btn-warning')
+                $("#editProjectTodo").removeClass('btn-success')
+                $("#editProjectTodo").html('Edit')
+
+                localStorage.setItem('content_name', content_name.innerHTML);
+                localStorage.setItem('content_status', content_status.innerHTML);
+                localStorage.setItem('content_due', content_due.innerHTML);
+                localStorage.setItem('content_desc', content_desc.innerHTML);
+                content.classList.remove('border')
+
+                //push to db for edit
+                let taskId = localStorage.getItem('projectTaskId')
+                let name = localStorage.getItem('content_name')
+                let status = localStorage.getItem('content_status')
+                let due_date = localStorage.getItem('content_due')
+                let description = localStorage.getItem('content_desc')
+                let token = localStorage.getItem('token')
+                $.ajax({
+                    method: "PUT",
+                    url: `http://localhost:3000/todo/${taskId}`,
+                    headers: { token: token },
+                    data: {
+                        name: name,
+                        description: description,
+                        status: status,
+                        due_date: due_date
+                    }
+                })
+                    .done(response => {
+                        console.log(response)
+                        getProjectTodo()
+                    })
+                    .fail(err => {
+                        console.log(err)
+                        showError(err)
+                    })
+            }
+        });
+
+        //Invitation Section
+        $('#invitebtn').click(function() {
+            $('#projectDetails').hide()
+            projectInvite
+            $.ajax({
+                    method: "GET",
+                    url: `http://localhost:3000/user`,
+                })
+                .done(response => {
+                    $('#memberselect').html('')
+                    $.each(response.data, function (index, content) {
+                        $('#memberselect').append(`
+                        <option value="${content._id}">${content.name}</option>
+                        `)
+                    })
+                    $('#projectInvite').show()
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        })
+        
+        $('#memberForm').on('submit', function(e) {
+            e.preventDefault()
+            let form = $(this)
+            let select = form.find('select')
+            let links = select.val();
+
+            let token = localStorage.getItem('token')
+            let projectId = localStorage.getItem('projectId')
+            let inviteeId = links
+            
+            $.ajax({
+                    method: "POST",
+                    url: `http://localhost:3000/project/invite`,
+                    headers: {token: token},
+                    data: {
+                        projectId: projectId,
+                        inviteeId: inviteeId
+                    }
+                })
+                .done(response => {
+                    console.log(response)
+                    showSuccess(response)
+                })
+                .fail(err => {
+                    console.log(err)
+                    showError(err)
+                })
+        })
+
+        $('#invitationCrumb').click(function() {
+            checkInivitation()
+        })
+
+        function checkInivitation() {
+            let token = localStorage.getItem('token')
+            $.ajax({
+                method: "GET",
+                url: `http://localhost:3000/project/invitation`,
+                headers: {
+                    token: token
+                }
+            })
+            .done(response => {
+                $('#invitebody').html(``)
+                $.each(response.data, function (index, content) {
+                    $('#invitebody').append(`
+                    <tr>
+                        <td>${content.project.name}</td>
+                        <td>${content.project.creator.name}</td>
+                        <td><button id="acceptInvite" type="button" onclick="acceptInvite('${content._id}')" class="btn btn-success"> Accept Invitation </button></td>
+                    </tr>
+                    `)
+                })
+            })
+            .fail(err => {
+                console.log(err)
+                showError(err)
+            })
+        }
+       
+        function acceptInvite(id) {
+            let token = localStorage.getItem('token')
+            $.ajax({
+                method: "POST",
+                url: `http://localhost:3000/project/accept/${id}`,
+                headers: {
+                    token: token
+                }
+            })
+            .done(response => {
+                showSuccess(response)
+                checkInivitation()
+            })
+            .fail(err => {
+                console.log(err)
+                showError(err)
+            })
+        }
+       
+        function removeBorderAnimationProject() {
+            //to remove animated border and editability of detail when we click to another task List
+            let content = document.querySelector('#projectDetails');
+            let content_name = document.querySelector('#nameEditProject');
+            let content_status = document.querySelector('#nameStatusProject');
+            let content_due = document.querySelector('#nameDueProject');
+            let content_desc = document.querySelector('#nameDescProject');
+            content.classList.remove('border')
+            if(content_name && content_status && content_due && content_desc) {
+                content_name.contentEditable = false;
+                content_status.contentEditable = false;
+                content_due.contentEditable = false;
+                content_desc.contentEditable = false;
+            }            
+        }
+    
+        //Face Book
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+      
+        function statusChangeCallback(response) {
+            localStorage.setItem('accessToken', response.authResponse.accessToken)
+            $.ajax({
+            method: "POST",
+            url: 'http://localhost:3000/registeration/fb-signin',
+            data: {
+                fbtoken : response.authResponse.accessToken
+            }
+        })
+            .done(function (response) {
+                console.log(response)
+                localStorage.setItem('token', response.token)
+                localStorage.setItem('name', response.name)
+                $('#error').hide()
+                getuserName()
+                islogged()
+            })
+            .fail(function (err) {
+                showError(err)
+            })
+        }
+        
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
+
+    </script>
+
+    <!--BootStrap JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
