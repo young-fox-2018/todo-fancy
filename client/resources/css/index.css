@@ -1,0 +1,42 @@
+.navbar-custom {
+    color: green;
+}
+
+.navbar-items {
+    float:right;
+}
+
+.bem {
+    width: 500px;
+    top: 50%;
+    margin-top: -115px;
+    left: 50%;
+    margin-left: -250px;
+    position: absolute;
+}
+
+.parent {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.register{
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.signup {
+    margin-top: 20px;
+    width: 500px;
+}
+
+.signin {
+    display: block;
+    margin: 0 auto;
+}
+
+.signupHeader {
+    margin-bottom: 40px;
+}
