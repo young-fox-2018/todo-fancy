@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="google-signin-client_id" content="745161162459-ui6uqk75gc38kat79u8t2p1u1pp04r36.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Todo fancy</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+    </style>
+</head>
+
+<body background="../assets/">
+    <div class="bg">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" id="Tasks">
+                        <a class="nav-link" href="">Tasks
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="complete-task">
+                        <a class="nav-link " href="">Completed</a>
+                    </li>
+                    <li class="nav-item" id="incomplete-task">
+                        <a class="nav-link " href="">Incompleted</a>
+                    </li>
+                    <li class="nav-item" id="incomplete-task">
+                        <a class="nav-link " href="../group/index.html">Group</a>
+                    </li>
+                </ul>
+                <button type="button" data-target="#notifModal" data-toggle="modal" class="btn btn-primary" style="margin-right:20px; padding-left: 10px; max-width:50px">
+                    <i class="fa fa-bell" aria-hidden="true"></i> <span class="badge badge-light" id="inviteCount"></span>
+                </button>
+                <img style="width: 30px" class="navbar-brand" id="userPhoto" src="" alt="">
+                <a class="navbar-brand" id="userName" href="#"></a>
+                <a class="nav-link" id="logOut" href="">Logout</a>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <h1 style="text-align: center;" id="HEADER">TODO'S</h1>
+            <!-- <div class="row">
+                <div class="col-md-8">
+                    
+                </div>
+                <div class="col-md-2">
+                    
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="jumbotron">
+                        <div id="btnOption">
+
+                            <button data-toggle="modal" id="createBtn" data-target="#basicModal" href="" class="btn btn-primary mainBtn"
+                                role="button">create new task</button>
+                            <button data-toggle="modal" style="margin-top:10px" data-target="#groupModal" href="" class="btn btn-primary mainBtn"
+                                role="button">new project</button>
+                        </div>
+
+
+                    </div>
+                    <ul class="list-group" id="listProject">
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center detailProject">
+                            Cras justo odio
+                            <span class="badge badge-primary badge-pill">14</span>
+                        </li>
+
+                    </ul>
+
+                </div>
+                <div class=" col-md-9">
+                    <div class="row" id="mainTasks">
+                        <!-- <div class="col-md-12">
+
+                            <h1 style="text-align: center;">You dont have todo yet</h1>
+
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+
+    <!-- MODAL NEW PROJECT -->
+    <div class="modal fade" id="groupModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">create new project</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="createTask">
+                        <label for="">input project name</label>
+                        <input id="newProjectInput" type="text" name="" id="">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="submitNewProject" data-dismiss="modal">submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END OF MODAL -->
+
+    <!-- MODAL NEW TASK -->
+    <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">testing</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="createTask">
+                        <label for="name">task name</label>
+                        <input type="text" name="name" id="formname">
+                        <br>
+                        <label for="description">description</label>
+                        <input type="text" name="description" id="formdescription">
+                        <br>
+                        <label for="status">status</label>
+                        <select name="status" id="formstatus">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <br>
+                        <label for="dueDate">due date</label>
+                        <input type="date" name="dueDate" id="formduedate">
+                        <br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="submitTask" type="submit" data-dismiss="modal">submit</button>
+                    <button id="updateTask" data-dismiss="modal" style="display: none">update</button>
+                    <button type="button" id="closebtn" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- end of modal -->
+
+    <!-- MODAL ADD TASK GROUP -->
+    <div class="modal fade" data-groupid="" id="modalTaskGroup" tabindex="-1" role="dialog" aria-labelledby="basicModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="taskGroupHeader">add task to group</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="createTaskGroup">
+                        <label for="name">task name</label>
+                        <input type="text" name="name" id="nameTaskGroup">
+                        <br>
+                        <label for="description">description</label>
+                        <input type="text" name="description" id="descriptionTaskGroup">
+                        <br>
+                        <label for="status">status</label>
+                        <select name="status" id="statusTaskGroup">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <br>
+                        <label for="dueDate">due date</label>
+                        <input type="date" name="dueDate" id="dueDateTaskGroup">
+                        <br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="submitTaskGroup" type="submit" data-dismiss="modal">submit</button>
+                    <!-- <button id="updateTask" data-dismiss="modal" style="display: none">update</button>
+                        <button type="button" id="closebtn" class="btn btn-default" data-dismiss="modal">Close</button> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- INVITE USER MODAL -->
+    <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Invite Member</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <select name="" id="selectUser">
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="submitInvite" class="btn btn-primary">Invite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--NOTIF MODAL -->
+    <div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Group Invitation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="mainNotif">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT TASK GROUP MODAL -->
+    <div class="modal fade" id="editTaskGroup" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">testing</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="createTask">
+                        <label for="name">task name</label>
+                        <input type="text" name="name" value="" id="formNameGroup">
+                        <br>
+                        <label for="description">description</label>
+                        <input type="text" name="description" id="formDescriptionGroup">
+                        <br>
+                        <label for="status">status</label>
+                        <select name="status" id="formStatusGroup">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <br>
+                        <label for="dueDate">due date</label>
+                        <input type="date" name="dueDate" id="formDueDateGroup">
+                        <br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="submitTaskEdit" type="submit" data-dismiss="modal">submit</button>
+                    <button type="button" id="closebtn" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+    <div class="form__field g-signin2" style="display: none" data-onsuccess="onSignIn" style="width: 320px;">
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+
+        <script>
+            function login() {
+                window.location.href = '../'
+            }
+            $('.details').hide()
+
+            // STORE
+            var listTasks = null
+            var listProject = []
+            var listTaskProject = []
+            var allUsers = []
+
+            // SUBMIT INVITE
+            $('#submitInvite').click(function () {
+                $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:3000/invite',
+                    headers: {
+                        token: localStorage.getItem('token')
+                    },
+                    data: {
+                        userId: $('#selectUser').val(),
+                        groupId: $('#inviteModal').data('groupid')
+                    }
+                })
+                    .done(data => {
+                        console.log(data)
+                    })
+                    .fail(err => {
+                        console.log(err)
+                    })
+            })
+            // READ ALL INVITE
+            $.ajax({
+                method: 'GET',
+                headers: {
+                    token: localStorage.getItem('token')
+                },
+                url: 'http://localhost:3000/invite'
+            })
+                .done(data => {
+                    console.log(data.data)
+                    $('#inviteCount').text(data.data.length)
+                    renderNotif(data.data)
+
+                    //REJECT INVITE
+                    $('.rejectInvite').click(function () {
+                        // console.log($(this).data('groupid'))
+                        $.ajax({
+                            method: 'POST',
+                            url: 'http://localhost:3000/invite/reject',
+                            data: {
+                                inviteId: $(this).data('inviteid')
+                            },
+                            headers: {
+                                token: localStorage.getItem('token')
+                            }
+                        })
+                            .done(data => {
+                                $('#inviteCount').text(data.data.length)
+                                renderNotif(data.data)
+                            })
+                            .fail(err => {
+                                console.log(err)
+                            })
+
+                    })
+
+
+                    // ACC INVITE
+                    $('.accInvite').click(function () {
+                        console.log($(this).data('inviteid'))
+                        console.log($(this).data('groupid'))
+
+                        $.ajax({
+                            method: 'POST',
+                            url: 'http://localhost:3000/invite/accept',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            },
+                            data: {
+                                inviteId: $(this).data('inviteid'),
+                                groupId: $(this).data('groupid')
+                            }
+                        })
+                            .done(data => {
+                                renderNotif(data.data)
+                            })
+                            .fail(err => {
+                                console.log(err)
+                            })
+                    })
+                })
+                .fail(err => {
+                    console.log(err)
+                })
+
+            //GET PROJECT DATA 
+            $.ajax({
+                method: 'GET',
+                url: 'http://localhost:3000/group',
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            })
+                .done(data => {
+                    if (data.length !== 0) {
+                        listProject = data
+                        let template = ''
+                        $.each(listProject, function (index, val) {
+                            template += `<li class="list-group-item d-flex justify-content-between align-items-center detailProject" style="cursor:pointer" data-projectId=${val._id}>
+                                                    ${val.name}
+                                            <span class="badge badge-primary badge-pill">${val.tasks.length}</span>
+                                        </li>`
+
+                        })
+                        $('#listProject').html(template)
+                    }
+                    // DETAIL PROJECT
+                    $('.detailProject').on('click', function () {
+                        // console.log($(this).data('projectid'))
+                        $('.details').show()
+                        $('.mainBtn').hide()
+                        let template = ''
+                        $.ajax({
+                            url: 'http://localhost:3000/group',
+                            method: 'POST',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            },
+                            data: {
+                                projectId: $(this).data('projectid')
+                            }
+                        })
+                            .done(detailGroup => {
+                                listTaskProject = detailGroup.tasks
+                                let template = ''
+                                $('#btnOption').html(`<button data-target="#inviteModal" data-toggle="modal" style="margin-top:10px" href="" class="btn btn-primary details"
+                                                        role="button" data-groupId="${detailGroup._id}" >Invite member</button>
+                                                      <button data-toggle="modal"  data-target="#modalTaskGroup"  style="margin-top:10px" href="" class="btn btn-primary details"
+                                                        role="button" data-groupId="${detailGroup._id}">Add task group</button>`)
+                                $('#HEADER').text(detailGroup.name)
+                                if (detailGroup.tasks.length != 0) {
+                                    renderDataTasks(detailGroup)
+                                } else {
+                                    $('#mainTasks').html('')
+                                }
+                                $('.details').click(function () {
+                                    $('#modalTaskGroup').data('groupid', $(this).data('groupid'))
+                                    $('#inviteModal').data('groupid', $(this).data('groupid'))
+                                })
+
+                                //DELETE TASK GROUP
+                                $('.taskGroupDelete').click(function () {
+                                    if (localStorage.getItem('userEmail') != $(this).data('user')) {
+                                        alert('you dont have permition to do this action')
+                                    } else {
+                                        $.ajax({
+                                            method: 'POST',
+                                            url: 'http://localhost:3000/group/delete-task',
+                                            headers: {
+                                                token: localStorage.getItem('token')
+                                            },
+                                            data: {
+                                                taskId: $(this).data('taskid'),
+                                                groupId: $(this).data('groupid')
+                                            }
+                                        })
+                                            .done(data => {
+                                                renderDataTasks(data)
+                                            })
+                                            .fail(err => {
+                                                console.log(err)
+                                            })
+                                    }
+                                })
+
+                                // UPDATE TASK GROUP
+                                $('.taskGroupUpdate').click(function () {
+                                    // console.log($(this).data())
+                                    let taskId = $(this).data('taskid')
+                                    let groupId = $(this).data('groupid')
+                                    $.ajax({
+                                        method: 'POST',
+                                        url: 'http://localhost:3000/group/find-task',
+                                        data: {
+                                            taskId: $(this).data('taskid')
+                                        }
+                                    })
+                                        .done(data => {
+                                            console.log(data)
+                                            $('#formNameGroup').attr('value', data.name)
+                                            $('#formDescriptionGroup').attr('value', data.description)
+                                            $('#formStatusGroup').attr('value', data.status)
+                                            $('#formDueDateGroup').attr('value', data.dueDate)
+
+                                            $('#submitTaskEdit').click(function () {
+                                                console.log($('#formDueDateGroup').val())
+                                                $.ajax({
+                                                    method: 'PUT',
+                                                    url: 'http://localhost:3000/group/update-task',
+                                                    data: {
+                                                        name: $('#formNameGroup').val(),
+                                                        description: $('#formDescriptionGroup').val(),
+                                                        status: $('#formStatusGroup').val(),
+                                                        dueDate: $('#formDueDateGroup').val(),
+                                                        taskId: taskId,
+                                                        groupId: groupId
+                                                    },
+                                                    headers: {
+                                                        token: localStorage.getItem('token')
+                                                    }
+                                                })
+                                                    .done(data => {
+                                                        console.log(data)
+                                                        renderDataTasks(data)
+                                                    })
+                                                    .fail(err => {
+                                                        console.log(err)
+                                                    })
+                                            })
+                                        })
+                                        .fail(err => {
+                                            console.log(err)
+                                        })
+                                })
+
+                                // COMPLETE TASK
+
+
+                                //NEW TASK GROUP
+                                $('#submitTaskGroup').click(function () {
+                                    let groupId = $('#modalTaskGroup').data('groupid')
+                                    $.ajax({
+                                        method: 'POST',
+                                        url: 'http://localhost:3000/group/create-task',
+                                        headers: {
+                                            token: localStorage.getItem('token')
+                                        },
+                                        data: {
+                                            name: $('#nameTaskGroup').val(),
+                                            description: $('#descriptionTaskGroup').val(),
+                                            status: $('#statusTaskGroup').val(),
+                                            dueDate: $('#dueDateTaskGroup').val(),
+                                            group: groupId
+                                        }
+                                    })
+                                        .done(data => {
+                                            listTaskProject = data.data.tasks
+                                            renderDataTasks(data.data.tasks)
+                                            // console.log(data)
+                                        })
+                                        .fail(err => {
+                                            console.log(err)
+                                        })
+                                    // console.log($('#modalTaskGroup').data('groupid'))
+                                })
+                            })
+                            .fail(err => {
+                                console.log(err)
+                            })
+                    })
+                })
+                .fail(err => {
+                    console.log(err)
+                })
+
+
+            // NEW Project
+            $('#submitNewProject').click(function () {
+                $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:3000/group/create',
+                    data: {
+                        name: $('#newProjectInput').val()
+                    },
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                })
+                    .done(groups => {
+                        listProject.push(groups.data)
+                        let template = ''
+                        $.each(listProject, function (index, val) {
+                            template += ` <li class="list-group-item d-flex justify-content-between align-items-center detailProject" style="cursor:pointer" data-projectId=${val._id}>
+                                                ${val.name}
+                                            <span class="badge badge-primary badge-pill">${val.tasks.length}</span>
+                                          </li>`
+                        })
+                        $('#listProject').html(template)
+
+                        // DETAIL PROJECT
+                        $('.detailProject').on('click', function () {
+                            alert('sorry there is something wrong, please reload the page and try again')
+                            console.log('berhasil')
+                        })
+                    })
+                    .fail(err => {
+                        console.log(err)
+                    })
+            })
+
+            // FIRST RENDER DATA
+            if (localStorage.getItem('token') == undefined) {
+                login()
+            } else {
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/user-data",
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                })
+                    .done(data => {
+                        var userData = data
+                        listTasks = data.todo
+                        localStorage.setItem('userEmail', data.email)
+                        $('#userName').text(data.name)
+                        $('#userPhoto').attr('src', data.photo)
+                        renderDataTasks(listTasks)
+
+                        // FIND ALL USERS
+                        $.ajax({
+                            url: 'http://localhost:3000/users',
+                            method: 'GET'
+                        })
+                            .done(users => {
+                                console.log(users)
+                                let filtered = users.filter(val => {
+                                    return val.email != localStorage.getItem('userEmail')
+                                })
+                                console.log(filtered)
+                                let template = ''
+                                $('#selectUser').html(
+                                    $.each(filtered, function (index, val) {
+                                        template += `<option value="${val._id}">${val.name}</option>`
+                                    })
+                                )
+                                $('#selectUser').html(template)
+                            })
+                            .fail(err => {
+                                console.log(err)
+                            })
+
+                        // DELETE TASK
+                        $('.taskDelete').click(function () {
+                            let value = $(this).attr('id')
+                            $.ajax({
+                                method: "DELETE",
+                                url: "http://localhost:3000/users/delete-task",
+                                data: {
+                                    token: localStorage.getItem('token'),
+                                    value: value
+                                }
+                            })
+                                .done(data => {
+                                    window.location.href = '/home'
+                                })
+                                .fail(err => {
+                                    console.log(err)
+                                })
+                        })
+
+
+                        // UPDATE TASK
+                        $('.taskUpdate').click(function (event) {
+                            event.preventDefault()
+                            let taskWillUpdate = $(this).attr('id')
+                            // console.log(taskWillUpdate)
+                            let filtered = userData.todo.filter(function (value, index, arr) {
+                                return value.name == taskWillUpdate
+                            })
+                            // console.log(filtered)
+                            $('#formname').val(filtered[0].name)
+                            $('#formdescription').val(filtered[0].description)
+                            $('#formstatus').val(filtered[0].status)
+                            $('#formduedate').val(filtered[0].dueDate)
+                            $('#myModalLabel').text('Update Task')
+                            $('#submitTask').hide()
+                            $('#updateTask').show()
+
+                            $('#updateTask').click(function (event) {
+                                event.preventDefault()
+                                let inputTask = {
+                                    token: localStorage.getItem('token'),
+                                    willUpdated: taskWillUpdate,
+                                    name: $('#formname').val(),
+                                    description: $('#formdescription').val(),
+                                    status: $('#formstatus').val(),
+                                    dueDate: $('#formduedate').val()
+                                }
+                                $.ajax({
+                                    method: "POST",
+                                    url: "http://localhost:3000/users/update-task",
+                                    data: inputTask
+                                })
+                                    .done(data => {
+                                        window.location.href = '/home'
+                                    })
+                                    .fail(err => {
+                                        console.log(err)
+                                    })
+                            })
+                        })
+
+                        //COMPLETE TASK
+                        $('.taskComplete').click(function () {
+                            let taskComplete = $(this).attr('id')
+                            $.ajax({
+                                method: "PUT",
+                                url: "http://localhost:3000/users/complete-task",
+                                data: {
+                                    token: localStorage.getItem('token'),
+                                    val: taskComplete
+                                }
+                            })
+                                .done(data => {
+                                    window.location.href = '/home'
+
+                                })
+                                .fail(err => {
+                                    console.log(err)
+                                })
+                        })
+                    })
+                    .fail(err => {
+                        alert('you must login first')
+                        login()
+                    })
+
+            }
+
+            //SUBMIT NEW TASK
+            $('#createBtn').click(function () {
+                $('#myModalLabel').text('Create new task')
+                $('#submitTask').show()
+                $('#updateTask').hide()
+                $('#formname').val('')
+                $('#formdescription').val('')
+                $('#formstatus').val('')
+                $('#formduedate').val('')
+            })
+            $('#submitTask').click(function (event) {
+                event.preventDefault()
+                let inputTask = {
+                    token: localStorage.getItem('token'),
+                    name: $('#formname').val(),
+                    description: $('#formdescription').val(),
+                    status: $('#formstatus').val(),
+                    dueDate: $('#formduedate').val()
+                }
+
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/create-task",
+                    data: inputTask
+                })
+                    .done(data => {
+                        window.location.href = '/home'
+
+                    })
+                    .fail(err => {
+                        console.log(err)
+                    })
+            })
+
+            //LOGOUT
+            $('#logOut').click(function () {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                window.location.href = '../'
+                localStorage.removeItem('token')
+            })
+
+            //list complete task
+            $('#complete-task').click(function (event) {
+                event.preventDefault()
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/list-complete",
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                })
+                    .done(data => {
+                        let template = ''
+                        $.each(data.todo, function (index, value) {
+                            template += `<div class="row">
+                            <div class="col-md-4">
+                                <h1>${value.name}</h1>
+                            </div>
+                            <div class="col-md-4">
+                                <h1>${value.status}</h1>
+                            </div>
+                            <div class="col-md-4">
+                                <img src="../assets/edit.png" style="cursor: pointer;" id="${value.name}" class="taskUpdate " alt="edit" data-toggle="modal" data-target="#basicModal">
+                                <img src="../assets/trash.png" style="cursor: pointer;" id="${value.name}" class= "taskDelete " alt="edit">
+                                <img src="../assets/checked.png" style="cursor: pointer;" id="${value.name}" class= "taskComplete " alt="edit">
+                            </div>
+                        </div>`
+                        })
+                        $('#mainTasks').html(template)
+                        $('#complete-task').addClass('active')
+                        $('#incomplete-task').removeClass('active')
+                        $('#Tasks').removeClass('active')
+                    })
+                    .fail(err => {
+                        console.log(err)
+                    })
+            })
+
+            $('#incomplete-task').click(function (event) {
+                event.preventDefault()
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/list-incomplete",
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                })
+                    .done(data => {
+                        let template = ''
+                        $.each(data.todo, function (index, value) {
+                            template += `<div class="row">
+                            <div class="col-md-4">
+                                <h1>${value.name}</h1>
+                            </div>
+                            <div class="col-md-4">
+                                <h1>${value.status}</h1>
+                            </div>
+                            <div class="col-md-4">
+                                <img src="../assets/edit.png" style="cursor: pointer;" id="${value.name}" class="taskUpdate " alt="edit" data-toggle="modal" data-target="#basicModal">
+                                <img src="../assets/trash.png" style="cursor: pointer;" id="${value.name}" class= "taskDelete " alt="edit">
+                                <img src="../assets/checked.png" style="cursor: pointer;" id="${value.name}" class= "taskComplete " alt="edit">
+                            </div>
+                        </div>`
+                        })
+                        $('#mainTasks').html(template)
+                        $('#incomplete-task').addClass('active')
+                        $('#complete-task').removeClass('active')
+                        $('#Tasks').removeClass('active')
+                    })
+                    .fail(err => {
+                        console.log(err)
+                    })
+            })
+
+
+            // ALL FUNCT
+            function renderNotif(input) {
+                let template = ''
+                $.each(input, function (index, val) {
+                    template += `<div class="list-group">
+                                    <a class="list-group-item list-group-item flex-column align-items-start">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">${val.groupId.name}</h5>
+                                            <button data-groupid="${val.groupId._id}" data-inviteid="${val._id}"class="btn btn-success accInvite"> accept</button>
+                                        </div>
+                                        <div class="d-flex w-100 justify-content-between mt-2">
+                                            <small>Invited by: ${val.invitorId.email}</small>
+                                            <button data-inviteid="${val._id}" class="btn btn-danger rejectInvite"> Reject</button>
+                                        </div>
+                                    </a>
+                                </div>`
+                })
+                $('#mainNotif').html(template)
+            }
+            function renderDataTasks(inputTask) {
+                let groupId = ''
+                if (inputTask.tasks) {
+                    data = inputTask.tasks
+                    groupId = inputTask._id
+                } else {
+                    data = inputTask
+                }
+                let template = ''
+                $.each(data, function (index, value) {
+                    let taskId = ''
+                    let user = ''
+                    if (value._id) {
+                        taskId = value._id
+                        user = value.author.email
+                    }
+
+                    if (value.isComplete == true) {
+                        template += `
+                                    <div class="col-sm-6 mt-2">
+                                        <div class="card bg-dark">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${value.name}</h5>
+                                            <p class="card-text">${value.description}</p>
+                                            <p class="text-muted mb-0">status: ${value.status}</p>
+                                            <p class="text-muted">due-date: ${value.dueDate}</p>
+                                            <div class="d-flex justify-content-center">
+                                                <i class="fas fa-undo taskComplete taskGroupComplete" data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}" style="font-size:36px; margin-right:20px; cursor:pointer"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                `
+                    } else {
+                        let status = ''
+                        if (value.status == 'High') {
+                            status = 'bg-danger'
+                        } else if (value.status == 'Medium') {
+                            status = 'bg-warning'
+                        } else {
+                            status = 'bg-info'
+                        }
+                        template += `
+                                    <div class="col-sm-6 mt-2">
+                                        <div class="card ${status}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${value.name}</h5>
+                                            <p class="card-text">${value.description}</p>
+                                            <p class="text-muted mb-0">status: ${value.status}</p>
+                                            <p class="text-muted">due-date: ${value.dueDate}</p>
+                                            <div class="d-flex justify-content-center">
+                                                <i class="fas fa-check-square taskComplete taskGroupComplete" data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}" style="font-size:36px; margin-right:20px;cursor:pointer"></i>
+                                                <i class="fas fa-pen-square taskUpdate taskGroupUpdate" data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}" data-toggle="modal" data-target="#editTaskGroup" style="font-size:36px; margin-right:20px;cursor:pointer"></i>
+                                                <i class="fas fa-trash taskDelete taskGroupDelete" data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}"  style="font-size:36px; margin-right:20px; cursor:pointer"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                `
+                    }
+                    $('#mainTasks').html(template)
+                })
+            }
+        </script>
+</body>
+
+</html>
