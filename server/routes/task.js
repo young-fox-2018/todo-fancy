@@ -10,5 +10,6 @@ router.put('/:TaskId', TaskController.update);
 router.delete('/:TaskId', TaskController.delete);
 
 router.get('/detail/:TaskId', TaskController.detail);
+router.post('/projects', isAuth, TaskController.createTaskProject);
 
 module.exports = router;

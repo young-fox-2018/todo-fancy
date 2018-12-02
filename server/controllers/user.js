@@ -4,6 +4,16 @@ const token = require('../helpers/token.js');
 
 class UserController {
 
+    static read(req, res) {
+        User.find({})
+            .then(function(dataUser) {
+                res.status(200).json(dataUser);
+            })
+            .catch(function(error) {
+                res.status(500).json(error);
+            });
+    }
+    
     static register(req, res) {
         User.create({
             fullName: req.body.fullName,

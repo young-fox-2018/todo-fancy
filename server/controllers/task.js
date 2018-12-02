@@ -1,4 +1,5 @@
 const Task = require('../models/task.js');
+const Project = require('../models/project.js');
 
 class TaskController {
 
@@ -11,6 +12,35 @@ class TaskController {
         })
             .then(function(newTask) {
                 res.status(201).json(newTask);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+
+    static createTaskProject(req, res) {
+        Task.create({
+            name: req.body.name,
+            description: req.body.description,
+            due_date: req.body.due_date,
+            UserId: req.user.UserId,
+            isProject: 1,
+        })
+            .then(function(newTask) {
+                Project.update(
+                    {_id: req.body.ProjectId},
+                    {
+                        $push: {
+                            tasks: newTask._id,
+                        },
+                    },
+                )
+                    .then(function(result) {
+                        res.status(200).json(result);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             })
             .catch(function(error) {
                 console.log(error);

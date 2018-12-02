@@ -35,7 +35,33 @@ class ProjectController {
     static read(req, res) {
         Project.find({})
             .populate('member', ['fullName', 'email'])
+            .populate('tasks', ['name', 'due_date'])
             .where('member').in([req.user.UserId])
+            .then(function(projects) {
+                res.status(200).json(projects);
+            })
+            .catch(function(error) {
+                console.log(error);
+                res.status(500).json({"message": "Error in Server"});
+            });
+    }
+
+    static addMember(req, res) {
+        Project.update({}, {$push: {member: req.body.UserId}})
+            .then(function(project) {
+                res.status(200).json(project);
+            })
+            .catch(function(error) {
+                console.log(error);
+                res.status(500).json({"message": "Error in Server"});
+            });
+    }
+
+    static getTaskProject(req, res) {
+        Project.findOne({
+            _id: req.params.ProjectId,
+        })
+            .populate('tasks', ['name', 'due_date'])
             .then(function(projects) {
                 res.status(200).json(projects);
             })
