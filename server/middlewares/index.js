@@ -27,7 +27,6 @@ module.exports = {
         delete req.query[key]
       }
     }
-    console.log(req.query)
     next()
   },
 

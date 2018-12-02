@@ -4,6 +4,7 @@ const { filterReqBody, filterReqQuery, authentication } = require('../middleware
 
 router.post('/signup', filterReqBody, userController.signUp);
 router.post('/signin', userController.signIn);
+router.post('/gsignin', userController.gSignIn);
 router.get('/', authentication ,userController.read);
 router.patch('/', authentication, filterReqBody, userController.update);
 router.delete('/', authentication, userController.delete);

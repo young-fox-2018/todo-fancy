@@ -25,6 +25,8 @@ module.exports = {
   },
 
   update(req, res) {
+    console.log('body', req.body)
+    console.log('query', req.query)
     // req.body and req.query are already filtered by express middleware
     delete req.body.user // user can not change ownership of task
     Todo.findOneAndUpdate(Object.assign(req.query, { user: req.currentUser.id }), req.body).exec()
