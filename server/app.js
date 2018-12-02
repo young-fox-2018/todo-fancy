@@ -2,7 +2,7 @@ require('dotenv').config()
 var createError = require('http-errors');
 var express = require('express');
 var logger = require('morgan');
-
+const cors = require('cors')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const todoRouter = require('./routes/todo.js')
@@ -11,6 +11,7 @@ var app = express();
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ToDo');
 
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

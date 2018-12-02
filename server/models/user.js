@@ -9,10 +9,6 @@ var userSchema = new Schema({
     provider: {
         type: String,
         default: 'none'
-    },
-    token: {
-        type: String,
-        default: ''
     }
     
 })

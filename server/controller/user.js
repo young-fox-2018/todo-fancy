@@ -1,7 +1,9 @@
 const User = require('../models/user.js')
 const helper = require('../helper/helper')
+const axios = require('axios')
 module.exports = {
     register: (req, res) => {
+        console.log(req.body)
         User.create({
             username: req.body.username,
             email: req.body.email,
@@ -18,18 +20,20 @@ module.exports = {
             })
     }, 
     login: (req, res) => {
+        console.log(req.body)
         User.findOne({
             email: req.body.email
         })
             .then(user => {
+                console.log(user)
                 if (user) {
+                    console.log(user)
                     if (helper.comparePassword(req.body.password, user.password)) {
+                        console.log("masuk pak eko")
                         let token = helper.generateToken({
                             id: user._id,
                             email: user.email
                         })
-                        user.token = token
-                        user.save()
                         res.status(200).json({
                             msg: "Berhasil login",
                             token: token
@@ -47,6 +51,18 @@ module.exports = {
             })
             .catch(err => {
                 res.status(400).json({err: err})
+            })
+    },
+    loginFB: function(req, res) {
+        axios({
+            method:'get',
+            url:`https://graph.facebook.com/me?fields=id,email&access_token=${req.body.token}`
+        })
+            .then(function (response) {
+              console.log(response)
+            })
+            .catch(function(err) {
+                res.status(400).json({err})
             })
     }
 }
