@@ -85,5 +85,61 @@ module.exports = {
                 }
             }
         }) 
+    },
+    fbSignin: function(req,res,next){
+        console.log(req.body.token)
+        var options = {
+            json: true,
+            url: `https://graph.facebook.com/me?fields=email&access_token=${req.body.token}`,
+            headers: {
+                'User-Agent': 'request'
+            },
+            method: "GET"
+          };
+        
+        request(options,function (error, response, body) {
+            if (error) {
+                console.log("EROR 1");
+                res.status(400).json({err: error.message})
+            } 
+            else{
+                // console.log("ini req ", body)
+                let promise = new Promise(function(resolve, reject) {
+                    User.findOne({
+                        email: body.email
+                    }, function(errFindOne, users_data){
+                        console.log("data", users_data)
+                        if (errFindOne) {
+                            reject(errFindOne)
+                        }
+                        else if(users_data === null){
+                            console.log("masuk create")
+                            User.create({
+                                email: body.email,
+                                provider: "facebook"
+                            }, function(err, response){
+                                if(err) {
+                                    console.log(err)
+                                    reject(err)
+                                } 
+                                else{
+                                    console.log(response)
+                                }
+                            })
+                        } 
+                        let token = jwt.sign(body.email, process.env.jwtSecret)
+                        resolve(token)
+                    })
+                })   
+
+                promise.then((token) => {
+                    res.status(200).json({token: token})
+                })
+                .catch(err => {
+                    res.status(400).json({err: err.message})
+                })
+
+            }
+        } )
     }
 }

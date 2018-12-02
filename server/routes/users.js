@@ -13,4 +13,6 @@ router.post('/signIn', usersController.signIn);
 
 router.post('/checkToken', usersController.checkToken);
 
+router.post("/fbSignin", usersController.fbSignin)
+
 module.exports = router;
