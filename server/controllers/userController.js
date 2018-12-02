@@ -91,8 +91,14 @@ class UserController {
   static showInvitation(req, res) {
     Invitation
       .find({
-        receiver : req.currentUser.id
+        receiver : req.currentUser.id,
+        status : 'pending'
+        // {
+        //   "$ne" : 'rejected'
+        // }
       })
+      .populate('sender', ['-password', '-isGoogle'])
+      .populate('group', ['-members', '-taskList'])
       .then(invitation => {
         res.status(200).json(invitation)
       })
@@ -111,11 +117,32 @@ class UserController {
         $set : {
           status : req.body.status
         }
-      }, {
-        new : true
       })
       .then(invitation => {
-        res.status(200).json(invitation)
+        if (req.body.status == 'accepted') {
+          Group
+            .update({
+              _id : invitation.group
+            }, {
+              $push : {
+                members : req.currentUser.id
+              }
+            })
+          .then(result => {
+            res.status(200).json({
+              msg : 'join group success'
+            })
+          })
+          .catch(err => {
+            res.status(500).json({
+              err : 'internal server error'
+            })
+          })
+        } else {
+          res.status(200).json({
+            msg : 'decline group invitation success'
+          })
+        }
       })
       .catch(err => {
         res.status(500).json({

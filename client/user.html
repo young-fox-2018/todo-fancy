@@ -73,6 +73,44 @@
     </div>
   </div>
 
+  <div class="modal fade" id="editTaskGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Task From Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="container mt-3 mb-3">
+            <form id="updateTaskGroup" >
+                <input type="hidden" id="taskIdGroup">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control"id="nameUpdateGroup" >
+                  </div>
+                  <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control"id="descUpdateGroup" >
+                  </div>
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control form-control-sm" id="statusUpdateGroup">
+                        <option value="working">just started</option>
+                        <option value="finish">finish</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                      <label>Date</label>
+                      <input type="date" class="form-control form-control-sm" id="dateUpdateGroup">
+                  </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" href="#" class="btn btn-primary" data-dismiss="modal" id="clickUpdateGroup">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -176,6 +214,28 @@
     </div>
   </div>
 
+  <div class="modal fade" id="inviteGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Invite Person To Join this Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="container mt-3 mb-3">
+            <form id="update" >
+                <div class="form-group">
+                    <label>email</label>
+                    <input type="text" class="form-control" id="inviteEmail" >
+                  </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" href="#" class="btn btn-primary" data-dismiss="modal" id="inviteGroupButton">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <div class="container mt-3">
     <div class="row justify-content-center" id="errorLogin">
@@ -183,6 +243,12 @@
             <div class="card-body text-white" id="msg">
             </div>
           </div>
+    </div>
+    <div class="row justify-content-center" id="error">
+
+    </div>
+    <div class="row justify-content-center" id="success">
+
     </div>
     <div class="row justify-content-center" id="success">
         <div class="card bg-success pl-2 pr-2 mb-4" id="displaySuccess">
@@ -222,19 +288,26 @@
                             <div class="col mt-3"><h5>Danger</h5><p> 0-2 days</p></div>
                             <div class="col bg-danger mr-3 my-3"></div>
                           </div>
-                        <h5 class="bg-primary text-white rounded text-center px-2 py-2">My Group List</h3>
+                        <h5 class="bg-primary text-white rounded text-center px-2 py-2">My Group List</h5>
                         <div id="groupList">
                           <select class="custom-select mb-2" id="groupPick" >
 
                           </select>
                           <button type="button" class="btn btn-outline-primary" id="chooseGroup">submit</button>
                         </div>
+                        <h5 class="bg-primary text-white rounded text-center px-2 py-2 mt-3">My Invitation List</h5>
+                        <select class="custom-select mb-2" id="invitationList" >
+
+                        </select>
+                        <button type="button" class="btn btn-outline-primary" id="acceptInv">accept</button>
+                        <button type="button" class="btn btn-outline-danger" id="declineInv">decline</button>
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <h5 class="bg-primary text-white rounded text-center py-2" id="taskContainer">Task List</h3>
                       <div id="btnplaceholder" class="mb-3">
                         <button class="btn btn-outline-primary"  data-toggle="modal" data-target="#addTaskGroupModal">Add Group Task</button>
+                        <button class="btn btn-outline-primary"  data-toggle="modal" data-target="#inviteGroupModal">Invite Person</button>
                       </div>
 
                       <div id="toDoList"></div>

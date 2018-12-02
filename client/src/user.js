@@ -9,7 +9,9 @@ if(!localStorage.getItem('token')){
   var dangerTask = []
   var allTask = []
   var groups = []
+  var invitations = []
   var currentGroup = ''
+  var currentInv = ''
   $("#chooseGroup").hide()
   $("#btnplaceholder").hide()
 }
@@ -34,6 +36,7 @@ $(function(){
     var maxDate = year + '-' + month + '-' + day;
     $('#date').attr('min', maxDate);
     $('#updateDate').attr('min', maxDate);
+    $('#dateTaskGroup').attr('min', maxDate);
 })
 
 function createTask(task) {
@@ -119,6 +122,7 @@ function resetAllForm() {
   $("#statusUpdate").val('')
   $("#dateUpdate").val('')
   $("#groupName").val('')
+  $('#inviteEmail').val('')
 }
 
 function getTask (url) {
@@ -244,14 +248,37 @@ function updateTask(task) {
       deadline : $("#dateUpdate").val()
     }
   })
-    .done((response) => {
-      console.log(response);
-      //location.reload(true);
-      showMyTask()
-    })
-    .fail(err => {
-      console.log(err);
-    })
+  .done((response) => {
+    console.log(response);
+    //location.reload(true);
+    showMyTask()
+  })
+  .fail(err => {
+    console.log(err);
+  })
+}
+
+function updateTaskGroup() {
+  $.ajax({
+    url : `${host}groups/${currentGroup}/` + $("#taskIdGroup").val(),
+    method : "PUT",
+    headers : {
+      token : localStorage.getItem("token")
+    },
+    data : {
+      name : $("#nameUpdateGroup").val(),
+      description : $("#descUpdateGroup").val(),
+      status : $("#statusUpdateGroup").val(),
+      deadline : $("#dateUpdateGroup").val()
+    }
+  })
+  .done((response) => {
+    console.log(response);
+    showMyTask()
+  })
+  .fail(err => {
+    console.log(err);
+  })
 }
 
 function getMyGroupList() {
@@ -273,10 +300,82 @@ function getMyGroupList() {
         $("#groupPick").append(`<option value="${value._id}">${value.name}</option>`)
       })
       console.log(groups)
+      resolve()
     })
     .fail(err => {
       console.log(err)
+      reject(err)
     })
+  })
+}
+
+function getMyInvList() {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      method: 'GET',
+      url: `${host}users/invitation`,
+      headers: {
+        token : token
+      }
+    })
+    .done(data => {
+      invitations = data
+      console.log(invitations)
+      $("#invitationList").empty()
+      $.each(data, function(index, value) {
+        $("#invitationList").append(`<option value="${value._id}">${value.group.name} - ${value.sender.email}</option>`)
+      })
+      console.log(data)
+      resolve()
+    })
+    .fail(err => {
+      console.log(err)
+      reject(err)
+    })
+  })
+}
+
+function changeInvitationStatus(id, stat) {
+  $.ajax({
+    method: 'PATCH',
+    url: `${host}users/invitation/${id}`,
+    data: {
+      status: stat
+    },
+    headers: {
+      token
+    }
+  })
+  .done(response => {
+    console.log(response)
+    if (response.msg == 'join group success') {
+      $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>You successfully joined this group</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
+    } else if (response.msg == 'decline group invitation success') {
+      $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Reject invitation success</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
+    } else {
+      alert('Oops SOmething went wrong...')
+    }
+    getMyInvList()
+    getMyGroupList()
+  })
+  .fail(err => {
+    console.log(err)
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Failed to join group</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
 }
 
@@ -308,7 +407,7 @@ function showMyGroupTask(id) {
                   <div class="card-body">
                     <p class="card-subtitle mb-2">Deadline: ${value.deadline.slice(0,10)}</h6>
                     <p class="desc card-text">Description : ${value.description}</p>
-                    <button type="button" id="${value._id}" class="updateTask mr-3 btn btn-light" data-toggle="modal" data-target="#exampleModalCenter">
+                    <button type="button" id="${value._id}" class="updateTaskGroup mr-3 btn btn-light" data-toggle="modal" data-target="#editTaskGroupModal">
                       Update
                     </button>
                   </div>
@@ -320,6 +419,39 @@ function showMyGroupTask(id) {
     })
 }
 
+function inviteUserToGroup(email) {
+  $.ajax({
+    method : 'POST',
+    url : `${host}groups/${currentGroup}/invite`,
+    headers : {
+      token : token
+    },
+    data : {
+      email : email
+    }
+  })
+  .then(response => {
+    resetAllForm()
+    console.log(response)
+    $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>${response.msg}</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
+  })
+  .catch(err => {
+    resetAllForm()
+    console.log('err', typeof err.responseText)
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>${err.responseText}</strong> You should check in your invitation email input.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
+  })
+}
+
 $(document).ready(function() {
   function initUserPage() {
       $("#displaySuccess").hide();
@@ -328,6 +460,7 @@ $(document).ready(function() {
       $("#userContent").show();
       showMyTask()
       getMyGroupList()
+      getMyInvList()
       $("#btnplaceholder").hide()
   }
   onLoad()
@@ -404,9 +537,25 @@ $(document).ready(function() {
       $("#statusUpdate").val(currentTask.status)
       $("#dateUpdate").val(currentTask.deadline)
     })
+  $("#toDoList")
+    .on('click', '.updateTaskGroup', event => {
+      const id = $(event.currentTarget).attr('id')
+      let currentTask = allTask.filter(data => data._id === id)
+      currentTask = currentTask[0]
+      currentTask.deadline = currentTask.deadline.slice(0,10)
+      $("#taskIdGroup").val(id)
+      $("#nameUpdateGroup").val(currentTask.name)
+      $("#descUpdateGroup").val(currentTask.description)
+      $("#statusUpdateGroup").val(currentTask.status)
+      $("#dateUpdateGroup").val(currentTask.deadline)
+    })
   $("#clickUpdate").click((e) => {
       e.preventDefault();
       updateTask()
+    })
+  $("#clickUpdateGroup").click((e) => {
+      e.preventDefault();
+      updateTaskGroup()
     })
   $("#createGroupButton").click((e) => {
     let name = $("#groupName").val()
@@ -431,5 +580,16 @@ $(document).ready(function() {
       deadline : $("#dateTaskGroup").val()
     }
     createTaskToGroup(task)
+  })
+  $('#inviteGroupButton').click((e) => {
+    let email = $("#inviteEmail").val()
+    inviteUserToGroup(email)
+    //console.log(email)
+  })
+  $("#acceptInv").click((e) => {
+    changeInvitationStatus($("#invitationList").val(), 'accepted')
+  })
+  $("#declineInv").click((e) => {
+    changeInvitationStatus($("#invitationList").val(), 'rejected')
   })
 })
