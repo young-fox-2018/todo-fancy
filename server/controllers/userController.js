@@ -156,6 +156,7 @@ class UserController {
       .find({
         members : req.currentUser.id
       })
+      .populate('members', '-password')
       .then(group => {
         res.status(200).json(group)
       })

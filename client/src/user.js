@@ -10,10 +10,12 @@ if(!localStorage.getItem('token')){
   var allTask = []
   var groups = []
   var invitations = []
-  var currentGroup = ''
+  var currentGroup = false
   var currentInv = ''
   $("#chooseGroup").hide()
   $("#btnplaceholder").hide()
+  $("#success").empty()
+  $("#error").empty()
 }
 
 function onLoad() {
@@ -57,10 +59,22 @@ function createTask(task) {
       console.log(response)
       showMyTask()
       resetAllForm()
+      $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success creating task</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
     })
     .fail(err => {
       console.log(err)
       resetAllForm()
+      $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Creating task failed</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
     })
 }
 
@@ -82,10 +96,22 @@ function createTaskToGroup(task) {
       console.log(response)
       showMyGroupTask(currentGroup)
       resetAllForm()
+      $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success creating task</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
     })
     .fail(err => {
       console.log(err)
       resetAllForm()
+      $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Creating task failed</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
     })
 }
 
@@ -105,10 +131,24 @@ function createGroup(name) {
       showMyTask()
       resetAllForm()
       getMyGroupList()
+      resetAllForm()
+      console.log(response)
+      $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success creating Group</strong>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
     })
     .fail(err => {
       console.log(err)
       resetAllForm()
+      $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Create Group Failed</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`)
     })
 }
 
@@ -228,9 +268,21 @@ function deleteTask(id) {
   .done((response) => {
     console.log(response);
     showMyTask()
+    $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Success delete task</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
   .fail(err => {
     console.log(err);
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Delete task failed</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
 }
 
@@ -252,9 +304,21 @@ function updateTask(task) {
     console.log(response);
     //location.reload(true);
     showMyTask()
+    $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Success Updating Task</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
   .fail(err => {
     console.log(err);
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Update task failed</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
 }
 
@@ -274,10 +338,23 @@ function updateTaskGroup() {
   })
   .done((response) => {
     console.log(response);
-    showMyTask()
+    showMyGroupTask(currentGroup)
+    $("#success").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Success Updating Task</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
   .fail(err => {
+    showMyGroupTask(currentGroup)
     console.log(err);
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Update task failed</strong>.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>`)
   })
 }
 
@@ -473,6 +550,7 @@ $(document).ready(function() {
     localStorage.removeItem('token')
     window.location = '/index.html'
   })
+
   $("#addTask").click((e) => {
     e.preventDefault()
     const task = {
@@ -483,10 +561,15 @@ $(document).ready(function() {
     }
     createTask(task)
   })
+
   $("#filterButton").click((e) => {
     const statusFilter = $("#statusFilter").val()
     if(statusFilter == 'all') {
-      showMyTask()
+      if(!currentGroup) {
+        showMyTask()
+      } else {
+        showMyGroupTask(currentGroup)
+      }
     } else {
       $("#toDoList").empty()
       let data = []
@@ -520,11 +603,13 @@ $(document).ready(function() {
       })
     }
   })
+
   $("#toDoList")
     .on('click', '.delete', event => {
       const id = $(event.currentTarget).attr('id');
       deleteTask(id)
     })
+
   $("#toDoList")
     .on('click', '.updateTask', event => {
       const id = $(event.currentTarget).attr('id');
@@ -537,6 +622,7 @@ $(document).ready(function() {
       $("#statusUpdate").val(currentTask.status)
       $("#dateUpdate").val(currentTask.deadline)
     })
+
   $("#toDoList")
     .on('click', '.updateTaskGroup', event => {
       const id = $(event.currentTarget).attr('id')
@@ -549,28 +635,38 @@ $(document).ready(function() {
       $("#statusUpdateGroup").val(currentTask.status)
       $("#dateUpdateGroup").val(currentTask.deadline)
     })
+
   $("#clickUpdate").click((e) => {
       e.preventDefault();
       updateTask()
     })
+
   $("#clickUpdateGroup").click((e) => {
       e.preventDefault();
       updateTaskGroup()
     })
+
   $("#createGroupButton").click((e) => {
     let name = $("#groupName").val()
     createGroup(name)
   })
+
+  $("#ownButton").click((e) => {
+    currentGroup = false
+    showMyTask()
+    $("#btnplaceholder").hide()
+  })
+
   $("#chooseGroup").click((e) => {
     e.preventDefault()
-    $("#taskContainer").text(`${$("#groupPick").text()} Task List`)
-    $("#btnplaceholder").show()
     const groupId = ($("#groupPick").val())
     currentGroup = groupId
-
-    console.log(currentGroup)
+    const groupName = groups.filter(data => data._id == currentGroup)
+    $("#taskContainer").text(`${groupName[0].name} Task List`)
+    $("#btnplaceholder").show()
     showMyGroupTask(groupId)
   })
+
   $("#createTaskToGroup").click((e) => {
     // e.preventDefault()
     let task = {
@@ -581,15 +677,74 @@ $(document).ready(function() {
     }
     createTaskToGroup(task)
   })
+
   $('#inviteGroupButton').click((e) => {
     let email = $("#inviteEmail").val()
     inviteUserToGroup(email)
     //console.log(email)
   })
+
   $("#acceptInv").click((e) => {
     changeInvitationStatus($("#invitationList").val(), 'accepted')
   })
+
+  $("#search").keyup((e) => {
+    let searchTask = $("#search").val()
+    $("#toDoList").empty()
+    let filtered = allTask.filter(data => data.name.includes(searchTask))
+    if (!currentGroup) {
+      $("#btnplaceholder").hide()
+      $.each(filtered, (index, value) => {
+        let condition = (dayCounter(value.deadline, value.status))
+        $("#toDoList")
+          .append(`<div class="card content bg-${condition} mb-2 text-white">
+                  <div class="card-header"><h5 class="card-title">${value.name}</h5></div>
+                  <div class="card-body">
+                    <p class="card-subtitle mb-2">Deadline: ${value.deadline.slice(0,10)}</h6>
+                    <p class="desc card-text">Description : ${value.description}</p>
+                    <button type="button" id="${value._id}" class="updateTask mr-3 btn btn-light" data-toggle="modal" data-target="#exampleModalCenter">
+                      Update
+                    </button>
+                    <a href="#" onclick="return confirm('Are you sure you want to delete this item?');" class="card-link delete btn btn-light" id="${value._id}">Delete</a>
+                  </div>
+                </div>`)
+      })
+    } else {
+      $("#btnplaceholder").show()
+      $.each(filtered, function(index, value) {
+        let condition = (dayCounter(value.deadline, value.status))
+        $("#toDoList")
+          .append(`<div class="card content bg-${condition} mb-2 text-white">
+                  <div class="card-header"><h5 class="card-title">${value.name}</h5></div>
+                  <div class="card-body">
+                    <p class="card-subtitle mb-2">Deadline: ${value.deadline.slice(0,10)}</h6>
+                    <p class="desc card-text">Description : ${value.description}</p>
+                    <button type="button" id="${value._id}" class="updateTaskGroup mr-3 btn btn-light" data-toggle="modal" data-target="#editTaskGroupModal">
+                      Update
+                    </button>
+                  </div>
+                </div>`)
+      })
+    }
+
+
+  })
+
   $("#declineInv").click((e) => {
     changeInvitationStatus($("#invitationList").val(), 'rejected')
   })
+
+  $("#showMembers").click((e) => {
+    let thisGroup = groups.filter(data => data._id == currentGroup)
+    let currentGroupMembers = thisGroup[0].members
+    $("#tabelBody").empty()
+    $.each(currentGroupMembers, function(index, value) {
+      $("#tabelBody").append(`<tr>
+        <th scope="row">${index+1}</th>
+        <td>${value.username}</td>
+        <td>${value.email}</td>
+      </tr>`)
+    })
+  })
+
 })
