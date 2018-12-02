@@ -20,7 +20,7 @@ class GroupController {
           })
       })
       .then(result => {
-        res.status(200).json({
+        res.status(201).json({
           msg : 'Success creating Group'
         })
       })

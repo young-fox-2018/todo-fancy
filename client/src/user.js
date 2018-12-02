@@ -1,6 +1,7 @@
 if(!localStorage.getItem('token')){
   window.location = '/login.html'
 } else {
+  var locationUser = {}
   var token = localStorage.getItem('token')
   var host = "http://localhost:3000/"
   var doneTask = []
@@ -16,6 +17,64 @@ if(!localStorage.getItem('token')){
   $("#btnplaceholder").hide()
   $("#success").empty()
   $("#error").empty()
+  if (navigator.geolocation) {
+    console.log('Geolocation is supported!');
+  }
+  else {
+    console.log('Geolocation is not supported for this Browser/OS.');
+  }
+}
+
+function getLocation() {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        locationUser.lat = position.coords.latitude;
+        locationUser.long = position.coords.longitude;
+        const coordinate = locationUser.lat+ ',' + locationUser.long
+        if(locationUser.lat && locationUser.long) {
+          resolve(coordinate)
+        } else {
+          reject('cannot get location')
+        }
+    });
+  })
+}
+
+function searchNearby(query) {
+  getLocation()
+    .then(location => {
+      $.ajax({
+        method : "GET",
+        url : `${host}places/${query}/${location}`
+      })
+      .done(response => {
+        let places = response.data.results
+        places.splice(0,10)
+        console.log(places)
+        $("#placeList").empty()
+        $.each(places, function(index, value) {
+          $("#placeList")
+          .append(`<div class="card content bg-primary mb-2 text-white mt-2">
+              <div class="card-header"><h5 class="card-title">${value.name}</h5></div>
+              <div class="card-body">
+
+                <h5 style="display:none">${value.name}</h5>
+                <p class="card-subtitle mb-2">Address : ${value.formatted_address}</h6>
+                <p class="desc card-text">Rating : ${value.rating}</p>
+                <button type="button" class="addPlaces btn btn-light" mr-3 btn btn-light" data-toggle="modal" data-target="#addPlaceModal">
+                  Add To Task
+                </button>
+              </div>
+            </div>`)
+        })
+      })
+      .fail(err => {
+        console.log(err)
+      })
+    })
+    .catch(err => {
+      console.log('failed to get places', err)
+    })
 }
 
 function onLoad() {
@@ -539,6 +598,7 @@ $(document).ready(function() {
       getMyGroupList()
       getMyInvList()
       $("#btnplaceholder").hide()
+      searchNearby('mall')
   }
   onLoad()
   initUserPage()
@@ -549,6 +609,11 @@ $(document).ready(function() {
       });
     localStorage.removeItem('token')
     window.location = '/index.html'
+  })
+
+  $("#searchNearbyPlace").click((e) => {
+    let place = $("#typeList").val()
+    searchNearby(place)
   })
 
   $("#addTask").click((e) => {
@@ -635,6 +700,31 @@ $(document).ready(function() {
       $("#statusUpdateGroup").val(currentTask.status)
       $("#dateUpdateGroup").val(currentTask.deadline)
     })
+
+  $("#placeList")
+    .on('click', '.addPlaces', event => {
+      const address = $(event.currentTarget).prevAll('.card-subtitle').text()
+      const title = 'Goes to ' + $(event.currentTarget).prevAll('h5').text()
+      let name = $("#placeName").val(title)
+      let description = $("#placeDesc").val(address)
+
+    })
+
+//here
+  $("#clickAddPlace").click((e) => {
+      console.log('asd')
+      let task = {
+        name : $("#placeName").val(),
+        description : $("#placeDesc").val(),
+        deadline : $("#placeDate").val(),
+        status : $("#placeStatus").val()
+      }
+      if(!currentGroup) {
+        createTask(task)
+      } else {
+        createTaskToGroup(task)
+      }
+  })
 
   $("#clickUpdate").click((e) => {
       e.preventDefault();
