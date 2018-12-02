@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>What To Do</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">               
+</head>
+
+<body>
+        <!-- facebook login requirement -->
+        <script>
+                window.fbAsyncInit = function() {
+                    FB.init({
+                        appId      : '257224458284324',
+                        cookie     : true,
+                        xfbml      : true,
+                        version    : 'v3.2'
+                    });
+                    
+                FB.AppEvents.logPageView();  
+
+                    FB.getLoginStatus(function(response) {
+                        statusChangeCallback(response);
+                    });
+        
+                };
+            
+                (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = "https://connect.facebook.net/en_US/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+    <!-- navbar -->
+     <nav>
+        <div class="nav-wrapper red darken-1">
+          <a href="#!" class="brand-logo"><i class="material-icons">check</i>What To Do</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#"><i class="material-icons">search</i></a></li>
+            <li id="logout">Logout</a></li>
+          </ul>
+        </div>
+     </nav>
+
+    <!-- form -->
+    <div class="row container" id="allForm">
+            <br><br>
+            <form class="col s12">
+                <h4 id="formtext">Login</h4>
+
+                <div class="row" id="name_form">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">person</i>  
+                        <input placeholder="Name" id="name" type="text" class="validate">
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="input-field col s6">
+                        <i class="material-icons prefix">mail_outline</i>    
+                        <input id="email" type="email" class="validate">
+                        <label for="email">Email</label>
+                        </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">lock_outline</i>
+                        <input id="password" type="password" class="validate">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+
+    
+                <button class="btn waves-effect waves-light center-align" id="login_button" type="submit" name="action">Login
+                    <i class="material-icons right">send</i>
+                </button>
+
+                <button class="btn waves-effect waves-light center-align" id="signup_button" type="submit" name="action">Sign Up
+                        <i class="material-icons right">send</i>
+                </button>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <h6 id="register">Don't have an account? Sign Up Here</h6>
+                    </div>
+                </div>
+
+                <div class = "row container" id="facebooklogin">
+                        <h5>Or</h5><br>
+                        <div class="row container" id="facebookbutton">
+                                <br>
+                             
+                                <fb:login-button 
+                                scope="public_profile,email"
+                                onlogin="checkLoginState();">
+                            </fb:login-button>
+                          
+                        </div>
+                </div>
+            </form>
+    </div>
+
+    <!-- content -->
+    <div class = 'row container' id = "allContent">
+        <h3>Your To Do List:</h3>  
+        <div id="allTask">
+            <!-- put your task here -->
+        </div>                               
+        <div class = 'row'>
+            <div class="divider"></div>
+            <h6 id="addTask">Add Task</h6>
+        </div>    
+
+        <div class="row" id="inputAddTask">
+            <form>
+                <div class="input-field col s12">
+                    <input id="new_task" type="text">
+                    <label>Add New Task</label>
+                </div>
+                <button class="btn waves-effect waves-light center-align" id="addTask_button" type="submit" name="action">Add Task
+                    <i class="material-icons right">add</i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+         
+        function ifLogin() {
+            // by default:
+            $('#name_form').hide()
+            $('#signup_button').hide()
+            $('#logout').hide()
+       
+            let token = localStorage.getItem("token")
+            if (token != null) { // ada yg login
+                generateTasks()
+                $('#allForm').hide()
+                $('#inputAddTask').hide()
+                $('#logout').show()
+                $('#allContent').show()
+                $('#addTask').show()
+            } else {
+                $('#allForm').show()
+                $('#allContent').hide()
+                $('#inputAddTask').hide()
+                $('#addTask_button').hide()
+                $('#addTask').hide()
+            }   
+        }
+
+        function generateTasks() {
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/task/findUserTask",
+                data: {
+                    token: localStorage.getItem("token")
+                }
+            })
+            .done(function(tasks) {
+                console.log(tasks)
+                let temp = ""
+                tasks.tasks.forEach(task => {
+                    let status = null
+                    if (task.priority == true) {
+                        status = "Top Priority"
+                    } else {
+                        status = "Not So Important"
+                    }
+                    temp += 
+                    `<div class="divider"></div>
+                    <div class="section">
+                        <div class = "row">
+                            <h6>${task.name}</h6>
+                                <a href="?id=${task._id}"><i id = "delete" class="material-icons right">delete</i></a>
+                                <a href="?id=${task._id}"><i id= "update" class="material-icons right">update</i></a> 
+                                <a href="?id=${task._id}"> <i id= "prioritize" class="material-icons right">notifications</i></a>
+                        </div>
+                        <p>Due Date: ${task.dueDate} </p>
+                        <p>Status: ${status} </p>
+                    </div>`
+                });
+                $('#allTask').html(temp) 
+            })
+        }  
+
+        ifLogin()
+
+        $('#register').click(function(event) {
+            event.preventDefault()
+            $('#name_form').show()
+            $('#register').hide()
+            $('#facebooklogin').hide()  
+            $('#formtext').html("Sign Up")
+            $('#login_button').hide()
+            $('#signup_button').show()
+        })
+
+        $('#signup_button').click(function(event) {
+            event.preventDefault()
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/user/create",
+                data: {
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val()
+                }
+            })
+                .done(function(user) {
+                    if (user) {
+                        $('#name_form').hide()
+                        $('#register').hide()
+                        $('#facebooklogin').hide()  
+                        $('#formtext').html("Login")
+                        $('#login_button').show()
+                        $('#signup_button').hide()
+                    }
+                })
+        })
+
+        $('#login_button').click(function(event) {
+            event.preventDefault()
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/user/login",
+                data: {
+                    email: $("#email").val(),
+                    password: $("#password").val()
+                }
+            })
+                .done(function(data) {
+                    console.log(data)
+                    localStorage.setItem("token", data.token)
+                    ifLogin()
+                })    
+                .fail(function(err) {
+                    console.log("ERRRORR")
+                    console.log(err)
+                })        
+        })
+        
+        $('#addTask').click(function(event) {
+            $('#addTask').hide()
+            $('#inputAddTask').show()
+            // event.preventDefault()
+            console.log( $('#new_task').val())
+        })
+
+        $('#addTask_button').click(function(event) {
+            console.log($('#new_task').val())
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/task/create",
+                data: {
+                    name: $('#new_task').val(),
+                    token: localStorage.getItem("token")
+                }
+            })
+                .done(function() {
+                    ifLogin()
+                })
+        })
+        
+        $('#logout').click(function() {
+            localStorage.clear()
+            ifLogin()
+        })
+        
+        // KACAO
+        $('#delete').click(function(event) {
+            // generateTasks()
+            event.preventDefault()
+            console.log("HOLA")
+            // $.ajax({
+            //     method: "DELETE",
+            //     url: "http://localhost:3000/task"
+            // })
+            // .done(function() {
+            //     console.log("done")
+            // })
+        })
+        
+        $('#prioritize').click(function() {
+            console.log("NJAY")
+        })
+
+        function statusChangeCallback(response) {
+            // localStorage.clear()
+            // console.log(response.authResponse.accessToken)
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/user/facebookLogin",
+                data: {
+                    fbtoken: response.authResponse.accessToken
+                }
+            })
+                .done(function(userToken) {
+                    if (userToken) {
+                        localStorage.setItem("token",userToken.token)
+                        ifLogin()
+                    }
+                })
+        }
+
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
+
+    </script>
+</body>
+</html>
