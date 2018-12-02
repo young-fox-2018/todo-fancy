@@ -28,11 +28,9 @@ $('.register').submit(function(e) {
         data: userData,
         url: 'http://localhost:3000/users/register'
     })
-    .done(function(user) {
-        // console.log(`sukses in html`);
+    .done(function(user) {        
         localStorage.setItem('token', user.token);
-        localStorage.setItem('userId', user.id);
-        // window.location.href = 'todos.html'
+        localStorage.setItem('userId', user.id);        
         checkUserLogin();
     })
     .fail(function(err) {
@@ -55,11 +53,9 @@ $('.login').submit(function(e) {
         data: userData,
         url: 'http://localhost:3000/users/login'
     })
-    .done(function(user) {      
-        // console.log('berhasil login')  
+    .done(function(user) {              
         localStorage.setItem('token', user.token);
-        localStorage.setItem('userId', user.id);
-        // window.location.href = 'todos.html'
+        localStorage.setItem('userId', user.id);        
         checkUserLogin();
     })
     .fail(function(err) {
@@ -200,28 +196,6 @@ function checkUserLogin() {
         $('.userPrivileged').hide();
     }
 }
-
-// function updateTodo(todoId) {
-//     console.log($(this));
-// }
-
-// function deleteTodo(todoId) {
-//     var confirmDeleteTodo = confirm('Are you sure want to delete this todo?');
-//     if(confirmDeleteTodo) {
-//         $.ajax({
-//             method: 'DELETE',
-//             data: {token: localStorage.token, idTodo: todoId},
-//             url: 'http://localhost:3000/todos'
-//         })
-//         .done(function(message) {
-//             checkUserLogin();
-//         })
-//         .then(function(err) {
-//             console.log(`Error in delete todo html`);
-//             console.log(err)
-//         })
-//     }
-// }
 
 function logout() {
     var userLogout = confirm('Are you sure want to logout?');

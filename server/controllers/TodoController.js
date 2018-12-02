@@ -6,7 +6,6 @@ const verifyToken = require('../helpers/verifyToken');
 module.exports = {
     createTodo: function(req, res, next) {
         const {title, description, due_date, user} = req.body;
-        // console.log(req.body);
 
         const newTodo = { title, description, due_date, user: ObjectID(user) };
         Todos.create(newTodo, function(err, todo) {
@@ -19,7 +18,7 @@ module.exports = {
                 res.status(500).json({
                     message: `Error create new todo`,
                     error: err.message
-                })
+                });
             }
         });
     },
@@ -42,12 +41,10 @@ module.exports = {
         const {idTodo} = req.params;
         const {title, description, due_date, token} = req.body;
         
-        const {id} = verifyToken(token);
-        console.log(id, `==================`);
+        const {id} = verifyToken(token);        
         User.findById(id, function(err, user) {
             if(!err) {
-                if(user) {
-                    console.log(`user found sebenernya===========`)
+                if(user) {                    
                     const updated = {title, description, due_date, user};
                     for(let key in updated) {
                         if(updated[key] === undefined) delete updated[key];
@@ -62,21 +59,21 @@ module.exports = {
                             res.status(500).json({
                                 message: `Error update todo`,
                                 error: err.message
-                            })
+                            });
                         }
                     });
                 } else {
                     res.status(400).json({
                         message: `User not found`
-                    })
+                    });
                 }
             } else {
                 res.status(500).json({
                     message: `Error finding user`,
                     error: err.message
-                })
+                });
             }
-        })
+        });
 
     },
     deleteTodo: function(req, res, next) {
