@@ -9,8 +9,9 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var userRouter = require('./routes/user');
 const taskRouter = require('./routes/task');
+const projectRouter = require('./routes/project');
 
 var app = express();
 
@@ -30,8 +31,9 @@ mongoose.connect(`mongodb://${process.env.USER_MONGODB}:${process.env.PASS_MONGO
 });
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', userRouter);
 app.use('/tasks', taskRouter);
+app.use('/projects', projectRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

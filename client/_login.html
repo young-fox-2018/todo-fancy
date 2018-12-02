@@ -1,0 +1,59 @@
+<div id="errorToken" class="col-12 border border-danger mb-2 rounded" style="display: none;"></div>
+<div class="col-12" id="formLogin">
+    <div class="card-header mb-2 rounded" style="background-color: #e3f2fd;"><h5><b>Please Login</b></h5></div>
+    <div class="p-2">
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Email</label>
+            <label class="col-sm-1 col-form-label">:</label>
+            <div class="col-sm-8">
+                <input type="email" class="form-control" id="emailLogin" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Password</label>
+            <label class="col-sm-1 col-form-label">:</label>
+            <div class="col-sm-8">
+                <input type="password" class="form-control" id="passwordLogin" />
+            </div>
+        </div>
+        <span id="loadingLogin"></span>
+        <button class="btn btn-outline-primary" onclick="login()">Login</button>
+        <button class="btn btn-outline-primary" onclick="showFormRegister()">Register</button>
+    </div>
+</div>
+
+<div class="col-12" style="display: none;" id="formRegister">
+    <div class="card-header mb-2 rounded" style="background-color: #e3f2fd;"><h5><b>Please Register</b></h5></div>
+    <div class="p-2">
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Full Name</label>
+            <label class="col-sm-1 col-form-label">:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="fullNameRegister" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Email</label>
+            <label class="col-sm-1 col-form-label">:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="emailRegister" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Password</label>
+            <label class="col-sm-1 col-form-label">:</label>
+            <div class="col-sm-8">
+                <input type="password" class="form-control" id="passwordRegister" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Retype Password</label>
+            <label class="col-sm-1 col-form-label">:</label>
+            <div class="col-sm-8">
+                <input type="password" class="form-control" id="passwordRegisterRetype" />
+            </div>
+        </div>
+        <span id="loadingRegister"></span>
+        <button class="btn btn-outline-primary" onclick="register()">Register</button>
+    </div>
+</div>

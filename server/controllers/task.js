@@ -7,6 +7,7 @@ class TaskController {
             name: req.body.name,
             description: req.body.description,
             due_date: req.body.due_date,
+            UserId: req.user.UserId,
         })
             .then(function(newTask) {
                 res.status(201).json(newTask);
@@ -18,6 +19,10 @@ class TaskController {
 
     static read(req, res) {
         Task.find({})
+            .sort({due_date: 'desc'})
+            .where({
+                UserId: req.user.UserId
+            })
             .then(function(dataTask) {
                 res.status(200).json(dataTask);
             })

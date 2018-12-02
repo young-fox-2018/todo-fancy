@@ -3,8 +3,8 @@ var router = express.Router();
 const UserController = require('../controllers/user.js');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post('/register', UserController.register);
+router.post('/login', UserController.login);
+router.get('/token-check/:token', UserController.tokenCheck);
 
 module.exports = router;
