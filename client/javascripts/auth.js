@@ -79,10 +79,12 @@ export default () => {
       .done(data => {
         localStorage.setItem('token', data.response)
         localStorage.setItem('idProvider', 'client')
-        toggleLogin()
       })
       .fail((jqXHR, textStatus, errorThrown) => {
         console.log(errorThrown)
+      })
+      .always(() => {
+        toggleLogin()
       })
 
   })
