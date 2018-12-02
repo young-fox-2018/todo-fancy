@@ -15,7 +15,11 @@ const todoSchema = mongoose.Schema({
   },
   dueDate: {
     type: Date,
-    required: true
+    default: new Date().setDate(new Date().getDate() + 7)
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
 
