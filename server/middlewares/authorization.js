@@ -10,10 +10,11 @@ const authorization = function(req, res, next) {
         let decoded = jwt.verify(req.headers.token, process.env.JWT_SECRET)
         Task.findOne({_id:req.params.taskid})
         .then(function(task) {
-            if(task.userid == decoded.id)
+            if(task.userid === decoded.id)
             next()
         })
         .catch(function(err) {
+            console.log(err)
             res.status(401).json({
                 error: "access denied"
             })

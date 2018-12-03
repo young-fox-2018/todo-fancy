@@ -1,10 +1,12 @@
 const Task = require('../models/Task')
+const readToken = require('../helpers/readToken')
 
 class taskController {
 
     static addTask(req, res) {
+        let decoded = readToken(req.headers.token)
         let inputTask = {
-            userid: req.userlogin.id,
+            userid: decoded.id,
             description: req.body.description
         }
         Task.create(inputTask)
@@ -20,9 +22,12 @@ class taskController {
             })
     }
 
-    static showAll(req,res) {
-        Task.find({userid:req.params.userid})
-            .then(function(tasks) {
+    static showAll(req, res) {
+        // console.log('udah sampe sini <======')        
+        let decoded = readToken(req.headers.token)
+        Task.find({userid: decoded.id})
+        .then(function(tasks) {
+            // console.log(tasks)
                 res.status(200).json(tasks)
             })
             .catch(function(err) {
@@ -47,7 +52,6 @@ class taskController {
     }
 
     static update(req, res) {
-        console.log('udah sampe sini <======')
         let dataUpdate = {
             description: req.body.description,
             iscomplete: req.body.iscomplete

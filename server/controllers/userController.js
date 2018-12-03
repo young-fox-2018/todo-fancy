@@ -32,7 +32,6 @@ class UserController {
                 const correctPassword =  checkPassword(req.body.password, user.password)
                 if (correctPassword) {
                     const Token = generateToken(user)
-                    console.log(Token)
                     res.status(200).json({
                         token: Token,
                         message: `${user.username} Login success`
