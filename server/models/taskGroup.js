@@ -11,7 +11,7 @@ var TaskSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'}
+    group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
 })
 
 let taskGroup = mongoose.model('Task', TaskSchema)

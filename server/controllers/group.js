@@ -188,6 +188,41 @@ class Controller {
                 res.status(400).send(err)
             })
     }
+    static completeTask(req,res){
+        let user = jwt.verify(req.headers.token, process.env.JWT_SECRET)
+        taskModel.findOne({
+            _id: req.body.taskId
+        })
+        .then(data => {
+            if (data.isComplete == false){
+                return taskModel.findOneAndUpdate({
+                    _id: req.body.taskId
+                }, {
+                    isComplete :true
+                })
+            } else {
+                return taskModel.findOneAndUpdate({
+                    _id: req.body.taskId
+                }, {
+                    isComplete :false
+                })
+            }
+        })
+        .then(data => {
+            return taskModel.find({
+                group: req.body.groupId
+            })
+        })
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => {
+            res.status(400).json({
+                err:err
+            })
+        })
+           
+    }
 }
 
 module.exports = Controller

@@ -153,9 +153,10 @@ class Controller {
     }
 
     static completeTask(req, res) {
-        console.log(req.body)
+        console.log(req.headers.token)
         Helpers.getUserDataServer(req.headers.token)
-            .then(data => {
+        .then(data => {
+            console.log('masuk sini')
                 let origin = data.todo.filter(function (value, index, arr) {
                     return value.name != req.body.val
                 })

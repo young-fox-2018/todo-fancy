@@ -537,7 +537,27 @@
                                 })
 
                                 // COMPLETE TASK
-
+                                $('.taskGroupComplete').click(function(){
+                                    // console.log($(this).data())
+                                    $.ajax({
+                                        url:'http://localhost:3000/group/complete',
+                                        data: {
+                                            groupId: $(this).data('groupid'),
+                                            taskId: $(this).data('taskid')
+                                        },
+                                        method:'POST',
+                                        headers:{
+                                            token: localStorage.getItem('token')
+                                        }
+                                    })
+                                    .done(data => {
+                                        // console.log(data)
+                                        renderDataTasks(data)
+                                    })
+                                    .fail(err => {
+                                        console.log(err)
+                                    })
+                                })
 
                                 //NEW TASK GROUP
                                 $('#submitTaskGroup').click(function () {
@@ -723,6 +743,9 @@
                                 data: {
                                     token: localStorage.getItem('token'),
                                     val: taskComplete
+                                },
+                                headers: {
+                                    token: localStorage.getItem('token')
                                 }
                             })
                                 .done(data => {

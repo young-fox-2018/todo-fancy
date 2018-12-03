@@ -8,6 +8,7 @@ router.post('/create-task', Middleware.checkUser, Middleware.checkLogin, Control
 router.post('/delete-task', Controller.deleteTask)
 router.post('/find-task', Controller.findTask)
 router.put('/update-task', Controller.updateTask)
+router.post('/complete', Controller.completeTask)
 router.get('/', Middleware.checkUser, Middleware.checkLogin, Controller.readGroup)
 router.post('/', Middleware.checkUser, Middleware.checkLogin, Controller.readGroupTask)
 
