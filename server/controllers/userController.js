@@ -1,7 +1,8 @@
 const User = require('../models/user')
 const Project = require('../models/project')
 const bcrypt = require('bcrypt');
-const { getJWTtoken } = require('../helpers/JWTtoken')
+const getJWTtoken = require('../helpers/JWTtoken')
+const bcryptCompare = require('../helpers/bcryptCompare')
 ObjectId = require('mongodb').ObjectID;
 const axios = require('axios');
 require('dotenv').config()
@@ -54,20 +55,19 @@ class UserController {
                 email: req.body.email
             })
                 .then( user => {
-                    bcrypt.compare(req.body.password, user.password, function (err, result) {
-                        if (result === true) {
-                            let accesstoken = getJWTtoken({
-                                email: user.email
-                            })
-                            res.status(200).json({accesstoken})
-                        }
-                        else {
-                            res.status(400).json({
-                                err: err,
-                                message: 'invalid password'
-                            })
-                        }
-                    }) 
+                    let result = bcryptCompare(req.body.password, user.password)
+                    if (result === true) {
+                        let accesstoken = getJWTtoken({
+                            email: user.email
+                        })
+                        res.status(200).json({accesstoken})
+                    }
+                    else {
+                        res.status(400).json({
+                            err: err,
+                            message: 'invalid password'
+                        })
+                    }
                 })
                 .catch(err => {
                     res.status(500).json({err, message: "error from login"})

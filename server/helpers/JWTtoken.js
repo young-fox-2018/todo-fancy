@@ -7,4 +7,4 @@ function getJWTtoken(data) {
 }
 
 
-module.exports = { getJWTtoken }
+module.exports = getJWTtoken

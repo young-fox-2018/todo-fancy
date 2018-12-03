@@ -60,6 +60,26 @@ function fbLogin(fbToken) {
 }
 
 
+function toggleLogin() {
+    let accesstoken = localStorage.getItem('accesstoken')
+    if (accesstoken) {
+        console.log('accesstoken exist');
+        getTasks()
+        getProjects()
+        getAllUsers()
+        getCompleted()
+        $( "#beforeLogin" ).hide() 
+        $( "#afterLogin" ).show()
+        showTasks()
+    }
+    else {
+        console.log('no accesstoken');
+        $( "#beforeLogin" ).show() 
+        $( "#afterLogin" ).hide()
+    }
+}
+
+
 function showTasks() {
     $('#allTasks').show()
     $('#allProjects').hide()
@@ -87,6 +107,18 @@ function showCompleted() {
     $('#allTasks').hide()
     $("#allCompletedTasks").show()
 }
+
+function showLogin() {
+    $('#loginForm').show()
+    $('#registerForm').hide()
+}
+
+
+function showRegister() {
+    $('#loginForm').hide()
+    $('#registerForm').show()
+}
+
 
 function getAllUsers() {
     $.ajax({
@@ -386,38 +418,6 @@ function showNotification(from, align, message, color) {
         align: align
     }
     });
-}
-
-
-function toggleLogin() {
-    let accesstoken = localStorage.getItem('accesstoken')
-    if (accesstoken) {
-        console.log('accesstoken exist');
-        getTasks()
-        getProjects()
-        getAllUsers()
-        getCompleted()
-        $( "#beforeLogin" ).hide() 
-        $( "#afterLogin" ).show()
-        showTasks()
-    }
-    else {
-        console.log('no accesstoken');
-        $( "#beforeLogin" ).show() 
-        $( "#afterLogin" ).hide()
-    }
-}
-
-
-function showLogin() {
-    $('#loginForm').show()
-    $('#registerForm').hide()
-}
-
-
-function showRegister() {
-    $('#loginForm').hide()
-    $('#registerForm').show()
 }
 
 
