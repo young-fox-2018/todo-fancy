@@ -169,7 +169,7 @@
                 })
             $("#login-page").hide()
         })
-        $("#my-list").on("click", (event) => {
+        function list() {
             $.ajax({
                 method: "GET",
                 url: "http://localhost:3000/todo"
@@ -179,7 +179,7 @@
                     data.forEach(element => {
                         list += `
                     <div>
-                        <h4 class="card-title">Title: ${element.name}</h4>
+                        <h4 class="card-title" >Title: ${element.name}</h4>
                         <p class="card-text">Description: ${element.description}</p>
                         <h6 class="card-footer">Due date: ${element.dueDate}</h6>
                         <button class="col-md-3 delete" data-name="${element._id}">delete</button>
@@ -189,30 +189,38 @@
                     })
                     $("#list-todo").html(list)
                 })
+        }
+        //list()
+        $("#my-list").on("click", (event) => {
+            list()
         })
-        $("#form-update").on("submit", (event) => {
-            event.preventDefault()
-            console.log("berhasil update")
-            $.ajax({
-                method: "PUT",
-                url: "http://localhost:3000/todo",
-                data: {
-                    id: $(event.currentTarget).attr("data-name"),
-                    name: $("#name-update").val(),
-                    description: $("#description-update").val(),
-                    dueDate: $("#dueDate-update").val()
-                }
-            })
-                .done(result => {
-                    console.log("berhasil update")
-                })
-                .fail(err => {
-                    console.log(err.message)
-                })
-        })
+        
         $("#list-todo").on("click", ".update", function(event) {
             $("#todo-page").hide()
             $("#update-page").show()
+            let id = $(event.currentTarget).attr("data-name")
+            $("#form-update").on("submit", (event) => {
+                event.preventDefault()
+                console.log("berhasil update")
+                $.ajax({
+                    method: "PUT",
+                    url: `http://localhost:3000/todo/${id}`,
+                    data: {
+                        name: $("#name-update").val(),
+                        description: $("#description-update").val(),
+                        dueDate: $("#dueDate-update").val()
+                    }
+                })
+                    .done(result => {
+                        console.log("berhasil update")
+                        $("#todo-page").show()
+                        $("#update-page").hide()
+                        list()
+                    })
+                    .fail(err => {
+                        console.log(err.message)
+                    })
+            })
         })
         $("#list-todo").on("click", ".delete", function(event) {
             console.log($(event.currentTarget).attr("data-name"))
