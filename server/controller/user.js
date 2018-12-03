@@ -20,32 +20,29 @@ module.exports = {
             })
     }, 
     login: (req, res) => {
-        console.log(req.body)
         User.findOne({
             email: req.body.email
         })
             .then(user => {
-                console.log(user)
                 if (user) {
                     console.log(user)
                     if (helper.comparePassword(req.body.password, user.password)) {
-                        console.log("masuk pak eko")
                         let token = helper.generateToken({
                             id: user._id,
                             email: user.email
                         })
                         res.status(200).json({
-                            msg: "Berhasil login",
+                            msg: "Sign successfull",
                             token: token
                         })
                     } else {
                         res.status(400).json({
-                            msg: "Password salah"
+                            msg: "Wrong password!"
                         })
                     }
                 } else {
                     res.status(400).json({
-                        msg: "Email tidak terdaftar!"
+                        msg: "Email not found!"
                     })
                 }
             })
@@ -59,7 +56,10 @@ module.exports = {
             url:`https://graph.facebook.com/me?fields=id,email&access_token=${req.body.token}`
         })
             .then(function (response) {
-              console.log(response.data)
+                res.status(200).json({
+                    msg: "Sign successfull",
+                    token: token
+                })
             })
             .catch(function(err) {
                 res.status(400).json({err})
