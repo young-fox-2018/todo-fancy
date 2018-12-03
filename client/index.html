@@ -171,7 +171,7 @@
 
             <div class="col-sm-4">
                 <hr>
-                <button data-toggle="modal" data-target="#newTodoForm" id="addBtn">Add New Task</button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#newTodoForm" id="addBtn">Add New Task</button>
                 <hr>
             </div>
 
@@ -179,6 +179,7 @@
             <!--list todo-->
             <div class="col-sm-4">
                 <div class="table-wrapper-scroll-y" id="listTodo">
+
                     <h1>List Todo</h1>
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -268,21 +269,28 @@
         })
             .done(function (todo) {
                 $.each(todo, function (index, value) {
+                    updateTodo(token, value._id)
                     $('#userTodo').append(` <tr>
                             <th scope="row ">${index + 1}</th>
                                 <td>${value.name}</td>
                                 <td>${value.description}</td>
                                 <td>
-                                <button onclick="updateTodo( '${token}', '${value._id}')" class="btn btn-xs" id="completeBtn ">Complete this task <i class="fa fa-check-square-o " aria-hidden="true "></i>
+                                <button onclick="updateTodo( '${token}', '${value._id}')" class="btn btn-success">Complete this task <i class="fa fa-check-square-o " aria-hidden="true "></i>
                                 </button>
-                                <button onclick="deleteTodo( '${token}', '${value._id}')" class="btn btn-xs">Delete
-                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                <button onclick="deleteTodo( '${token}', '${value._id}')" class="btn btn-danger">Delete
+                                        <i class="fa fa-times-rectangle" aria-hidden="true"></i>
                         </button>
                         </td>
                         <td>${value.due_date}</td>
-                        <td id="status">
+                        
+                        <td>
+                                <div id='checkData${value._id}'>
+
+                                    </div>
                         </td>
+                        
                         </tr>`)
+
                 })
                 addNewTodo(token)
             })
@@ -312,6 +320,11 @@
                         <td>${todo.task.description}</td>
                         <td>${todo.task.due_date}</td>
                         </tr>`)
+                    $('#userTodo').html('')
+                    todoList(token)
+                    $('#userTodo').show()
+                    // todoList(token)
+                    // $('#userTodo').show()
                 })
                 .fail(function (err) {
                     console.log(err)
@@ -328,8 +341,13 @@
         })
             .done(function (task) {
                 if (task.status) {
-                    $('#status').html('Complete')
+                    $(`#checkData${taskId}`).html('')
+                    $(`#checkData${taskId}`).html('<p>Complete</p>')
+                } else {
+                    $(`#checkData${taskId}`).html('')
+                    $(`#checkData${taskId}`).html('<p>UnComplete</p>')
                 }
+
             })
             .fail(err => {
                 console.log(err)
@@ -345,6 +363,9 @@
         })
             .done(function (msg) {
                 alert(`${msg.msg}`)
+                $('#userTodo').html('')
+                todoList(token)
+                $('#userTodo').show()
             })
             .fail(function (err) {
                 console.log(err)
@@ -374,6 +395,8 @@
         });
 
     }
+
+
 
 </script>
 

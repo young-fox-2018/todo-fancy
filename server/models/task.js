@@ -8,7 +8,7 @@ var taskSchema = new Schema({
         type: Boolean,
         default: false
     },
-    due_date: Date
+    due_date: String
 });
 
 
