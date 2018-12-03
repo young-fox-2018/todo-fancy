@@ -75,7 +75,7 @@
                         </div>
                         <div class="md-form mb-4">
                             <i class="fa fa-lock prefix grey-text"></i>
-                            <label data-error="wrong" data-success="righ" for="password ">Your password</label>
+                            <label data-error="wrong" data-success="right" for="password ">Your password</label>
                             <input type="password" id="password " class="form-control validate">
                         </div>
                 </div>
@@ -117,8 +117,8 @@
                     <button type="submit" class="btn btn-deep-orange">Sign In
                         <i class="fa fa-sign-in ml-1"></i>
                     </button>
-                    <div class="g-signin2 " data-onsuccess="onSignIn">
-                        <button type="submit" class="btn btn-deep-orange"> Google Sign In
+                    <div class="g-signin2" data-onsuccess="onSignIn">
+                        <button type="submit" class="closeSignIn">
                         </button>
                     </div>
                     </form>
@@ -210,6 +210,7 @@
     if (token) {
         todoList(token)
         $('#listTodo').show()
+        $('#userTodo').show()
         $('#addBtn').show()
         $('#signup').hide()
         $('#signin').hide()
@@ -251,8 +252,17 @@
             }
         })
             .done(function (userLogin) {
-                console.log(userLogin)
+                $('.close').click()
                 localStorage.setItem('token', userLogin)
+                console.log(userLogin)
+                todoList(userLogin)
+                $('#listTodo').show()
+                $('#userTodo').show()
+                $('#addBtn').show()
+                $('#signup').hide()
+                $('#signin').hide()
+                $('#signout').show()
+
             })
             .fail(function (err) {
                 console.log(err)
@@ -268,6 +278,7 @@
             }
         })
             .done(function (todo) {
+                addNewTodo(token)
                 $.each(todo, function (index, value) {
                     updateTodo(token, value._id)
                     $('#userTodo').append(` <tr>
@@ -292,7 +303,7 @@
                         </tr>`)
 
                 })
-                addNewTodo(token)
+
             })
             .fail(function (err) {
                 console.log(err)
@@ -314,17 +325,19 @@
                 }
             })
                 .done(function (todo) {
+                    $('.close').click()
                     console.log(todo)
                     $('#userTodo').append(`
                         <td>${todo.task.name}</td>
                         <td>${todo.task.description}</td>
                         <td>${todo.task.due_date}</td>
                         </tr>`)
+
                     $('#userTodo').html('')
                     todoList(token)
                     $('#userTodo').show()
-                    // todoList(token)
-                    // $('#userTodo').show()
+
+
                 })
                 .fail(function (err) {
                     console.log(err)
