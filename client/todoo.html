@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./assets/styles.css" type="text/css">
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Todo Manager</title>
+</head>
+<body>
+    <script src="./assets/todo.js"></script>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Todo Manager</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <!-- <li><a href="#">Completed</a></li>
+            <li><a href="#">Uncompleted</a></li> -->
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id=dropdownName>Hello</a>
+                <div class="dropdown-menu navbar-inverse">
+                  <a href="#" class="dropdown-item">Profile</a>
+                  <a href="#" class="dropdown-item">Completed</a>
+                  <a href="#" class="dropdown-item">Uncompleted</a>
+                  <a href="#" class="dropdown-item">Settings</a>
+                </div>
+              </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" id="logout-Btn" onclick="signout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+          </ul>
+        </div>
+      </nav>
+    <div class="col-sm-6">
+        <form id="submit_todo">
+          <div class="form-group">
+            <label for="todoTitle">Title</label>
+            <input type="text" class="form-control" id="todoTitle" placeholder="Add Title">
+          </div>
+          <div class="form-group">
+            <label for="todoDescription">Description</label>
+            <textarea type="text" class="form-control" id="todoDescription" rows="3" placeholder="Description"></textarea>
+          </div>
+            Due Date:
+            <br>
+            <input type="date" id="dueDate">
+          <br><br>
+          <button type="submit" class="btn btn-primary"> Submit </button>
+        </form>
+    </div>
+    <div class="col-sm-6" id="todo-list">
+        <!-- <form id="search" class="form-inline mr-auto">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form><br> -->
+        <h1>Your Todo List</h1>
+        <div id="listTodo"></div>
+    </div>
+
+    <script>
+      listTodo()
+      
+      $('#submit_todo').submit(function(event){
+          event.preventDefault()
+          console.log("masuk")
+          createTodo()
+          
+      })
+
+      $('#logout-Btn').submit(function(event){
+        event.preventDefault()
+        console.log("out")
+        signout()
+      })
+    </script>
+
+    
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="./assets/signin.css" type="text/css">
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>Todo Manager</title>
+</head>
+<body class="text-center">
+    <div class="alert alert-warning alert-dismissible fade in" id="warnig">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <p id="warning_sentences"></p>
+    </div>
+
+    <div class="alert alert-success alert-dismissible" id="success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <p id="success_sentences"></p>
+    </div>
+    
+    <div id="signin">
+      <form class="signin-form" id="signin-form">
+            <div>
+              <h3>Sign In</h3>
+            </div>
+            <div class="form-group">
+              <label for="loginEmail">Email address</label>
+              <input type="email" class="form-control" id="loginEmail" placeholder="Enter Email">
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input type="password" class="form-control" id="loginPassword" placeholder="Enter Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
+      </form>
+    </div>
+
+    <div id="signup">
+      <form id='loginfacebook'>
+          <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+            </fb:login-button><br>
+      </form>
+      <form id="signup-form">
+          <hr>
+          OR
+
+          <div class="form-group">
+              <label id="register-label-name" for="registerName">Full Name</label>
+              <input type="text" class="form-control" id="registerName" placeholder="Enter Name">
+            </div>
+          <div class="form-group">
+            <label id="register-label-email" for="registerEmail">Email address</label>
+            <input type="email" class="form-control" id="registerEmail" placeholder="Enter Email">
+          </div>
+          <div class="form-group">
+            <label id="register-label-password" for="registerPassword">Password</label>
+            <input type="password" class="form-control" id="registerPassword" placeholder="Enter Password">
+          </div>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form><br>
+      <div>
+        <p>Already have an account? <a href="" id="signinAccount">Sign In</a><p>
+        <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
+      </div>
+    </div>
+
+    <script src= "./assets/script.js"></script>
+    <script src="./assets/todo.js"></script>
+    <script>
+      window.fbAsyncInit = function() {
+          FB.init({
+          appId      : '577570032678120',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v3.2'
+          });
+          
+          FB.AppEvents.logPageView();   
+          
+      };
+      
+      (function(d, s, id){
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = "https://connect.facebook.net/en_US/sdk.js";
+          fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+      });
+
+      function statusChangeCallback(response){
+        // console.log(response)
+        console.log(response.authResponse.accessToken)
+        loginfacebook(response.authResponse.accessToken)
+      }
+
+      function checkLoginState() {
+          FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+          });
+      }
+    </script>
+    
+    
+</body>
+</html>
