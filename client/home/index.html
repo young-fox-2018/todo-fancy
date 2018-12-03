@@ -74,10 +74,10 @@
                     </div>
                     <ul class="list-group" id="listProject">
 
-                        <li class="list-group-item d-flex justify-content-between align-items-center detailProject">
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center detailProject">
                             Cras justo odio
                             <span class="badge badge-primary badge-pill">14</span>
-                        </li>
+                        </li> -->
 
                     </ul>
 
@@ -155,7 +155,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="submitTask" type="submit" data-dismiss="modal">submit</button>
-                    <button id="updateTask" data-dismiss="modal" style="display: none">update</button>
+                    <button id="updateTask" data-dismiss="modal">update</button>
                     <button type="button" id="closebtn" class="btn btn-default" data-dismiss="modal">Close</button>
 
                 </div>
@@ -171,7 +171,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="taskGroupHeader">add task to group</h4>
+                    <h4 class="modal-title" id="taskGroupHeader">add task to project</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -224,7 +224,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="submitInvite" class="btn btn-primary">Invite</button>
+                    <button type="button" id="submitInvite" data-dismiss="modal" class="btn btn-primary">Invite</button>
                 </div>
             </div>
         </div>
@@ -253,11 +253,11 @@
     </div>
 
     <!-- EDIT TASK GROUP MODAL -->
-    <div class="modal fade" id="editTaskGroup" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal fade" id="editTaskGroup" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">testing</h4>
+                    <h4 class="modal-title">edit task project</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -449,7 +449,7 @@
                                 $('#btnOption').html(`<button data-target="#inviteModal" data-toggle="modal" style="margin-top:10px" href="" class="btn btn-primary details"
                                                         role="button" data-groupId="${detailGroup._id}" >Invite member</button>
                                                       <button data-toggle="modal"  data-target="#modalTaskGroup"  style="margin-top:10px" href="" class="btn btn-primary details"
-                                                        role="button" data-groupId="${detailGroup._id}">Add task group</button>`)
+                                                        role="button" data-groupId="${detailGroup._id}">Add project task</button>`)
                                 $('#HEADER').text(detailGroup.name)
                                 if (detailGroup.tasks.length != 0) {
                                     renderDataTasks(detailGroup)
@@ -537,26 +537,26 @@
                                 })
 
                                 // COMPLETE TASK
-                                $('.taskGroupComplete').click(function(){
+                                $('.taskGroupComplete').click(function () {
                                     // console.log($(this).data())
                                     $.ajax({
-                                        url:'http://localhost:3000/group/complete',
+                                        url: 'http://localhost:3000/group/complete',
                                         data: {
                                             groupId: $(this).data('groupid'),
                                             taskId: $(this).data('taskid')
                                         },
-                                        method:'POST',
-                                        headers:{
+                                        method: 'POST',
+                                        headers: {
                                             token: localStorage.getItem('token')
                                         }
                                     })
-                                    .done(data => {
-                                        // console.log(data)
-                                        renderDataTasks(data)
-                                    })
-                                    .fail(err => {
-                                        console.log(err)
-                                    })
+                                        .done(data => {
+                                            // console.log(data)
+                                            renderDataTasks(data)
+                                        })
+                                        .fail(err => {
+                                            console.log(err)
+                                        })
                                 })
 
                                 //NEW TASK GROUP
@@ -648,12 +648,16 @@
                         localStorage.setItem('userEmail', data.email)
                         $('#userName').text(data.name)
                         $('#userPhoto').attr('src', data.photo)
-                        renderDataTasks(listTasks)
+                        // renderDataTasks(listTasks)
+                        renderDataTasksUser(listTasks)
 
                         // FIND ALL USERS
                         $.ajax({
                             url: 'http://localhost:3000/users',
-                            method: 'GET'
+                            method: 'GET',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            }
                         })
                             .done(users => {
                                 console.log(users)
@@ -682,6 +686,9 @@
                                 data: {
                                     token: localStorage.getItem('token'),
                                     value: value
+                                },
+                                headers: {
+                                    token: localStorage.getItem('token')
                                 }
                             })
                                 .done(data => {
@@ -701,7 +708,8 @@
                             let filtered = userData.todo.filter(function (value, index, arr) {
                                 return value.name == taskWillUpdate
                             })
-                            // console.log(filtered)
+                            // console.log('masuk')
+                            console.log(filtered)
                             $('#formname').val(filtered[0].name)
                             $('#formdescription').val(filtered[0].description)
                             $('#formstatus').val(filtered[0].status)
@@ -723,7 +731,10 @@
                                 $.ajax({
                                     method: "POST",
                                     url: "http://localhost:3000/users/update-task",
-                                    data: inputTask
+                                    data: inputTask,
+                                    headers: {
+                                        token: localStorage.getItem('token')
+                                    }
                                 })
                                     .done(data => {
                                         window.location.href = '/home'
@@ -787,7 +798,10 @@
                 $.ajax({
                     method: "POST",
                     url: "http://localhost:3000/users/create-task",
-                    data: inputTask
+                    data: inputTask,
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
                 })
                     .done(data => {
                         window.location.href = '/home'
@@ -900,6 +914,69 @@
                                 </div>`
                 })
                 $('#mainNotif').html(template)
+            }
+            function renderDataTasksUser(inputTask) {
+                let groupId = ''
+                if (inputTask.tasks) {
+                    data = inputTask.tasks
+                    groupId = inputTask._id
+                } else {
+                    data = inputTask
+                }
+                let template = ''
+                $.each(data, function (index, value) {
+                    let taskId = ''
+                    let user = ''
+                    if (value._id) {
+                        taskId = value._id
+                        user = value.author.email
+                    }
+
+                    if (value.isComplete == true) {
+                        template += `
+                                    <div class="col-sm-6 mt-2">
+                                        <div class="card bg-dark">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${value.name}</h5>
+                                            <p class="card-text">${value.description}</p>
+                                            <p class="text-muted mb-0">status: ${value.status}</p>
+                                            <p class="text-muted">due-date: ${value.dueDate}</p>
+                                            <div class="d-flex justify-content-center">
+                                                <i class="fas fa-undo taskComplete" data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}" style="font-size:36px; margin-right:20px; cursor:pointer"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                `
+                    } else {
+                        let status = ''
+                        if (value.status == 'High') {
+                            status = 'bg-danger'
+                        } else if (value.status == 'Medium') {
+                            status = 'bg-warning'
+                        } else {
+                            status = 'bg-info'
+                        }
+                        template += `
+                                    <div class="col-sm-6 mt-2">
+                                        <div class="card ${status}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${value.name}</h5>
+                                            <p class="card-text">${value.description}</p>
+                                            <p class="text-muted mb-0">status: ${value.status}</p>
+                                            <p class="text-muted">due-date: ${value.dueDate}</p>
+                                            <div class="d-flex justify-content-center">
+                                                <i class="fas fa-check-square taskComplete " data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}" style="font-size:36px; margin-right:20px;cursor:pointer"></i>
+                                                <i class="fas fa-pen-square taskUpdate " data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}" data-toggle="modal" data-target="#basicModal" style="font-size:36px; margin-right:20px;cursor:pointer"></i>
+                                                <i class="fas fa-trash taskDelete " data-groupid="${groupId}" data-taskid=${taskId} data-user= ${user} id="${value.name}"  style="font-size:36px; margin-right:20px; cursor:pointer"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                `
+                    }
+                    $('#mainTasks').html(template)
+                })
             }
             function renderDataTasks(inputTask) {
                 let groupId = ''

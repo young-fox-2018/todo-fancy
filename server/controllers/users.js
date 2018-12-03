@@ -9,15 +9,16 @@ class Controller {
 
     static userLogin(req, res) {
         Helpers.getUserData(req.body.data)
-            .then(data => {
-                return userModel.findOne({
-                    email: data.email
-                })
+        .then(data => {
+            return userModel.findOne({
+                email: data.email
             })
-            .then(user => {
-                if (user === null) {
-                    return Helpers.createUser(req.body.data)
-                } else {
+        })
+        .then(user => {
+            if (user === null) {
+                return Helpers.createUser(req.body.data)
+            } else {
+                console.log('masuk')
                     return user
                 }
             })
@@ -90,6 +91,8 @@ class Controller {
             isComplete: false,
             createdAt: new Date()
         }
+        console.log(req.body)
+        console.log(req.headers.token)
         userModel.updateOne({
             email: jwt.verify(req.headers.token, process.env.JWT_Secret).email
         }, {
