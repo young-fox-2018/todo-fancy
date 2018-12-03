@@ -2,9 +2,12 @@
 
 ## .env
 JWT_Secret=< secret to be used for JWT Token>
+mlab_user=< user for mlab>
+mlab_password=< mlab password>
 
 ## Link Deploy
-None Yet
+http://xavier-todo-client.thenile.online/
+* Face Book Login doesnt work on deploy yet because url is http and not https
 
 ## Additional Feature
 *Not Sure if these are considered additonal features, but these are the items I spent quite some time on

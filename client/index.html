@@ -310,7 +310,7 @@
             let password = $("#passwordUp").val()
             $.ajax({
                 method: "POST",
-                url: `http://localhost:3000/registeration/signup`,
+                url: `http://xavier-todo-server.thenile.online/registeration/signup`,
                 data: {
                     name: name,
                     email: email,
@@ -332,7 +332,7 @@
             let password = $("#passwordIn").val()
             $.ajax({
                 method: "POST",
-                url: `http://localhost:3000/registeration/signin`,
+                url: `http://xavier-todo-server.thenile.online/registeration/signin`,
                 data: {
                     email: email,
                     password: password
@@ -476,7 +476,7 @@
                 let token = localStorage.getItem('token')
                 $.ajax({
                     method: "PUT",
-                    url: `http://localhost:3000/todo/${taskId}`,
+                    url: `http://xavier-todo-server.thenile.online/todo/${taskId}`,
                     headers: { token: token },
                     data: {
                         name: name,
@@ -501,7 +501,7 @@
             let token = localStorage.getItem('token')
             $.ajax({
                 method: "Delete",
-                url: `http://localhost:3000/todo/${taskId}`,
+                url: `http://xavier-todo-server.thenile.online/todo/${taskId}`,
                 headers: { token: token },
             })
                 .done(response => {
@@ -524,7 +524,7 @@
             let due_date = $('#addPersonalDue').val()
             $.ajax({
                 method: "POST",
-                url: `http://localhost:3000/todo`,
+                url: `http://xavier-todo-server.thenile.online/todo`,
                 headers: {token:token},
                 data: {
                     name: name,
@@ -545,7 +545,7 @@
             let token = localStorage.getItem('token')
             $.ajax({
                 method: "GET",
-                url: `http://localhost:3000/todo/`,
+                url: `http://xavier-todo-server.thenile.online/todo/`,
                 headers: {
                     token: token
                 }
@@ -623,7 +623,7 @@
 
             $.ajax({
                 method: "POST",
-                url: `http://localhost:3000/project`,
+                url: `http://xavier-todo-server.thenile.online/project`,
                 headers: {token:token},
                 data: {
                     name: name,
@@ -641,7 +641,7 @@
             let token = localStorage.getItem('token')
             $.ajax({
                 method: "GET",
-                url: `http://localhost:3000/project`,
+                url: `http://xavier-todo-server.thenile.online/project`,
                 headers: {
                     token: token
                 }
@@ -696,7 +696,7 @@
             let projectId = localStorage.getItem('projectId')
             $.ajax({
                 method: "POST",
-                url: `http://localhost:3000/todo`,
+                url: `http://xavier-todo-server.thenile.online/todo`,
                 headers: {token:token},
                 data: {
                     name: name,
@@ -718,7 +718,7 @@
             let projectId = localStorage.getItem('projectId')
             $.ajax({
                 method: "GET",
-                url: `http://localhost:3000/project/${projectId}`,
+                url: `http://xavier-todo-server.thenile.online/project/${projectId}`,
                 headers: {
                     token: token
                 }
@@ -766,7 +766,7 @@
             let token = localStorage.getItem('token')
             $.ajax({
                 method: "Delete",
-                url: `http://localhost:3000/todo/${projectTaskId}`,
+                url: `http://xavier-todo-server.thenile.online/todo/${projectTaskId}`,
                 headers: { token: token },
             })
                 .done(response => {
@@ -819,7 +819,7 @@
                 let token = localStorage.getItem('token')
                 $.ajax({
                     method: "PUT",
-                    url: `http://localhost:3000/todo/${taskId}`,
+                    url: `http://xavier-todo-server.thenile.online/todo/${taskId}`,
                     headers: { token: token },
                     data: {
                         name: name,
@@ -845,7 +845,7 @@
             projectInvite
             $.ajax({
                     method: "GET",
-                    url: `http://localhost:3000/user`,
+                    url: `http://xavier-todo-server.thenile.online/user`,
                 })
                 .done(response => {
                     $('#memberselect').html('')
@@ -874,7 +874,7 @@
             
             $.ajax({
                     method: "POST",
-                    url: `http://localhost:3000/project/invite`,
+                    url: `http://xavier-todo-server.thenile.online/project/invite`,
                     headers: {token: token},
                     data: {
                         projectId: projectId,
@@ -899,7 +899,7 @@
             let token = localStorage.getItem('token')
             $.ajax({
                 method: "GET",
-                url: `http://localhost:3000/project/invitation`,
+                url: `http://xavier-todo-server.thenile.online/project/invitation`,
                 headers: {
                     token: token
                 }
@@ -926,7 +926,7 @@
             let token = localStorage.getItem('token')
             $.ajax({
                 method: "POST",
-                url: `http://localhost:3000/project/accept/${id}`,
+                url: `http://xavier-todo-server.thenile.online/project/accept/${id}`,
                 headers: {
                     token: token
                 }
@@ -966,7 +966,7 @@
             localStorage.setItem('accessToken', response.authResponse.accessToken)
             $.ajax({
             method: "POST",
-            url: 'http://localhost:3000/registeration/fb-signin',
+            url: 'http://xavier-todo-server.thenile.online/registeration/fb-signin',
             data: {
                 fbtoken : response.authResponse.accessToken
             }
