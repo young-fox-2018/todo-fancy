@@ -46,7 +46,6 @@
         
         <script>
             function post(param1, param2, param3) {
-                console.log("ini masuk register post function")
                 $.ajax({
                     method: "POST",
                     url: "http://localhost:3000/users/register",
@@ -57,12 +56,10 @@
                     }
                 })
                     .done(function(response) {
-                        console.log("ini ke create lhoo ", response)
                         window.location.href = "http://localhost:8080/index.html";
                     })
                     .fail(function(err) {
                         $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
-                        console.log(err.responseJSON)
                     })
             }
         </script>

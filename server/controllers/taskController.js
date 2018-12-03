@@ -2,8 +2,6 @@ const Task = require('../models/Task')
 
 class TaskController {
     static createTask(req, res) {
-        // console.log("this is create task")
-
         let dateInput = (new Date(req.body.date)).getDate()
         let month = (new Date(req.body.date)).getMonth() + 1
         let year = (new Date(req.body.date)).getFullYear()
@@ -18,7 +16,6 @@ class TaskController {
         })
         task.save()
             .then(result => {
-                // console.log("this is createTask ", result)
                 res.status(200).json(result)
             })
             .catch(err => {
@@ -31,7 +28,6 @@ class TaskController {
             userId: req.decoded.id
         })
             .then(result => {
-                // console.log("this is readTask ", result)
                 res.status(200).json(result)
             })
             .catch(err => {
@@ -40,9 +36,6 @@ class TaskController {
     }
 
     static editTask(req, res) {
-        console.log("ini req.body ", req.body)
-        console.log(new Date(req.body.date))
-
         let dateInput = (new Date(req.body.date)).getDate()
         let month = (new Date(req.body.date)).getMonth() + 1
         let year = (new Date(req.body.date)).getFullYear()

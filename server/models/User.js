@@ -26,7 +26,6 @@ var userSchema = new Schema({
                             if (data){
                                 reject(false)
                             }else{
-                                console.log('data email not exist on db')
                                 resolve(true)
                             }
                         }

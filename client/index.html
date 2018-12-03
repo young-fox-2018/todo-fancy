@@ -69,7 +69,6 @@
                     })
                     .fail(function(err) {
                         $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
-                        console.log(err.responseJSON)
                     })
             }
         </script>
@@ -96,7 +95,6 @@
 
             function checkLoginState() {
                 FB.getLoginStatus(function(response) {
-                    console.log('ini chcekLoginFB di HTML ',response);
                     $.ajax({
                         method: "POST",
                         url: "http://localhost:3000/users/login-fb",
@@ -110,7 +108,6 @@
                         })
                         .fail(function(err) {
                             $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
-                            console.log(err.responseJSON)
                         })
                 });
             }
