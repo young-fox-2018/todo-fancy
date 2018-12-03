@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Register Page</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="./register.css" >
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body class="align">
+
+        <div class="grid">    
+            <form method="post" class="form login" onsubmit="return false">
+                <div class="form__field">
+                    <label for="email"><i class="fa fa-user" style="color: #fff"></i><span class="hidden">Username</span></label>
+                    <input type="text" name="username" id="username" placeholder="username" class="form__input" required>
+                </div>                    
+                <div class="form__field">
+                    <label for="email"><i class="fa fa-envelope" style="color: #fff"></i><span class="hidden">Email</span></label>
+                    <input type="email" name="email" id="email" placeholder="email" class="form__input" required>
+                </div>                
+                <div class="form__field">
+                    <label for="login__password"><i class="fa fa-lock" style="color: #fff"></i><span class="hidden">Password</span></label>
+                    <input type="password" name="password" id="password" class="form__input" placeholder="Password" required>
+                </div>                
+                <div class="form__field">
+                    <button id="buttonSubmit" onclick="post($('#username').val(), $('#email').val(), $('#password').val())">REGISTER</button>
+                </div>                    
+            </form>        
+        </div> 
+
+        <div class="showErr">
+        </div>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+        <script>
+            function post(param1, param2, param3) {
+                console.log("ini masuk register post function")
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/register",
+                    data: {
+                        username: param1,
+                        email: param2,
+                        password: param3
+                    }
+                })
+                    .done(function(response) {
+                        console.log("ini ke create lhoo ", response)
+                        window.location.href = "http://localhost:8080/index.html";
+                    })
+                    .fail(function(err) {
+                        $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                        console.log(err.responseJSON)
+                    })
+            }
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Login Page</title>
+
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <!-- jquery -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="./login.css" >
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body class="align">
+
+        <div class="grid">
+        
+            <form method="post" class="form login" onsubmit="return false">
+                
+                <div class="form__field">
+                    <label for="email"><i class="fa fa-envelope" style="color: #fff"></i><span class="hidden">Email</span></label>
+                    <input type="email" name="email" id="email" placeholder="email" class="form__input" required>
+                </div>
+                
+                <div class="form__field">
+                    <label for="login__password"><i class="fa fa-lock" style="color: #fff"></i><span class="hidden">Password</span></label>
+                    <input type="password" name="password" id="password" class="form__input" placeholder="Password" required>
+                </div>
+                
+                <div class="form__field">
+                    <button id="buttonSubmit" onclick="login($('#email').val(), $('#password').val())">LOGIN</button>
+                </div>
+                    
+            </form>
+                
+            <p class="text--center">Not a member? <a href='http://localhost:8080/register.html'>Sign up now</a></p>
+        
+        </div>      
+
+        <div class="showErr">
+        </div>
+
+        <fb:login-button 
+            scope="public_profile,email"
+            onlogin="checkLoginState();">
+        </fb:login-button>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            function login(email, password) {
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/login",
+                    data: {
+                        email: email,
+                        password: password
+                    }
+                })
+                    .done(function(result) {
+                        localStorage.setItem("token", result);
+                        window.location.href = "http://localhost:8080/to-do.html";
+                    })
+                    .fail(function(err) {
+                        $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                        console.log(err.responseJSON)
+                    })
+            }
+        </script>
+        <script>
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '361239214649479',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v3.2'
+              });
+                
+              FB.AppEvents.logPageView();   
+                
+            };
+          
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "https://connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            function checkLoginState() {
+                FB.getLoginStatus(function(response) {
+                    console.log('ini chcekLoginFB di HTML ',response);
+                    $.ajax({
+                        method: "POST",
+                        url: "http://localhost:3000/users/login-fb",
+                        data: {
+                            accessToken: response.authResponse.accessToken
+                        }
+                    })
+                        .done(function(result) {
+                            localStorage.setItem("token", result);
+                            window.location.href = "http://localhost:8080/to-do.html";
+                        })
+                        .fail(function(err) {
+                            $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                            console.log(err.responseJSON)
+                        })
+                });
+            }
+          </script>
+    </body>
+</html>
