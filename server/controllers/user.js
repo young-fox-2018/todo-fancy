@@ -9,7 +9,6 @@ module.exports = {
             if(input[key] == undefined) delete input[key]
         }
         User.findOneAndUpdate({_id: req.params.id}, {$set: input}, function(err, result){
-            console.log("Updated the transaction");
             res.status(201).json({
                 msg : "updated data",
                 data: result
@@ -21,17 +20,12 @@ module.exports = {
             if(err){
                 res.status(400).json({error : err})
             }else{
-                console.log(result)
-                console.log("removed the customer");
                 res.status(200).json("removed customer")
             }
         })  
     },
     findOne : function(req,res,next){
-        console.log(req.body)
-        let {id} = verifyToken(req.body.token)
-
-        console.log(id)
+        const id = req.userId;
         User.findOne({_id : id}).
         populate('todo').
         exec(function(err, user){

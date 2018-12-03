@@ -3,8 +3,7 @@ const {verifyToken} = require('../helpers/index')
 
 module.exports = {
     create: function(req,res,next){
-        let {id} = verifyToken(req.body.token)
-        console.log(id)
+        const id = req.userId;
         Todo.create({
             title: req.body.title,
             description: req.body.description,
@@ -25,36 +24,30 @@ module.exports = {
             if(err){
                 res.status(400).json(err)
             }else{
-                console.log("Found the following records");
-                console.log(todos)
                 res.status(200).json(todos)
             }
         })
     },
     findOne:function(req, res, next){
-        let {id} = verifyToken(req.query.token);
+        const userId = req.userId;
         Todo.findOne({_id : req.params.id}, function(err, todo){
             if(err){
                 res.status(400).json(err)
             }else{
-                console.log("Found todo ====");
-                console.log(todo)
                 res.status(200).json(todo)
             }
         })
     },
     update : function(req, res, next){
-        let {id} = verifyToken(req.body.token)
-        let {title, description, due_date, status} = req.body
-        let input = {title, description, due_date, status}
-        console.log(input)
+        let id = req.headers.task_id;
+        console.log(id)
+        let input = {title, description, due_date, status} = req.body
         for(let key in input) {
             if(key == undefined)
             delete input[key]
         }
-        console.log(id)
-        console.log(input,"============")
-        Todo.findOneAndUpdate({user: id}, {$set: input}, function(err, result){
+        console.log(input)
+        Todo.findOneAndUpdate({_id : id}, {$set: input}, function(err, result){
             console.log("Updated the task");
             res.status(200).json({
                 data: result
@@ -63,8 +56,6 @@ module.exports = {
     },
 
     delete : function(req, res, next){
-        console.log(req.body.title)
-        let {id} = verifyToken(req.body.token)
         Todo.findOneAndDelete({title: req.body.title}, function(err, result){
             if(err){
                 res.status(400).json({error : err})

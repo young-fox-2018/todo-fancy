@@ -288,17 +288,19 @@
             $('#form-create').on('submit', function(e){
                 e.preventDefault();
                 var data ={
-					title : $('#title-create').val(),
-                    description : $('#description-create').val(),
-                    due_date : $('#due_date-create').val(),
-                    token : localStorage.getItem('token')
+					title : $('#title-add').val(),
+                    description : $('#description-add').val(),
+                    due_date : $('#due_date-add').val()
                 }
                 // console.log(data)
 				$.ajax({
 					type: 'POST',
 					url: 'http://localhost:3000/tasks/',
 					dataType: 'json',
-					data: data
+                    data: data,
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
 				})
 				.done(function(dataTask){
                     console.log(dataTask)
@@ -324,19 +326,23 @@
                 var data ={
                     title : $('#title-edit').val(),
                     description : $('#description-edit').val(),
-                    due_date: $('#due_date-edit').val(),
-                    token: localStorage.getItem("token")
+                    due_date: $('#due_date-edit').val()
                 }
                 console.log(data)
                 $.ajax({
                     type: 'PUT',
                     url: 'http://localhost:3000/tasks/',
                     dataType: 'json',
-                    data: data
+                    data: data,
+                    headers: {
+                        token: localStorage.getItem('token'),
+                        task_id: localStorage.getItem('idTask'),
+                        title: $('#title-edit').val()
+                    }
                 })
                 .done(function(dataEdit){
                     console.log("berhasil update:",dataEdit)
-                    // location.reload(true)
+                    location.reload(true)
                 })
                 .fail(function(error){
                     console.log(error)
@@ -349,7 +355,7 @@
         })
         function checklogin(){
             if(localStorage.getItem("token")){
-                $('task').show()
+                $('.task').show()
                 getAllTask()
                 $('#form-edit').hide()
                 $('#manage-task').hide()
@@ -368,8 +374,8 @@
                 method : 'post',
                 url : 'http://localhost:3000/users',
                 dataType: 'json',
-                data: {
-                    token: localStorage.getItem("token")
+                headers: {
+                        token: localStorage.getItem('token')
                 }
                 })
                 .done (function(result){
@@ -405,9 +411,9 @@
                method: 'GET',
                url: `http://localhost:3000/tasks/${task_id}`,
                dataType: 'json',
-               data: {
-                   token: localStorage.getItem("token")
-               }
+               headers: {
+                        token: localStorage.getItem('token')
+                }
            })
            .done(function(result){
                 $('.viewHeader').empty()
@@ -417,6 +423,7 @@
                 $("#form-edit #description-edit").val(`${result.description}`)
                 $("#form-edit #due_date-edit").val(`${result.due_date}`)
                 $('#underlist').hide()
+                localStorage.setItem('idTask', task_id)
            })
            .fail(function(e){
                console.log("ERROR: ", e);
@@ -429,8 +436,10 @@
                 url : 'http://localhost:3000/tasks',
                 dataType: 'json',
                 data: {
-                    token: localStorage.getItem("token"),
                     title: $('#titletask').text()
+                },
+                headers: {
+                        token: localStorage.getItem('token')
                 }
             })
             .done (function(result){
