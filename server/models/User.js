@@ -8,23 +8,22 @@ let userSchema = new Schema({
   lastName: String,
   email: String,
   password: String,
-  login: String,
-  taskList: [{type: Schema.Types.ObjectId, ref: 'Task' }]
+  login: String
 })
 
 const User = mongoose.model('User', userSchema);
 
-userSchema.path('email').validate(function(email, next) {
-  User.findOne( {
-    email: email
-  }, function (err, user) {
-    if (user) {
-      throw new Error('Email is not unique')
-    } else {
-      next()
-    }
-  })
-  }, "email is not unique")
+// userSchema.path('email').validate(function(email, next) {
+//   User.findOne( {
+//     email: email
+//   }, function (err, user) {
+//     if (user) {
+//       throw new Error('Email is not unique')
+//     } else {
+//       next()
+//     }
+//   })
+//   }, "email is not unique")
 
 
 

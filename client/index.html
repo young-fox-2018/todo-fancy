@@ -81,18 +81,23 @@
                     <label for="date">Due Date</label>
                     <input type="date" class="form-control" id="date" placeholder="date" required>
                 </div>
-                <div id="radioChoice">            
-                    <div class="form-group">
-                        <label for="status">Status</label>
-                        <div class="form-group">
-                            <input type="radio" name="status" id="r1" value="finished"> Finished
-                        </div>
-                        <input type="radio" name="status" id="r2" value="not finish"> Not Finished
-                    </div>
-                </div>
-               
                 <button class="btn btn-primary" type="submit">Submit</button>
             </form>
+            <form id="update">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="updateName" placeholder="task name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="details">Details</label>
+                        <input type="text" class="form-control" id="updateDetails" placeholder="details">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Due Date</label>
+                        <input type="date" class="form-control" id="updateDate" placeholder="date" required>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
             <div class="row" id="maincContent">
                 <div class="col-xs-3">
                     <div class="card card-bem">
@@ -104,9 +109,12 @@
                     </div>
                 </div>
                 <div class="col-xs-9" id="content">
-                    <button class="btn btn-primary">Edit</button>
-                    <button class="btn btn-danger">Finish</button>
-                    <button class="btn btn-default">Delete</button>
+                    <button class="btn btn-primary"onclick="editTask()">Edit</button>
+                    <button class="btn btn-danger" onclick="finishTask()">Finish</button>
+                    <button class="btn btn-default" onclick="deleteTask()">Delete</button>
+                    <ul class="list-group list-group-flush" id="itemDetail" >
+                    </ul>
+                
                 </div>
             </div>
         </div>
@@ -119,6 +127,73 @@
         $("#task").hide()
         $("#alertError").hide()
         $("#signupError").hide()
+        $("#update").hide()
+
+
+        function deleteTask() {
+            let id = $('.list-group-item.active').attr('id')
+                
+            $.ajax ({
+                method: "DELETE",
+                url: `http://localhost:3000/tasks/delete`,
+                data: {
+                    id: id,
+                    token: localStorage.getItem("token"),
+                }
+            })
+            .done((task) => {
+                $("#itemDetail").empty()
+                $('.list-group-item.active').hide()
+            })
+            .fail((err) => {
+                console.log(err)
+            })
+        }
+
+         function editTask() {
+            let id = $('.list-group-item.active').attr('id')
+            $("#maincContent").hide()
+            $("#update").show()
+            $.ajax ({
+                method: "GET",
+                url: `http://localhost:3000/tasks/${id}`,
+                data: {
+                    token: localStorage.getItem("token"),
+                }
+            })
+            .done((task) => {
+                $("#updateName").val(task.task.name)
+                $("#updateDetails").val(task.task.details)
+                $("#updateDate").val(task.task.date)
+            })
+            .fail((err) => {
+                console.log(err)
+            })
+        }
+
+        function finishTask() {
+            let id = $('.list-group-item.active').attr('id')
+                
+            $.ajax ({
+                method: "POST",
+                url: `http://localhost:3000/tasks/finish`,
+                data: {
+                    id: id,
+                    token: localStorage.getItem("token"),
+                    status: 'finished'
+                }
+            })
+            .done((task) => { 
+                $("#itemDetail").empty()
+                $("#itemDetail").append(`<li class="list-group-item"><strong>Name: </strong>${task.task.name}</li>
+                                                <li class="list-group-item"><strong>Details: </strong>${task.task.details}</li>
+                                                <li class="list-group-item" id="status"><strong>Status: </strong>${task.task.status}</li>
+                                                <li class="list-group-item"><strong>Due Date: </strong>${task.task.due_date}</li>`)    
+            })
+            .fail((err) => {
+                console.log(err)      
+            })
+        }
 
         $("#signupForm").on("submit", function(e) {
             e.preventDefault()
@@ -133,24 +208,18 @@
                     password: $("#password").val()
                 }
                 })
-                .done((user) => {
-                    $("#firstName").val('')
-                    $("#lastName").val('')
-                    $("#email").val('')
-                    $("#password").val('')
-                    $("#signinForm").show()
-                    $("#signupForm").hide()     
-                })
-                .fail(((err) => {
-                    $("#signupError").show()
-                }))
+            .done((user) => {
+                $("#firstName").val('')
+                $("#lastName").val('')
+                $("#email").val('')
+                $("#password").val('')
+                $("#signinForm").show()
+                $("#signupForm").hide()     
+            })
+            .fail(((err) => {
+                $("#signupError").show()
+            }))
         })
-
-        $(".list-group-item").on('click', function (e) {
-            $(".list-group-item").removeClass('active');
-
-            $(this).addClass('active');
-        });
 
         $("#task").on('submit', function(e) {
             e.preventDefault()
@@ -162,13 +231,39 @@
                     name: $("#name").val(), 
                     details: $("#details").val(),
                     due_date: $("#date").val(),
-                    status: $('#task input[name=status]:checked').val(),
+                    status: 'not finished',
                     token: localStorage.getItem("token")
                 }
             })
             .done((task) => { 
                 $("#alertError").hide()
                 $("#task").hide()
+                $("#maincContent").show()
+                showAllTasks()
+            })
+            .fail(((err) => {
+                console.log(err)
+            }))
+        })
+
+         $("#update").on('submit', function(e) {
+            e.preventDefault()
+            let id = $('.list-group-item.active').attr('id')
+            $.ajax({
+                method: "PUT",
+                url: "http://localhost:3000/tasks",
+                data: {
+                    id: id,
+                    name: $("#name").val(), 
+                    details: $("#details").val(),
+                    due_date: $("#date").val(),
+                    token: localStorage.getItem("token")
+                }
+            })
+            .done((task) => { 
+                console.log("MASUK LOHHHHH")
+                $("#alertError").hide()
+                $("#update").hide()
                 $("#maincContent").show()
                 showAllTasks()
             })
@@ -197,7 +292,6 @@
                  showAllTasks()
             })
             .fail(((err) => {
-                console.log(err)
                 $("#alertMessage").text(err.responseJSON.error)
                 $("#alertError").show()
             }))
@@ -222,15 +316,40 @@
                    token: localStorage.getItem("token")
                 }
             })
-            .done((users) => { 
-                console.log(users)
-                //$("#itemList").val('')
-                //$("#itemList").append()
+            .done((tasks) => { 
+                $("#itemList").empty()
+            
+                tasks.tasks.forEach(element => {
+                    $("#itemList").append(` <li class="list-group-item" id=${element._id}>${element.name}</li>`)
+                });
+
+                 $(".list-group-item").on('click', function (e) {
+                    $(".list-group-item").removeClass('active')
+                    $(this).addClass('active')
+                    let id = $(this).attr('id')
+        
+                    $.ajax({
+                        method: "GET",
+                        data: {
+                            token: localStorage.getItem("token") 
+                        },
+                        url: `http://localhost:3000/tasks/${id}`,
+                        })
+                    .done((task) => { 
+                        $("#itemDetail").empty()
+                        $("#itemDetail").append(`<li class="list-group-item"><strong>Name: </strong>${task.task.name}</li>
+                                                <li class="list-group-item"><strong>Details: </strong>${task.task.details}</li>
+                                                <li class="list-group-item" id="status"><strong>Status: </strong>${task.task.status}</li>`)
+                        
+                    })
+                    .fail((err) => {
+                        console.log(err)      
+                    })
+                })
             })
             .fail(((err) => {
-                // console.log('woi')
-                // $("#alertMessage").text(err.responseJSON.error)
-                // $("#alertError").show()
+                $("#alertMessage").text(err.responseJSON.error)
+                $("#alertError").show()
             }))
         }
     </script>

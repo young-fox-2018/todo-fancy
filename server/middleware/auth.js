@@ -5,7 +5,7 @@ const jwt = require('../helper/jwt')
 module.exports = {
     checkLogin: (req, res, next) => {  
         let token = req.query.token || req.body.token
-       
+        console.log("MAU UPDATE NIH TP NYANGKUT")
         jwt.validateToken(token, (err, result) => {
             if (err) {
                 res.status(501).json( {
@@ -21,6 +21,7 @@ module.exports = {
                 } else {
                     req.result = result
                     console.log(req.result,'4444444')
+                    console.log("KESINI LOH BRO")
                     next()
                 }
             }

@@ -8,7 +8,7 @@ module.exports = {
         Task.create( {
             name: req.body.name,
             details: req.body.details,
-            due_date: req.body.date,
+            due_date: req.body.due_date,
             status: req.body.status,
             userId: mongoose.Types.ObjectId(req.result._id)
         }, (err, task) => {
@@ -27,14 +27,36 @@ module.exports = {
     },
 
     getAll: (req, res) => {
-        User.findOne({email: req.result.email})
-        .populate('taskList')
-        .exec(function (err, user) {
+        console.log('GET ALL')
+        Task.find({userId: req.result._id})
+        .populate('userId')
+        .exec(function (err, tasks) {
           if (err)  {
-              console.log(err)
+            res.status(500).json( {
+                error: err,
+                msg: "Please try again later"
+            })
           } else {
-              console.log(user)
+            res.status(200).json( {
+                tasks: tasks
+            })
           }
+        })
+    },
+
+    getDetail: (req, res) => {
+        console.log('MASUK GA')
+        Task.findById(req.params.taskId, (err, task) => {
+            if(err) {
+                res.status(500).json( {
+                    error: err,
+                    msg: "Please try again later"
+                }) 
+            } else {
+                res.status(200).json( {
+                    task: task
+                })
+            }
         })
     },
 
@@ -43,9 +65,57 @@ module.exports = {
              _id: req.body.id
             }, function (err, user) {
           if (err)  {
-              console.log(err)
+             res.status(500).json( {
+                 msg: 'please try again',
+                 err: err
+             })
           } else {
-              console.log(user)
+              res.status(204).json( {
+                  msg: "successfully deleted"
+              })
+          }
+        })
+    },
+
+    update: (req, res) => {
+        console.log("GAK MASUK KESINI LOH")
+        console.log('SSS--S-SSS-', req.body)
+        Task.findOneAndUpdate( {
+             _id: req.body.id
+            },  {
+                name: req.body.name,
+                details: req.body.details,
+                due_date: req.body.due_date
+            }, {new:true}, function (err, task) {
+                if (err)  {
+                    res.status(500).json( {
+                        error: err,
+                        msg: "Please try again later"
+                    })
+                  } else {
+                      console.log(task)
+                      res.status(200).json( {
+                        task: task
+                      })
+                  }
+        })
+    },
+
+    finishTask: (req, res) => {
+        Task.findOneAndUpdate( {
+             _id: req.body.id
+        }, {
+            status: req.body.status
+        }, {new: true}, function (err, task) {
+          if (err)  {
+            res.status(500).json( {
+                error: err,
+                msg: "Please try again later"
+            })
+          } else {
+              res.status(200).json( {
+                task: task
+              })
           }
         })
     }
