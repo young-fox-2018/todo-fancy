@@ -1,10 +1,12 @@
+import url from './url.js'
+
 const deleteTodoButton = todo => {
   let button = $('<button class="todoButton btn btn-danger float-left">Delete</button>')
 
   button.click(event => {
     $.ajax({
       method: 'DELETE',
-      url: `http://localhost:3000/todos?id=${todo._id}`,
+      url: `${url}/todos?id=${todo._id}`,
       headers: {
         Authorization: localStorage.getItem('token'),
       }
@@ -38,7 +40,7 @@ const todoButton = todo => {
     button.click(event => {
       $.ajax({
         method: 'PATCH',
-        url: `http://localhost:3000/todos?id=${todo._id}`,
+        url: `${url}/todos?id=${todo._id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -72,7 +74,7 @@ const todoTemplate = todo => {
 
 export function getTodos() {
   $.get({
-    url: 'http://localhost:3000/todos',
+    url: url + '/todos',
     headers: {
       Authorization: localStorage.getItem('token')
     }
@@ -97,7 +99,7 @@ export default () => {
 
     event.preventDefault()
     $.post({
-      url: 'http://localhost:3000/todos',
+      url: url + '/todos',
       headers: {
         Authorization: localStorage.getItem('token')
       },

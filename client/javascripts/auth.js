@@ -1,8 +1,9 @@
 import { getTodos } from './todo.js'
+import url from './url.js'
 
 function gOnSignIn(googleUser) {
   $.post({
-    url: 'http://localhost:3000/users/gsignin',
+    url: url + '/users/gsignin',
     data: {
       id_token: googleUser.getAuthResponse().id_token
     }
@@ -56,7 +57,7 @@ export default () => {
 
   $('#signupForm').submit(event => {
     event.preventDefault()
-    $.post('http://localhost:3000/users/signup', {
+    $.post(url + '/users/signup', {
       username: $('#regUsername').val(),
       email: $('#regEmail').val(),
       password: $('#regPassword').val(),
@@ -72,7 +73,7 @@ export default () => {
 
   $('#loginForm').submit(event => {
     event.preventDefault()
-    $.post('http://localhost:3000/users/signin', {
+    $.post(url + '/users/signin', {
       identity: $('#inputIdentity').val(),
       password: $('#inputPassword').val(),
     })

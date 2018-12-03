@@ -3,3 +3,4 @@
 server/.env
 google-oauth.json
 server/credentials.json
+server/.gitignore
