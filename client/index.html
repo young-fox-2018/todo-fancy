@@ -15,6 +15,59 @@
     integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous">
     </script>
+
+<script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '929426517445206',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v3.2'
+          });
+            
+          FB.AppEvents.logPageView();   
+            
+        };
+      
+        (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "https://connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+
+         FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+
+        function statusChangeCallback(response){
+            console.log(response.authResponse.accessToken)
+            let input = {
+                token: response.authResponse.accessToken
+            }
+            $.ajax({
+                type: "POST",
+                url: `http://localhost:3000/users/fbSignin`,
+                data: input
+            })
+            .done(function(data){
+                localStorage.setItem("token", data.token)
+                console.log("masuk done")
+                checkToken()
+            })
+            .fail(function(err){
+                console.log("masuk fail")
+                console.log(err)
+            })
+        }
+
+        function checkLoginState() {
+           FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+            });
+        }
+      </script>
 </head>
 <body>
         <nav class="navbar navbar-inverse">
@@ -46,6 +99,10 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
+                    <fb:login-button 
+                    scope="public_profile,email"
+                    onlogin="checkLoginState();">
+                    </fb:login-button>
             </div>
             <div  class="row userPriviledge">
                 <div class="col-sm-4">
@@ -193,20 +250,42 @@
                         <button type="submit" class="btn btn-default">Submit</button>
                       </form>
                       `)
-                })
 
-
-                //edit belom kelar
-                $("#editTaskForm").submit(function(event){
+                    $("#editTaskForm").submit(function(event){
                     event.preventDefault()
                     console.log("oet")
                     let input ={
                         title: $("#titleEdit").val(),
                         description: $("#descriptionEdit").val(),
-                        dueDate: $("dueDateEdit").val()
+                        dueDate: new Date($("dueDateEdit").val())
                     }
-                    console.log(input)
+                    console.log("=====",input)
+                    $.ajax({
+                            type: "PUT",
+                            url: `http://www.localhost:3000/tasks/${currentTask._id}`,
+                            data: input
+                        })
+                        .done(function(data){
+                            console.log("dkfjkdfjkd", data)
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                        checkToken()
+                        })
+                        .fail(function(err){
+                            console.log(err)
+                            
+                        })
+                    
                 })
+                })
+
+
+                //edit belom kelar
+                
 
                 $("#deleteTask").click(function(event){
                     event.preventDefault()
