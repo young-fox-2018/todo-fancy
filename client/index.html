@@ -57,7 +57,6 @@
 
                 <div class="modal-body mx-3">
                     <form action="" id="signUpForm">
-
                         <div class="md-form mb-5">
                             <i class="fa fa-user prefix grey-text"></i>
                             <label data-error="wrong" data-success="right" for="fullName">Full Name</label>
@@ -75,8 +74,8 @@
                         </div>
                         <div class="md-form mb-4">
                             <i class="fa fa-lock prefix grey-text"></i>
-                            <label data-error="wrong" data-success="right" for="password ">Your password</label>
-                            <input type="password" id="password " class="form-control validate">
+                            <label data-error="wrong" data-success="right" for="password">Your password</label>
+                            <input type="password" id="password" class="form-control validate">
                         </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
@@ -235,12 +234,38 @@
             }
         })
             .done(function (user) {
-                alert(`Sign Up Success`)
+                $.ajax({
+                    url: `http://localhost:3000/users/signin`,
+                    type: `POST`,
+                    data: {
+                        email: $('#email').val(),
+                        password: $('#password').val()
+                    }
+                })
+                    .done(function (userLogin) {
+                        $('.close').click()
+                        localStorage.setItem('token', userLogin)
+                        console.log(userLogin)
+                        todoList(userLogin)
+                        $('#listTodo').show()
+                        $('#userTodo').show()
+                        $('#addBtn').show()
+                        $('#signup').hide()
+                        $('#signin').hide()
+                        $('#signout').show()
+
+                    })
+                    .fail(function (err) {
+                        console.log(err)
+                    })
+
+
             })
             .fail(function (err) {
                 console.log(err)
             })
     })
+
     $('#signInForm').on('submit', function (event) {
         event.preventDefault()
         $.ajax({
