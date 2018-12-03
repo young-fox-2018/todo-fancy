@@ -6,14 +6,18 @@ const request = require("request")
 
 module.exports = {
     create: function(req,res,next){
+        console.log("masuk control cre")
+        // console.log(req.body.name, req.body.email, req.body.password)
         User.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password
         }, function(err, response){
-            if(err) res.status(400).json({err: err.message})
+            if(err) {res.status(400).json({err: err.message}) 
+            console.log("gagal", err.message)}
             else{
-                res.status(200).json({message: `you successfully registered with id ${response.id}`})
+                
+                res.status(200).json({msg: `you successfully registered with id ${response.id}`})
             }
         })
     },

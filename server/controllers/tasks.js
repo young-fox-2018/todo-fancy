@@ -57,6 +57,7 @@ module.exports ={
             dueDate: req.body.dueDate,
             status: req.body.status
         }
+        console.log(updatedData)
         for(let key in updatedData){
             if(updatedData[key] == undefined || updatedData[key] == ""){
                 console.log("masuk delete")

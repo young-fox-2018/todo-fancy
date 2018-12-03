@@ -79,8 +79,8 @@
                 <li><a id="addTask" href="#">add Task</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                <li><a id="logOut" href="#"><span class="glyphicon glyphicon-log-out userPriviledge"></span> Logout</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-user signIn"></span> Sign Up</a></li>
+                <li class="userPriviledge"><a id="logOut" href="#"><span class="glyphicon glyphicon-log-out "></span> Logout</a></li>
+                <li id="signUp" class="signIn"><a href="#"><span class="glyphicon glyphicon-user "></span> Sign Up</a></li>
                 </ul>
             </div>
         </nav>
@@ -88,6 +88,7 @@
         <main class="container">
             <div class="signIn">
                     <form id="signInForm">
+                            <h1>Sign In</h1>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
@@ -98,11 +99,30 @@
                             <input type="password" class="form-control" id="password" placeholder="Password">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <fb:login-button 
+                        scope="public_profile,email"
+                        onlogin="checkLoginState();">
+                        </fb:login-button>
                     </form>
-                    <fb:login-button 
-                    scope="public_profile,email"
-                    onlogin="checkLoginState();">
-                    </fb:login-button>
+            </div>
+                    <form id="signUpForm">
+                        <h1>Register</h1>
+                        
+                                    <div class="form-group">
+                                      <label for="exampleInputEmail1">Name</label>
+                                      <input type="name" class="form-control" id="nameRegister" aria-describedby="emailHelp" placeholder="Enter full name">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="exampleInputEmail1">Email address</label>
+                                      <input type="email" class="form-control" id="emailRegister" aria-describedby="emailHelp" placeholder="Enter email">
+                                      <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="exampleInputPassword1">Password</label>
+                                      <input type="password" class="form-control" id="passwordRegister" placeholder="Password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
             </div>
             <div  class="row userPriviledge">
                 <div class="col-sm-4">
@@ -153,6 +173,9 @@
             let currentTask
 
             $(document).ready(function(){
+
+                $("#signUpForm").hide()
+                
                 checkToken()
 
                 console.log(users_data)
@@ -284,12 +307,11 @@
                             
                         })
                     
-                })
+                    })
+
                 })
 
 
-                //edit belom kelar
-                
 
                 $("#deleteTask").click(function(event){
                     event.preventDefault()
@@ -339,6 +361,40 @@
                     event.preventDefault()
                     localStorage.clear()
                     checkToken()
+                })
+
+                $("#signUp").click(function(event){
+                    event.preventDefault()
+
+                    $("#signUpForm").show()
+                    $("#signInForm").hide()
+
+                    $("#signUpForm").submit(function(event){
+                        event.preventDefault()
+                        let input ={
+                            name: $("#nameRegister").val(),
+                            email : $("#emailRegister").val(),
+                            password : $("#passwordRegister").val()
+                            
+                        }
+                        console.log("disini ", input)
+                    $.ajax({
+                        type: "POST",
+                        url: `http://www.localhost:3000/users/`,
+                        data: input
+                    })
+                    .done(function(data){
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                    })
+                    .fail(function(err){
+                        console.log(err)
+                    })
+                    })
                 })
             })
 
