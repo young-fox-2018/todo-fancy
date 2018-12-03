@@ -24,25 +24,23 @@ class UserController {
     }
 
     static register(req, res) {
-        bcrypt.hash(req.body.password, 10, function (err, hash) {
-            User.create({
-                email: req.body.email,
-                password: hash,
-                name: req.body.name
-            })
-                .then( user => {
-                    res.status(201).json({
-                        user,
-                        message: 'Congratulation! You have been registered! Please login to continue.'
-                    })
-                })
-                .catch( err => {
-                    res.status(500).json({ 
-                        err: err.message,
-                        message: 'error from creating new user'
-                    })
-                })
+        User.create({
+            email: req.body.email,
+            password: req.body.password,
+            name: req.body.name
         })
+            .then( user => {
+                res.status(201).json({
+                    user,
+                    message: 'Congratulation! You have been registered! Please login to continue.'
+                })
+            })
+            .catch( err => {
+                res.status(500).json({ 
+                    err: err.message,
+                    message: 'error from creating new user'
+                })
+            })
     }
 
     static login(req, res) {
