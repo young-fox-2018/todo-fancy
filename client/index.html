@@ -108,6 +108,10 @@
                 <div class="col-sm-4">
                     <ul id="taskList" class="list-group">
                     </ul>
+                    <h3>FINISHED:</h3>
+                    <ul id="finishedTaskList" class="list-group">
+
+                    </ul>
                 </div>
                 <div id="canvas" class="col-sm-8">
                     <div id="taskDisplay">
@@ -257,7 +261,7 @@
                     let input ={
                         title: $("#titleEdit").val(),
                         description: $("#descriptionEdit").val(),
-                        dueDate: new Date($("dueDateEdit").val())
+                        dueDate: new Date($("#dueDateEdit").val())
                     }
                     console.log("=====",input)
                     $.ajax({
@@ -375,9 +379,14 @@
             function printList(){
                 
                 $("#taskList").html("<span></span>")
+                $("#finishedTaskList").html("<span></span>")
                 users_data.taskList.forEach(element => {
-                    
-                    $("#taskList").append(`<li id="${element._id}" class="list-group-item">${element.title}</li>`)
+                    if(element.status === "pending"){
+                        $("#taskList").append(`<li id="${element._id}" class="list-group-item">${element.title}</li>`)
+                    }
+                    else{
+                        $("#finishedTaskList").append(`<li id="${element._id}" class="list-group-item">${element.title}</li>`)
+                    }
                 });
 
                 $(".list-group-item").click(function(event){
