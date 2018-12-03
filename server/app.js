@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
 const mongoose = require('mongoose')
+const mongodbUri = 'mongodb://@ds125198.mlab.com:25198/todofancy'
 const cors = require('cors')
 //routes
 const toDoRoute = require('./routes/todo')
@@ -14,8 +15,14 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 
 //connect mongoose
-mongoose.connect('mongodb://localhost:27017/todoYF', {useNewUrlParser:true});
-const db = mongoose.connection;
+mongoose.connect(mongodbUri,
+  {
+    useNewUrlParser: true,
+    auth: {
+      user: process.env.mlab_user,
+      password: process.env.mlab_password
+    }
+  });const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log(('You are Mongected'));

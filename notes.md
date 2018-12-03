@@ -13,7 +13,6 @@ None Yet
 
 ## Obstacles
 1. Spent some time reworking on the models for projects and invitation, which took some time.
-2. 
 
 ## Other Notes
 Steps on Editing ToDo
