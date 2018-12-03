@@ -3,7 +3,8 @@ $(document).ready(function() {
 
     $("#displayError").hide()
 
-    $('#clickLogin').click(function(prop) {
+    $('#buttonLogin').click(function(prop) {
+        console.log("masuk")
         prop.preventDefault()
         $.ajax({
             url:'http://localhost:3000/users/login',
@@ -18,7 +19,6 @@ $(document).ready(function() {
                 $("#valueEmail").val('')
                 $("#valuePassword").val('')
                 console.log(response.message)
-                window.location = '/index.html'
             })
             .fail(function(err) {
                 $("#messageError").text("email / password invalid")
