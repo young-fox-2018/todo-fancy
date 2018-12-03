@@ -10,12 +10,61 @@ $(document).on('click', '.view-project', function() {
     dataTaskProject = '';
     let tasks = JSON.parse($(this).attr('data-tasks'));
     for(let i = 0; i < tasks.length; i++) {
+        
+        let due_date = new Date(tasks[i].due_date).toDateString();
+        let colorStatus = 'danger';
+        if(tasks[i].status === 'pending') {
+            colorStatus = 'warning';
+        }else if(tasks[i].status === 'finish') {
+            colorStatus = 'info';
+        }
+
         dataTaskProject += `
             <div class="card mb-2">
                 <div class="card-header">
                     ${tasks[i].name}
+                    <div><small><b>Due Date : ${due_date}</b></small></div>
+                </div>
+                <div class="card p-2">
+                    <button
+                        class="btn btn-sm btn-outline-${colorStatus}"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        data-datamodal="todoProject"
+                        data-taskid="${tasks[i]._id}"
+                        data-projectid="${projectid}"
+                        data-name="${tasks[i].name}"
+                        data-status="${tasks[i].status}"
+                    >
+                        <i class="fa fa-edit"> ${tasks[i].status}</i>
+                    </button>
                 </div>
                 <div class="p-2">
+                    <button class="btn btn-sm btn-outline-info view" id="${tasks[i]._id}">
+                        <i class="fa fa-id-card"> View</i>
+                    </button>
+                    <button
+                        class="btn btn-sm btn-outline-info"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        data-datamodal="edit"
+                        data-taskid="${tasks[i]._id}"
+                        data-name="${tasks[i].name}"
+                        data-name="${tasks[i].description}"
+                        data-name="${tasks[i].due_date}"
+                    >
+                        <i class="fa fa-edit"> Edit</i>
+                    </button>
+                    <button
+                        class="btn btn-sm btn-outline-info"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        data-datamodal="delete"
+                        data-taskid="${tasks[i]._id}"
+                        data-name="${tasks[i].name}"
+                    >
+                        <i class="fa fa-trash"> Delete</i>
+                    </button>
                 </div>
             </div>
         `;
@@ -36,7 +85,7 @@ $(document).on('click', '.view-project', function() {
             <tr>
                 <td>Member</td>
                 <td>:</td>
-                <td>${member}</td>
+                <td id="nameMember">${member}</td>
             </tr>
             <tr>
                 <td colspan="3">
@@ -45,6 +94,7 @@ $(document).on('click', '.view-project', function() {
                         data-toggle="modal"
                         data-target="#myModal"
                         data-datamodal="addMember"
+                        data-projectid="${projectid}"
                     >
                         <i class="fa fa-user"> Add Member</i>
                     </button>
@@ -69,6 +119,7 @@ $('#myModal').on('show.bs.modal', function (e) {
 
     let taskid = button.data('taskid');
     let name = button.data('name');
+    let status = button.data('status');
     let description = button.data('description');
     let due_date = button.data('due_date');
     let datamodal = button.data('datamodal');
@@ -189,7 +240,7 @@ $('#myModal').on('show.bs.modal', function (e) {
                 `);
                 $('.button-footer').html(`
                     <span id="loadingSaveMember"></span>
-                    <button type="button" class="btn btn-outline-primary" onclick="saveMember()">Save</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="saveMember('${projectid}')">Save</button>
                 `);
                     })
             .fail(function(error) {
@@ -223,6 +274,88 @@ $('#myModal').on('show.bs.modal', function (e) {
         $('.button-footer').html(`
             <span id="loadingSaveTaskProject"></span>
             <button type="button" class="btn btn-outline-primary" onclick="saveTaskProject('${projectid}')">Save</button>
+        `);
+    } else if (datamodal === 'todo') {
+        let selectedStart = '';
+        let selectedPending = '';
+        let selectedFinish = '';
+        if (status === 'start') {
+            selectedStart = 'selected';
+        } else if (status === 'pending') {
+            selectedPending = 'selected';
+        } else if (status === 'finish') {
+            selectedFinish = 'selected';
+        }
+        $('.modal-header').text('To Do Task');
+        $('.modal-body').html(`
+            <table cellpadding="5">
+                <tr>
+                    <td>Id</td>
+                    <td>:</td>
+                    <td>${taskid}</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>:</td>
+                    <td>${name}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>:</td>
+                    <td>
+                        <select class="form-control" id="status">
+                            <option ${selectedStart}>start</option>
+                            <option ${selectedPending}>pending</option>
+                            <option ${selectedFinish}>finish</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        `);
+        $('.button-footer').html(`
+            <span id="loadingSaveTodo"></span>
+            <button type="button" class="btn btn-outline-primary" onclick="saveTodo('${taskid}')">Save To Do</button>
+        `);
+    } else if (datamodal === 'todoProject') {
+        let selectedStart = '';
+        let selectedPending = '';
+        let selectedFinish = '';
+        if (status === 'start') {
+            selectedStart = 'selected';
+        } else if (status === 'pending') {
+            selectedPending = 'selected';
+        } else if (status === 'finish') {
+            selectedFinish = 'selected';
+        }
+        $('.modal-header').text('To Do Task');
+        $('.modal-body').html(`
+            <table cellpadding="5">
+                <tr>
+                    <td>Id</td>
+                    <td>:</td>
+                    <td>${taskid}</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>:</td>
+                    <td>${name}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>:</td>
+                    <td>
+                        <select class="form-control" id="status">
+                            <option ${selectedStart}>start</option>
+                            <option ${selectedPending}>pending</option>
+                            <option ${selectedFinish}>finish</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        `);
+        $('.button-footer').html(`
+            <span id="loadingSaveTodo"></span>
+            <button type="button" class="btn btn-outline-primary" onclick="saveTodoProject('${taskid}', '${projectid}')">Save To Do</button>
         `);
     }
 });
@@ -319,12 +452,13 @@ function saveProject() {
         });
 }
 
-function saveMember() {
+function saveMember(projectid) {
     $('#loadingSaveMember').html('<img src="./loading.gif" />');
     $.ajax({
         method: 'POST',
         url: 'http://localhost:3000/projects/add-member',
         data: {
+            ProjectId : projectid,
             UserId : $("#MemberId").val(),
         },
         headers: {
@@ -333,7 +467,11 @@ function saveMember() {
     })
         .done(function(response) {
             $('#myModal').modal('hide');
-            console.log(response)
+            let nameMember = '';
+            for(let i = 0; i < response.member.length; i++) {
+                nameMember += response.member[i].email + ', ';
+            }
+            $('#nameMember').html(nameMember);
         })
         .fail(function(error) {
             console.log(error);
@@ -368,18 +506,39 @@ function getTask() {
             let data = '';
             for(let i = 0; i < response.length; i++) {
                 let due_date = new Date(response[i].due_date).toDateString();
+                
+                let colorStatus = 'danger';
+                if(response[i].status === 'pending') {
+                    colorStatus = 'warning';
+                }else if(response[i].status === 'finish') {
+                    colorStatus = 'info';
+                }
+
                 data += `
                     <div class="card mb-3">
                         <div class="card-header">
                             ${response[i].name}
                             <div><small><b>Due Date : ${due_date}</b></small></div>
                         </div>
+                        <div class="card p-2">
+                            <button
+                                class="btn btn-sm btn-outline-${colorStatus}"
+                                data-toggle="modal"
+                                data-target="#myModal"
+                                data-datamodal="todo"
+                                data-taskid="${response[i]._id}"
+                                data-name="${response[i].name}"
+                                data-status="${response[i].status}"
+                            >
+                                <i class="fa fa-edit"> ${response[i].status}</i>
+                            </button>
+                        </div>
                         <div class="p-2">
-                            <button class="btn btn-sm btn-outline-primary view" id="${response[i]._id}">
+                            <button class="btn btn-sm btn-outline-info view" id="${response[i]._id}">
                                 <i class="fa fa-id-card"> View</i>
                             </button>
                             <button
-                                class="btn btn-sm btn-outline-warning"
+                                class="btn btn-sm btn-outline-info"
                                 data-toggle="modal"
                                 data-target="#myModal"
                                 data-datamodal="edit"
@@ -391,7 +550,7 @@ function getTask() {
                                 <i class="fa fa-edit"> Edit</i>
                             </button>
                             <button
-                                class="btn btn-sm btn-outline-danger"
+                                class="btn btn-sm btn-outline-info"
                                 data-toggle="modal"
                                 data-target="#myModal"
                                 data-datamodal="delete"
@@ -424,12 +583,61 @@ function getTaskProject(projectid) {
             dataTaskProject = '';
             let tasks = response.tasks;
             for(let i = 0; i < tasks.length; i++) {
+                let due_date = new Date(tasks[i].due_date).toDateString();
+                
+                let colorStatus = 'danger';
+                if(tasks[i].status === 'pending') {
+                    colorStatus = 'warning';
+                }else if(tasks[i].status === 'finish') {
+                    colorStatus = 'info';
+                }
+                
                 dataTaskProject += `
                     <div class="card mb-2">
                         <div class="card-header">
                             ${tasks[i].name}
+                            <div><small><b>Due Date : ${due_date}</b></small></div>
+                        </div>
+                        <div class="card p-2">
+                            <button
+                                class="btn btn-sm btn-outline-${colorStatus}"
+                                data-toggle="modal"
+                                data-target="#myModal"
+                                data-datamodal="todoProject"
+                                data-taskid="${tasks[i]._id}"
+                                data-projectid="${projectid}"
+                                data-name="${tasks[i].name}"
+                                data-status="${tasks[i].status}"
+                            >
+                                <i class="fa fa-edit"> ${tasks[i].status}</i>
+                            </button>
                         </div>
                         <div class="p-2">
+                            <button class="btn btn-sm btn-outline-info view" id="${tasks[i]._id}">
+                                <i class="fa fa-id-card"> View</i>
+                            </button>
+                            <button
+                                class="btn btn-sm btn-outline-info"
+                                data-toggle="modal"
+                                data-target="#myModal"
+                                data-datamodal="edit"
+                                data-taskid="${tasks[i]._id}"
+                                data-name="${tasks[i].name}"
+                                data-name="${tasks[i].description}"
+                                data-name="${tasks[i].due_date}"
+                            >
+                                <i class="fa fa-edit"> Edit</i>
+                            </button>
+                            <button
+                                class="btn btn-sm btn-outline-info"
+                                data-toggle="modal"
+                                data-target="#myModal"
+                                data-datamodal="delete"
+                                data-taskid="${tasks[i]._id}"
+                                data-name="${tasks[i].name}"
+                            >
+                                <i class="fa fa-trash"> Delete</i>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -465,7 +673,7 @@ function getProject() {
                         </div>
                         <div class="p-2">
                             <button
-                                class="btn btn-sm btn-outline-primary view-project"
+                                class="btn btn-sm btn-outline-info view-project"
                                 data-projectid="${response[i]._id}"
                                 data-name="${response[i].name}"
                                 data-member="${member}"
@@ -474,7 +682,7 @@ function getProject() {
                                 <i class="fa fa-id-card"> View</i>
                             </button>
                             <button
-                                class="btn btn-sm btn-outline-warning"
+                                class="btn btn-sm btn-outline-info"
                                 data-toggle="modal"
                                 data-target="#myModal"
                                 data-datamodal="edit"
@@ -484,7 +692,7 @@ function getProject() {
                                 <i class="fa fa-edit"> Edit</i>
                             </button>
                             <button
-                                class="btn btn-sm btn-outline-danger"
+                                class="btn btn-sm btn-outline-info"
                                 data-toggle="modal"
                                 data-target="#myModal"
                                 data-datamodal="delete"
@@ -591,4 +799,48 @@ function logout() {
 function showFormRegister() {
     $('#formLogin').hide();
     $('#formRegister').fadeIn();
+}
+
+function saveTodo(TaskId) {
+    $('#loadingSaveTodo').html('<img src="./loading.gif" />');
+    $.ajax({
+        method: 'POST',
+        url: `http://localhost:3000/tasks/save-todo`,
+        data: {
+            TaskId : TaskId,
+            status : $("#status").val(),
+        },
+        headers: {
+            token: localStorage.getItem('token-todo-fancy'),
+        }
+    })
+        .done(function(response) {
+            $('#myModal').modal('hide');
+            getTask();
+        })
+        .fail(function(error) {
+            console.log(error);
+        });
+}
+
+function saveTodoProject(TaskId, projectid) {
+    $('#loadingSaveTodo').html('<img src="./loading.gif" />');
+    $.ajax({
+        method: 'POST',
+        url: `http://localhost:3000/tasks/save-todo`,
+        data: {
+            TaskId : TaskId,
+            status : $("#status").val(),
+        },
+        headers: {
+            token: localStorage.getItem('token-todo-fancy'),
+        }
+    })
+        .done(function(response) {
+            $('#myModal').modal('hide');
+            getTaskProject(projectid)
+        })
+        .fail(function(error) {
+            console.log(error);
+        });
 }

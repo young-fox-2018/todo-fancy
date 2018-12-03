@@ -4,12 +4,10 @@
 
 * **URL**
 
-  <_The URL Structure (path only, no root url)_>
+  <http://localhost:3000/>
 
 * **Method:**
   
-  <_The request type_>
-
   `GET` | `POST` | `DELETE` | `PUT`
   
 *  **URL Params**
@@ -59,23 +57,9 @@
 ----
   Returns json data about a single user.
 
-* **URL**
-
-  /users/:id
-
-* **Method:**
-
-  `GET`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `id=[integer]`
-
-* **Data Params**
-
-  None
+**URL** | **Method:** | **URL Params** | **Required:** | **Data Params**
+------- | ----------- | -------------- | ------------- | ---------------
+/users/:id | `GET` | - | `id=[integer]` | None
 
 * **Success Response:**
 
