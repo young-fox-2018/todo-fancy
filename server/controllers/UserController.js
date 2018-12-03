@@ -18,7 +18,7 @@ module.exports = {
                 });
             } else {
                 res.status(500).json({
-                    message: `Error getting all users`,
+                    message: `Error getting all user data`,
                     error: err.message
                 })
             }
