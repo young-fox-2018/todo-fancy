@@ -2,7 +2,7 @@ const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config()
 const userModel = require('../models/user')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const saltRounds = 10;
 let pass = bcrypt.hashSync('12345', saltRounds)
 
