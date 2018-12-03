@@ -6,6 +6,6 @@ const middleware = require('../middleware/middleware')
 /* GET users listing. */
 router.post('/register', userController.register)
 router.post('/login', userController.login)
-router.post('/loginFB', middleware.findOne, userController.loginFB)
+router.post('/loginFB', middleware.decodeFb, middleware.findOne, userController.loginFB)
 
 module.exports = router;

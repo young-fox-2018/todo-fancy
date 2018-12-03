@@ -31,6 +31,7 @@ module.exports = {
                             id: user._id,
                             email: user.email
                         })
+                        req.id = user._id
                         res.status(200).json({
                             msg: "Sign successfull",
                             token: token
@@ -51,18 +52,13 @@ module.exports = {
             })
     },
     loginFB: function(req, res) {
-        axios({
-            method:'get',
-            url:`https://graph.facebook.com/me?fields=id,email&access_token=${req.body.token}`
+        let token = helper.generateToken({
+            id: req.id,
+            email: req.email
         })
-            .then(function (response) {
-                res.status(200).json({
-                    msg: "Sign successfull",
-                    token: token
-                })
-            })
-            .catch(function(err) {
-                res.status(400).json({err})
-            })
+        res.status(200).json({
+            msg: "Sign successfull",
+            token: token
+        })
     }
 }

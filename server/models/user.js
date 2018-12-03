@@ -5,7 +5,10 @@ const helper = require('../helper/helper')
 var userSchema = new Schema({
     username: String,
     email: String,
-    password: String,
+    password: {
+        type: String,
+        default: 'password'
+    },
     provider: {
         type: String,
         default: 'none'

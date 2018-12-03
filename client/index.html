@@ -114,12 +114,13 @@
             $.ajax({
                 method: "POST",
                 url: "http://localhost:3000/users/loginFB",
-                data: {
+                headers: {
                     token: response.authResponse.accessToken
                 }
             })
                 .done(data => {
                     localStorage.setItem("access_token", data.token)
+                    getList()
                 })
         }
         function checkLoginState() {
@@ -129,6 +130,36 @@
         }
     </script>
     <script>
+        if (localStorage.getItem("access_token")) {
+            $("#login-page").hide()
+            $("#todo-page").show()
+        }
+        function getList() {
+            $(document).ready(function () {
+            $.ajax({
+                method: "GET",
+                url: "http://localhost:3000/todo",
+                headers: {
+                    token: localStorage.getItem("access_token")
+                }
+            })
+                .done(data => {
+                    let list = ``
+                    data.forEach(element => {
+                        list += `
+                    <div>
+                        <h4 class="card-title" >Title: ${element.name}</h4>
+                        <p class="card-text">Description: ${element.description}</p>
+                        <h6 class="card-footer">Due date: ${element.dueDate}</h6>
+                        <button class="col-md-3 delete" data-name="${element._id}">delete</button>
+                        <button class="col-md-3 update" data-name="${element._id}">update</button>
+                    </div>
+                    `
+                    })
+                    $("#list-todo").html(list)
+                })
+            })
+        }
         $("#signin-form").on("submit", function(event) {
             event.preventDefault()
             console.log("signin")
@@ -144,6 +175,8 @@
                     console.log(data.token)
                     localStorage.setItem("access_token", data.token)
                     $("#login-page").hide()
+                    $("#todo-page").show()
+                    getList()
                 })
                 .catch(err => {
                     console.log(err.message)
@@ -163,37 +196,17 @@
             })
                 .done(data => {
                     console.log(data)
+                    $("#login-page").hide()
+                    $("#todo-page").show()
+                    getList()
                 })
                 .catch(err => {
                     console.log(err.message)
                 })
-            $("#login-page").hide()
         })
-        function list() {
-            $.ajax({
-                method: "GET",
-                url: "http://localhost:3000/todo"
-            })
-                .done(data => {
-                    let list = ``
-                    data.forEach(element => {
-                        list += `
-                    <div>
-                        <h4 class="card-title" >Title: ${element.name}</h4>
-                        <p class="card-text">Description: ${element.description}</p>
-                        <h6 class="card-footer">Due date: ${element.dueDate}</h6>
-                        <button class="col-md-3 delete" data-name="${element._id}">delete</button>
-                        <button class="col-md-3 update" data-name="${element._id}">update</button>
-                    </div>
-                    `
-                    })
-                    $("#list-todo").html(list)
-                })
-        }
-        //list()
-        $("#my-list").on("click", (event) => {
-            list()
-        })
+        
+
+        
         
         $("#list-todo").on("click", ".update", function(event) {
             $("#todo-page").hide()
@@ -215,7 +228,7 @@
                         console.log("berhasil update")
                         $("#todo-page").show()
                         $("#update-page").hide()
-                        list()
+                        getList()
                     })
                     .fail(err => {
                         console.log(err.message)
@@ -233,6 +246,7 @@
             })
                 .done(result => {
                     console.log("berhasil delete")
+                    getList()
                 })
                 .fail(err => {
                     console.log(err.message)
@@ -241,16 +255,21 @@
         
         $("#form-todo").on("submit", function(event) {
             event.preventDefault()
+            console.log()
+            let token = localStorage.getItem("access_token")
             let name = $("#name-todo").val()
             let description = $("#description-todo").val()
             let dueDate = $("#dueDate-todo").val()
             $.ajax({
                 method: "POST",
-                url: "http://localhost:3000/todo",
-                data: {name, description, dueDate, token: localStorage.getItem("access_item")}
+                url: `http://localhost:3000/todo`,
+                headers: {
+                    token: localStorage.getItem("access_token")
+                },
+                data: {name, description, dueDate}
             })
                 .done(data => {
-                    console.log(data)
+                    getList()
                     $("#list-todo").append(`
                     <div>
                         <h4 class="card-title">Title: ${data.result.name}</h4>

@@ -7,7 +7,7 @@ module.exports = {
             name: req.body.name,
             description: req.body.description,
             dueDate: req.body.dueDate,
-            user: req.body.user
+            user: req.id
         })
             .then(result => {
                 res.status(201).json({
@@ -20,8 +20,9 @@ module.exports = {
             })
     },
     readAll: (req, res) => {
+        console.log(req.id)
         Todo.find({
-            //user: ObjectId("5c02587023edfd4b94268f88")
+            user: ObjectId(req.id)
         })
             .then(result => {
                 res.status(201).json(result)
@@ -34,7 +35,9 @@ module.exports = {
         console.log(req.params.id, '==========')
         console.log("masuk update")
         let params = {}
+        // let whiteList = ['description']
         for (let key in req.body) {
+            // whiteList.includes(key)
             params[key] = req.body[key]
         }
         Todo.updateOne({_id: ObjectId(req.params.id)}, params)
