@@ -8,7 +8,7 @@ PASS=rahasia
 ----
 PLACE_KEY=AIzaSyDtRsQTIOnsIeSCDAhTdcgjdUruNcCCphQ
 ----
-Link Deploy : Menyusul
+Link Deploy : https://todo.dhimas-hary.online
 ----
 Fitur Tambahan :
 ----
