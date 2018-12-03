@@ -120,7 +120,7 @@ $('#editTodo').submit(function(e) {
     })
 })
 
-$('.card-deck').on('click', '.updateTodo', function(e) {
+$('.card-columns').on('click', '.updateTodo', function(e) {    
     $('#editTodo').show();
     $('#addTodo').hide();
 
@@ -134,7 +134,29 @@ $('.card-deck').on('click', '.updateTodo', function(e) {
     $('#description').val(description.textContent)
 });
 
-$('.card-deck').on('click', '.deleteTodo', function(e) {
+$('.card-columns').on('click', '.completeTodo', function(e) {
+    const idTodo = e.target.parentElement.id;
+    // console.log(e, `completetodo======`);
+    // console.log(idTodo, `id======`);
+
+    $.ajax({
+        method: 'PUT',
+        data: {
+            status: 'complete',             
+            token: localStorage.token
+        },
+        url: `http://localhost:3000/todos/${idTodo}`
+    })
+    .done(function(response) {
+        $('#editTodo').hide();        
+        getAllTodos()
+    })
+    .fail(function(err) {
+        console.log(err);
+    })
+});
+
+$('.card-columns').on('click', '.deleteTodo', function(e) {
     var confirmDeleteTodo = confirm('Are you sure want to delete this todo?');
     if(confirmDeleteTodo) {
         const idTodo = $(this)[0].parentElement.id;
@@ -161,19 +183,22 @@ function getAllTodos(){
         $('.col-9').empty();
         userDetails.todos.forEach(todo => {
             if(todo.status === 'pending') {
-                var bg = 'bg-warning'
+                var bg = 'bg-warning';
+                var btnComplete = '';
             } else {
-                var bg = 'bg-success'
+                var bg = 'bg-success';
+                var btnComplete = 'disabled';
             }
             $('.col-9').append(`
                 <div class="card ${bg}" style="width: 18rem;">
                     <div class="card-body" id="${todo._id}">
                         <h5 class="card-title">${todo.title}</h5><hr>
-                        <h6 class="card-subtitle mb-2 text-muted">Due date: ${todo.due_date}</h6>
+                        <h6 class="card-subtitle mb-2">Due date: ${todo.due_date}</h6>
                         <p class="card-text">${todo.description}</p>
                         <p class="card-text">Status: ${todo.status}</p>
                         <a class="btn btn-sm btn-primary updateTodo">Update</a>
                         <a class="btn btn-sm btn-danger deleteTodo" onclick="deleteTodo('${todo._id}')">Delete</a>
+                        <a class="btn btn-sm btn-success completeTodo" ${btnComplete}>Completed</a>
                     </div>
                 </div> 
             `);

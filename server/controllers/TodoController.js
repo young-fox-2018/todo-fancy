@@ -39,13 +39,13 @@ module.exports = {
     },
     updateTodo: function(req, res, next) {
         const {idTodo} = req.params;
-        const {title, description, due_date, token} = req.body;
+        const {title, description, due_date, status, token} = req.body;
         
         const {id} = verifyToken(token);        
         User.findById(id, function(err, user) {
             if(!err) {
                 if(user) {                    
-                    const updated = {title, description, due_date, user};
+                    const updated = {title, description, due_date, status, user};
                     for(let key in updated) {
                         if(updated[key] === undefined) delete updated[key];
                     }

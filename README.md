@@ -14,8 +14,10 @@ List of routes:
 | /todos | POST | Create new todo |
 | /todos/:id | PUT | Update user's todo |
 | /todos/:id | DELETE | Delete user's todo |
-***
 
+
+ENV:
+SECRET=SECRETPASSWORDNOONESHOULDKNOW
 
 Link Deploy = soon
 Fitur Tambahan = -
