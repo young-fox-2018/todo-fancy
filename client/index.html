@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <!-- semantic ui -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '290629304905323',
+                version: 'v3.2',
+                cookie: true,
+                xfbml: true
+            });
+
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+            FB.AppEvents.logPageView();
+        };
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+
+
+    <title>Sulistiyono</title>
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container" id="nav-bar">
+    </div>
+
+    <!-- end navbar -->
+
+    <div class="ui container" id="form-login-register">
+
+    </div>
+    <!-- task-->
+    <div class="taskData" style="margin:20px">
+        <div class="ui grid centered">
+            <div class="ui twelve wide column">
+                <div class="ui cards" id="task">
+
+                </div>
+                <!-- end UI card-->
+            </div>
+        </div>
+
+
+        <!-- modal created -->
+        <div class="ui modal mini" id="taskCreated" style="witdh:150px">
+            <i class="close icon"></i>
+            <div class="header">
+            </div>
+            <div class="image content">
+                <div class="ui form">
+                    <h4 class="ui dividing header">Add your Task</h4>
+                    <div class="field">
+                        <label>Name</label>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" name="name" placeholder="name" id="task_name">
+                            </div>
+                        </div>
+                    </div>
+                    <label>Description</label>
+                    <textarea type="text" id="task_description"></textarea>
+                    <label>Due Date</label>
+                    <input type="date" name="dueDate" id="due_date">
+                    <div style="margin-top:10px">
+                        <button class="ui button" type="submit" onclick="createdTask()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
+        <!-- updated created -->
+        <div class="ui modal mini" id="updated_task" style="witdh:150px">
+            <i class="close icon"></i>
+            <div class="header">
+            </div>
+            <div class="image content">
+                <div class="ui form">
+                    <h4 class="ui dividing header">Updated your Task</h4>
+                    <div class="field">
+                        <label>Name</label>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" name="name" id="update_task_name" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <label>Description</label>
+                    <textarea type="text" id="update_task_description" value=""></textarea>
+                    <label>Due Date</label>
+                    <input type="date" name="due_date" id="updated_due_date">
+                    <div style="margin-top:10px">
+                        <button class="ui button" type="submit" onclick="updatedTask()">Updated</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
+
+        <!-- updated created -->
+        <div class="ui modal mini" id="detailed_task">
+            <i class="close icon"></i>
+            <div class="header">
+                Detail
+            </div>
+            <div class="image content">
+                <div class="ui form">
+                    <h4 class="ui dividing header">Description</h4>
+                    <div class="field">
+
+                        <div class="ui card">
+                            <div class="content">
+                                <div class="header" id="titleDetail">
+                                </div>
+                                <div class="meta"></div>
+                                <div class="description">
+                                    <p id="descriptionDetail">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
+
+        <script src="./script/index.js"></script>
+        <script>
+            $('.menu .item').tab();
+
+        </script>
+</body>
+
+</html>
