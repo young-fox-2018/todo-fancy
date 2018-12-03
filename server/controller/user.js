@@ -59,7 +59,7 @@ module.exports = {
             url:`https://graph.facebook.com/me?fields=id,email&access_token=${req.body.token}`
         })
             .then(function (response) {
-              console.log(response)
+              console.log(response.data)
             })
             .catch(function(err) {
                 res.status(400).json({err})

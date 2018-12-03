@@ -51,23 +51,23 @@
         </fb:login-button>
     </div>
     <div class="container" id="todo-page">
-        <div class="row">
-            <div class="col-md">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="list-group" id="list-tab" role="tablist">
-                        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">deskripsi disini</div>
-                        </div>
-                    </div>
-                </div>
+        <form class="form" action="" id="form-todo">
+            <label for="name-todo">Name:</label>
+            <input type="text" class="form-control" id="name-todo">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description-todo">
+            <label for="Due date">Due date:</label>
+            <input type="date" class="form-control" id="dueDate-todo">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        <h3 id="">My to do list</h3>
+        <button data-toggle="#list-todo" id="my-list">click</button>
+        <div class="card" id="list-todo">
+            <div class="card-body">
             </div>
         </div>
     </div>
+    <div id="num"></div>
     <script>
         $("#todo-page").hide()
         window.fbAsyncInit = function() {
@@ -95,7 +95,7 @@
         });
         function statusChangeCallback(response) {
             console.log(response)
-            localStorage.setItem("tokenFB", response.authResponse.accessToken)
+            localStorage.setItem("access_token", response.authResponse.accessToken)
             $("#login-page").hide()
             $("#todo-page").show()
             $.ajax({
@@ -116,7 +116,6 @@
         }
     </script>
     <script>
-
         $("#signin-form").on("submit", function(event) {
             event.preventDefault()
             console.log("signin")
@@ -156,7 +155,85 @@
                     console.log(err.message)
                 })
             $("#login-page").hide()
-            // $("#signin-form").show()
+        })
+        $("#my-list").on("click", (event) => {
+            $.ajax({
+                method: "GET",
+                url: "http://localhost:3000/todo"
+            })
+                .done(data => {
+                    let list = ``
+                    data.forEach(element => {
+                        list += `
+                    <div>
+                        <h4 class="card-title">Title: ${element.name}</h4>
+                        <p class="card-text">Description: ${element.description}</p>
+                        <h6 class="card-footer">Due date: ${element.dueDate}</h6>
+                        <button class="col-md-3 delete" data-name="${element._id}">delete</button>
+                        <button class="col-md-3 update" data-name="${element._id}">update</button>
+                    </div>
+                    `
+                    })
+                    $("#list-todo").html(list)
+                })
+        })
+        
+        $("#list-todo").on("click", ".update", function(event) {
+            $.ajax({
+                method: "PUT",
+                url: "http://localhost:3000/todo",
+                data: {
+                    id: $(event.currentTarget).attr("data-name")
+                }
+            })
+                .done(result => {
+                    console.log("berhasil delete")
+                })
+                .fail(err => {
+                    console.log(err.message)
+                })
+        })
+        $("#list-todo").on("click", ".delete", function(event) {
+            console.log($(event.currentTarget).attr("data-name"))
+            $.ajax({
+                method: "DELETE",
+                url: "http://localhost:3000/todo",
+                data: {
+                    id: $(event.currentTarget).attr("data-name")
+                }
+            })
+                .done(result => {
+                    console.log("berhasil delete")
+                })
+                .fail(err => {
+                    console.log(err.message)
+                })
+        })
+        
+        $("#form-todo").on("submit", function(event) {
+            event.preventDefault()
+            let name = $("#name-todo").val()
+            let description = $("#description-todo").val()
+            let dueDate = $("#dueDate-todo").val()
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/todo",
+                data: {name, description, dueDate, token: localStorage.getItem("access_item")}
+            })
+                .done(data => {
+                    console.log(data)
+                    $("#list-todo").append(`
+                    <div>
+                        <h4 class="card-title">Title: ${data.result.name}</h4>
+                        <p class="card-text">Description: ${data.result.description}</p>
+                        <h6 class="card-footer">Due date: ${data.result.dueDate}</h6>
+                        <button class="col-md-3" data-name="${data.result._id}">delete</button>
+                        <button class="col-md-3" data-name="${data.result._id}">update</button>
+                    </div>`)
+                })
+                .catch(err => {
+                    console.log(err.message)
+                })
         })
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
