@@ -108,7 +108,7 @@ error alert "<error text>"
 ***
 ## Create Todo
 ***
-get all users info ( admin only )
+create todo list ( authenticated only )
 
 1. URL  `localhost:8080/task`
 2. Method `POST`
@@ -140,7 +140,8 @@ CODE: 400
 ***
 ## Read Todo
 ***
-get a single user info ( admin and authenticated user)
+show all todo list ( authenticated user only )
+
 1. URL  `localhost:8080/task`
 2. Method `GET`
 3. URL Param 
@@ -162,7 +163,7 @@ CODE: 400
 ***
 ## Edit Todo
 ***
-create a user ( admin only )
+edit todo list ( authenticated user only )
 1. URL  `localhost:8080/task`
 2. Method `PUT`
 3. URL Param `not required`
@@ -193,7 +194,7 @@ CONTENT:
 ***
 ## Delete Todo
 ***
-delete a user ( admin only )
+delete todo list ( authenticated user only )
 
 1. URL  `localhost:8080/task`
 2. Method `DELETE`
