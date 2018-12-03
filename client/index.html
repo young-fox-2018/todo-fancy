@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="642413593903-edd65uba6s3ovrtlb3h7fi5pr1d2q17l.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="justdoit_logo.png" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <title>JustDoIt</title>
+    <link href="signin.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" id="navbar" style="background-color:rgb(180, 183, 185)">
+        <a class="navbar-brand" href="http://localhost:8080"><img class="" src="justdoit_logo.png" alt="" style="max-height: 40px; max-width: 184px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"></li>
+                <li class="nav-item">
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <a href="#" onclick="signOut();">Sign Out</a>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div>
+            <form class="form-signin" id="formSignin">
+                <a href="http://localhost:8080">
+                    <img class="mb-5" src="justdoit_logo.png" alt="">
+                </a>
+                <div id="signinNotif">
+
+                </div>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="text" id="inputEmail" class="form-control" placeholder="Email or Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <button class="btn btn-lg btn-secondary btn-block" type="submit">Sign In</button>
+                <div class="g-signin2 mt-3" data-onsuccess="onSignIn" sty></div>
+                <p class="mt-4 text-center">First time visit? <a href="" data-target="#exampleModalCenter" data-toggle="modal">sign up</a> here.</p>
+                <p class="mt-5 mb-3 text-muted text-center">Copyright &copy; 2018 JustDoIt</p>
+            </form>
+        </div>
+    
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Sign Up</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form class="form-group" id="formSignup">
+                        <div class="modal-body">
+                            <div id="signupNotif">
+
+                            </div>
+                            <label for="inputFirstName" class="sr-only">First Name</label>
+                            <input type="text" id="inputFirstName" class="form-control" placeholder="First name" required autofocus>
+                            <label for="inputLastName" class="sr-only">Last Name</label>
+                            <input type="text" id="inputLastName" class="form-control" placeholder="Last name" required autofocus>
+                            <label for="inputUsername" class="sr-only">Username</label>
+                            <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                            <label for="inputSignupEmail" class="sr-only">Email</label>
+                            <input type="text" id="inputSignupEmail" class="form-control" placeholder="Email address" required autofocus>
+                            <label for="inputSignupPassword" class="sr-only">Password</label>
+                            <input type="password" id="inputSignupPassword" class="form-control" placeholder="Password" required autofocus>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-secondary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+
+        <div class="row">
+            <div class="col-md-4" style="padding-top:60px">
+                <div>
+                    <form class="form-group" id="formCreateTask" style="position:fixed">
+                        <h1 class="h3 mb-3 font-weight-normal text-center">Create New Task</h1>
+                        <label for="taskName" class="sr-only">Task name</label>
+                        <input class="form-control" type="text" id="taskName" placeholder="Task name">
+                        <label for="taskDesc" class="sr-only">Description</label>
+                        <input class="form-control" type="text" id="taskDesc" placeholder="Description">
+                        <label for="taskDate" class="sr-only">Due date</label>
+                        <input class="form-control" type="date" id="taskDate"><br>
+                        <button class="btn btn-lg btn-secondary btn-block" type="submit">Submit</button>
+                        <p class="mt-5 mb-3 text-muted text-center">Copyright &copy; 2018 JustDoIt</p>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div id="myTodoList" style="padding-top:60px">
+    
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div id="updateTask" style="padding-top:60px">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+    if (localStorage.getItem('token')) {
+        $('#formSignin').hide()
+        $('#navbar').show()
+        myTodoList()
+        $('#myTodoList').show()
+        $('#formCreateTask').show()
+    }
+    else {
+        $('#navbar').hide()
+        $('#formCreateTask').hide()
+    }
+
+    $('#formSignup').on('submit', function(event) {
+        event.preventDefault()
+        $.ajax({
+            url: 'http://localhost:3000/users/signup',
+            type: 'post',
+            data: {
+                firstName: $('#inputFirstName').val(),
+                lastName: $('#inputLastName').val(),
+                username: $('#inputUsername').val(),
+                email: $('#inputSignupEmail').val(),
+                password: $('#inputSignupPassword').val()
+            }
+        })
+        .done(function(message) {
+            $('.close').click()
+            $.ajax({
+            url: 'http://localhost:3000/users/signin',
+            type: 'post',
+            data: {
+                email: $('#inputSignupEmail').val(),
+                password: $('#inputSignupPassword').val(),
+            }
+            })
+            .done(function(token) {
+                localStorage.setItem('token', token)
+                $('#formSignin').hide()
+                $('#navbar').show()
+                $('#myTodoList').html('')
+                myTodoList()
+                $('#myTodoList').show()
+                $('#formCreateTask').show()
+            })
+            .fail(function(err) {
+                console.log(err.responseJSON.msg)
+            })
+        })
+        .fail(function(err) {
+            console.log(err.responseJSON)
+            $('#signupNotif').html('')
+            $('#signupNotif').append(`
+                                        <span class="has-text-error alert alert-danger form-control"> 
+                                            ${err.responseJSON}
+                                        </span>
+                                    `)
+        })
+    })
+
+    $('#formSignin').on('submit', function(event) {
+        event.preventDefault()
+        $.ajax({
+            url: 'http://localhost:3000/users/signin',
+            type: 'post',
+            data: {
+                email: $('#inputEmail').val(),
+                password: $('#inputPassword').val(),
+            }
+        })
+        .done(function(token) {
+            localStorage.setItem('token', token)
+            $('#formSignin').hide()
+            $('#navbar').show()
+            $('#myTodoList').html('')
+            myTodoList()
+            $('#myTodoList').show()
+            $('#formCreateTask').show()
+        })
+        .fail(function(err) {
+            console.log(err.responseJSON.msg)
+            $('#signinNotif').html('')
+            $('#signinNotif').append(`
+                                        <span class="has-text-error alert alert-danger form-control"> 
+                                            ${err.responseJSON.msg}
+                                        </span>
+                                    `)
+        })
+    })
+
+    function myTodoList() {
+        $.ajax({
+            url: 'http://localhost:3000/tasks',
+            type: 'get',
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .done(function(myTodoList) {
+            $.each(myTodoList, function(index, value) {
+                $('#myTodoList').append(` 
+                                            <h4><strong>${value.name}</strong></h4>
+                                            <p>${value.description}</p>
+                                            <p>${value.status}</p>
+                                            <h4><strong>${value.dueDate}</strong></h4>
+                                            <button type="button" class="btn btn-outline-success" onclick="competeTask('${value._id}', 'Complete')" data-toggle="modal" data-target="#exampleModal">Complete</button>
+                                            <button type="button" class="btn btn-outline-warning" onclick="competeTask('${value._id}', 'Uncomplete')" data-toggle="modal" data-target="#exampleModal">Uncomplete</button>
+                                            <button type="button" class="btn btn-outline-info" onclick="updateTask('${value._id}')">Update</button>
+                                            <button type="button" class="btn btn-outline-danger" onclick="deleteTask('${value._id}')">Delete</button>
+                                            <hr>
+
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Notification</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Task status updated
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `)
+            })
+        })
+        .fail(function(err) {
+            console.log(err.responseJSON.msg)
+        })
+    }
+
+    function dateFormat(date) {
+        return `${date[0]}${date[1]}${date[2]}${date[3]}-${date[5]}${date[6]}-${date[8]}${date[9]}`
+    }
+
+    function statusDropDown(status) {
+        if (status == 'Complete') {
+            return 'Uncomplete'
+        }
+        else {
+            return 'Complete'
+        }
+    }
+
+    function updateTask(taskId) {
+        $.ajax({
+            url: `http://localhost:3000/tasks/findOne/${taskId}`,
+            type: 'get',
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .done(function(task) {
+            // console.log(task)
+            $('#updateTask').html('')
+            $('#updateTask').show()
+            $('#updateTask').append(`
+                                        <form class="form-group" id="formUpdateTask" style="position:fixed">
+                                            <h1 class="h3 mb-3 font-weight-normal text-center">Update Task</h1>
+                                            <label for="inputTaskName" class="sr-only">Name</label>
+                                            <input type="text" id="inputTaskName" class="form-control" value="${task.name}" required autofocus>
+
+                                            <label for="inputTaskDesc" class="sr-only">Description</label>
+                                            <input type="text" id="inputTaskDesc" class="form-control" value="${task.description}" required autofocus>
+
+                                            <label for="inputTaskStatus" class="sr-only">Description</label>
+                                            <select id="inputTaskStatus" class="form-control">
+                                                <option value="${task.status}">${task.status}</option>
+                                                <option value="${statusDropDown(task.status)}">${statusDropDown(task.status)}</option>
+                                            </select>
+
+                                            <label for="inputTaskDueDate" class="sr-only">Due date</label>
+                                            <input type="date" id="inputTaskDueDate" class="form-control" value="${dateFormat(task.dueDate)}" required autofocus>
+                
+                                            <button type="submit" class="btn btn-lg btn-secondary btn-block mt-2" onclick="saveUpdateTask('${task._id}')">Save</button>
+                                            <button type="button" class="btn btn-lg btn-danger btn-block" onclick="$('#updateTask').html('')">Cancel</button>
+                                        </form>
+
+                                    `)
+        })
+        .fail(function(err) {
+            console.log(err)
+        })
+    }
+
+    function saveUpdateTask(taskId) {
+         $.ajax({
+                url: `http://localhost:3000/tasks/${taskId}`,
+                type: 'put',
+                data: {
+                    name: $('#inputTaskName').val(),
+                    description: $('#inputTaskDesc').val(),
+                    status: $('#inputTaskStatus').val(),
+                    dueDate: $('#inputTaskDueDate').val()
+                },
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            })
+            .done(function(message) {
+                console.log(message)
+                $('#updateTask').hide()
+                $('#myTodoList').html('')
+                myTodoList()
+                $('#myTodoList').show()
+            })
+            .fail(function(err) {
+                console.log(err)
+            })
+    }
+
+    function deleteTask(taskId) {
+        $.ajax({
+            url: `http://localhost:3000/tasks/${taskId}`,
+            type: 'delete',
+            headers: {
+                    token: localStorage.getItem('token')
+            }
+        })
+        .done(function(message) {
+            console.log(message)
+            $('#myTodoList').html('')
+            myTodoList()
+            $('#myTodoList').show()
+        })
+        .fail(function(err) {
+            console.log(err)
+        })
+    }
+
+    function competeTask(taskId, status) {
+        $.ajax({
+            url: `http://localhost:3000/tasks/findOne/${taskId}`,
+            type: 'get',
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .done(function(task) {
+            // console.log(task)
+            $.ajax({
+                url: `http://localhost:3000/tasks/${task._id}`,
+                type: 'put',
+                data: {
+                    name: task.name,
+                    description: task.description,
+                    status: `${status}`,
+                    dueDate: task.dueDate,
+                },
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            })
+            .done(function(message) {
+                console.log(message)
+                $('#myTodoList').html('')
+                myTodoList()
+                $('#myTodoList').show()
+            })
+            .fail(function(err) {
+                console.log(err)
+            })
+        })
+        .fail(function(err) {
+            console.log(err)
+        })
+    }
+
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
+        $.ajax({
+            url: 'http://localhost:3000/users/signin',
+            type: 'post',
+            headers: {
+                googletoken: id_token
+            }
+        })
+        .done(function(token) {
+            localStorage.setItem('token', token)
+            $('#formSignin').hide()
+            $('#navbar').show()
+            $('#myTodoList').html('')
+            myTodoList()
+            $('#myTodoList').show()
+            $('#formCreateTask').show()
+        })
+        .fail(function(err) {
+            console.log(err)
+        })
+    }
+
+    $('#formCreateTask').on('submit', function(event) {
+        event.preventDefault()
+        $.ajax({
+            url: 'http://localhost:3000/tasks',
+            type: 'post',
+            data: {
+                name: $('#taskName').val(),
+                description: $('#taskDesc').val(),
+                dueDate: $('#taskDate').val()
+            },
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .done(function(message) {
+            console.log(message)
+            $('#myTodoList').html('')
+            myTodoList()
+            $('#myTodoList').show()
+
+        })
+        .catch(function(err) {
+            console.log(err)
+        })
+    })
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+            localStorage.removeItem('token')
+            $('#formSignin').show()
+            $('#navbar').hide()
+            $('#myTodoList').hide()
+            $('#formCreateTask').hide()
+        });
+    }
+
+</script>
+</html>
