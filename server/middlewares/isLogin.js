@@ -8,7 +8,7 @@ const ObjectId = require('mongodb').ObjectID
 module.exports = {
     isLogin: (req, res, next) => {
         let token = req.headers.token
-        console.log(token)
+        // console.log(token)
         if (token) {
             jwt.verify(token, process.env.secret, function (err, decoded) {
                 if (err) {

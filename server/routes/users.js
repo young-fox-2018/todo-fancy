@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const UserController = require('../controllers/userController')
-// const LoginFbController = require('../controllers/fbLoginController')
+const LoginFbController = require('../controllers/fbLoginController')
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -10,7 +10,7 @@ const UserController = require('../controllers/userController')
 
 router.post('/login', UserController.login)
 router.post('/register', UserController.register)
-// router.post('/loginFb', LoginFbController.login)
+router.post('/loginFb', LoginFbController.loginFb)
 
 
 

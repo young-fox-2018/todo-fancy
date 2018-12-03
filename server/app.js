@@ -6,7 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const todosRouter = require('./routes/todo')
-const fbLogin = require('./routes/fbLogin')
+// const fbLogin = require('./routes/fbLogin')
 const mongoose = require('mongoose')
 const cors = require('cors')
 require('dotenv').config()
@@ -37,7 +37,7 @@ app.use(cors())
 // app.use('/', indexRouter)
 app.use('/users', usersRouter);
 app.use('/todos', todosRouter)
-app.use('/facebook', fbLogin)
+// app.use('/facebook', fbLogin)
 
 
 // catch 404 and forward to error handler

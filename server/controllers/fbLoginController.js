@@ -2,7 +2,7 @@ const User = require('../models/user')
 const ObjectId = require('mongodb').ObjectId
 const bcryptHelper = require('../helpers/bcrypt')
 const jwt = require('../helpers/jwt')
-const reqquest = require('request')
+const request = require('request')
 
 
 module.exports = {
@@ -21,6 +21,7 @@ module.exports = {
                     err: err.message
                 })
             } else {
+                console.log(req.body)
                 User.findOne({
                     email: body.email
                 }, (err, result) => {
@@ -36,7 +37,7 @@ module.exports = {
                         } else {
                             User.create({
                                 email: body.email,
-                                name: body.name,
+                                username: body.name,
                                 password: 'facebook',
                             }, (err, result) => {
                                 if (err) {
@@ -55,6 +56,7 @@ module.exports = {
             }
         })
     }
+
 }
 
 

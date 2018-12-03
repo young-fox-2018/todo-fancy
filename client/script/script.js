@@ -29,10 +29,9 @@ function checkLoginState() {
 }
 
 function statusChangeCallback(response) {
-    // console.log(response)
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:3000/fblogin',
+        url: 'http://localhost:3000/users/loginFb',
         dataType: 'json',
         data: {
             token: response.authResponse.accessToken
@@ -43,11 +42,12 @@ function statusChangeCallback(response) {
             localStorage.setItem('token', data.token)
             localStorage.setItem('name', data.name)
             localStorage.setItem('email', data.email)
-            login()
+            cekLogin()
         })
-    fail(err => {
-        alert(err)
-    })
+        .fail(err => {
+            console.log(err)
+            // alert(err)
+        })
 }
 
 
@@ -62,17 +62,16 @@ const register = () => {
         }
     })
         .done(function (data) {
-            // console.log(data)
             cekLogin()
             $('#errorLogin').empty()
         })
         .fail(function (err) {
             $('#errorRegister').empty()
             $('#errorRegister').append(`
-            <span class="has-text-error alert alert-danger">${err.responseJSON.message}</span> 
-            <br>
-            
-            `)
+        <span class="has-text-error alert alert-danger">${err.responseJSON.message}</span> 
+        <br>
+        
+        `)
         })
 }
 const login = () => {
@@ -90,7 +89,6 @@ const login = () => {
             cekLogin()
         })
         .fail(err => {
-            // console.log(err.responseJSON.message)
             $('#errorLogin').empty()
             $('#errorLogin').append(`
             <span class="has-text-error alert alert-danger">${err.responseJSON.message}</span>
@@ -386,6 +384,8 @@ const saveEdit = (id) => {
             console.log(err)
         })
 }
+
+
 
 
 
