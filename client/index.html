@@ -132,8 +132,8 @@
                 <div class="pageHeader">
                     <div class="title">Dashboard</div>
                     <div class="userPanel">
-                        <i class="fa fa-chevron-down"></i><span class="username" id="logout">Logout </span><img src="" width="40" height="40"/><span class="greeting"></span></div>
-                        
+                        <i class="fa fa-chevron-down"></i><span class="username" id="logout">Logout </span><img src="" width="40" height="40"/><span class="greeting"></span>
+                    </div>     
                 </div>
 
                 <div class="main-task"> 
@@ -145,7 +145,7 @@
                         <div class="menu">
                             <div class="title">Navigation</div>
                             <ul>
-                                <li class="active"> <i class="fa fa-home"></i>Home</li>
+                                <li class="active" id="home-button"> <i class="fa fa-home"></i>Home</li>
                                 <li><i class="fa fa-signal"></i>Activity</li>
                                 <li > <i class="fa fa-tasks"></i>Manage Tasks</li>
                                 <li> <i class="fa fa-envelope"></i>X</li>
@@ -171,19 +171,15 @@
                         </div>
                     </div>
 
-                    <div class="view" id="edit-form">
-                    
-                    </div>
-
                     <div class="view" id="add-task">
                         <div class="main-add">
                             <form action="POST" id="form-create">
-                                <input class="type-text" type="text" id="title" name="title" placeholder="Title task.."> <br>
+                                <input class="type-text" type="text" id="title-add" name="title" placeholder="Title task.."> <br>
                                 
-                                <textarea class="type-submit" id="description" name="description" placeholder="Description task.." style="height:100px"></textarea>
+                                <textarea class="type-submit" id="description-add" name="description" placeholder="Description task.." style="height:100px"></textarea>
 
                                 <!-- <label>Last Name</label> -->
-                                <input type="date" id="due_date" name="trip-start" value="due date">
+                                <input type="date" id="due_date-add" name="trip-start" value="due date">
                             
                                 <!-- <label>Subject</label> -->
                             
@@ -191,7 +187,20 @@
                             
                             </form>
                         </div>
-                    </div>  
+                    </div> 
+                    <div class="view" id="edit-form">
+                        <div class="main-edit">
+                            <form action="POST" id="form-edit">
+                                <input class="type-text" type="text" id="title-edit" name="title" placeholder="Title task.."> <br>
+                                <textarea class="type-submit" id="description-edit" placeholder="Description task.." style="height:100px"></textarea>
+                        
+                                <input type="date" id="due_date-edit" name="trip-start" value="due date">
+                        
+                                <input type="submit" value="Submit">
+                            
+                            </form>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </section>
@@ -205,7 +214,6 @@
     <script>
         $(document).ready(function(event){
             checklogin()
-            
             $('#login-form').on('submit', function(e){
                 e.preventDefault();
 
@@ -280,9 +288,9 @@
             $('#form-create').on('submit', function(e){
                 e.preventDefault();
                 var data ={
-					title : $('#title').val(),
-                    description : $('#description').val(),
-                    due_date : $('#due_date').val(),
+					title : $('#title-create').val(),
+                    description : $('#description-create').val(),
+                    due_date : $('#due_date-create').val(),
                     token : localStorage.getItem('token')
                 }
                 // console.log(data)
@@ -307,8 +315,54 @@
                     alert(error.responseText)
 				})
             })
+            $('#home-button').on('click', function(e){
+                checklogin()
+            })
+            $('#form-edit').on('submit', function(e){
+                e.preventDefault();
+                console.log("lagiii disini")
+                var data ={
+                    title : $('#title-edit').val(),
+                    description : $('#description-edit').val(),
+                    due_date: $('#due_date-edit').val(),
+                    token: localStorage.getItem("token")
+                }
+                console.log(data)
+                $.ajax({
+                    type: 'PUT',
+                    url: 'http://localhost:3000/tasks/',
+                    dataType: 'json',
+                    data: data
+                })
+                .done(function(dataEdit){
+                    console.log("berhasil update:",dataEdit)
+                    // location.reload(true)
+                })
+                .fail(function(error){
+                    console.log(error)
+                    console.log(error.responseText)
+                })
+            })
             
+
+
         })
+        function checklogin(){
+            if(localStorage.getItem("token")){
+                $('task').show()
+                getAllTask()
+                $('#form-edit').hide()
+                $('#manage-task').hide()
+                $('#add-task').hide()
+                $('.signup').hide()
+                $('.sign-in').hide()
+            }else{
+                $('.sign-in').show()
+                $('.signup').hide()
+                $('.task').hide()
+            }
+        }
+        
         function getAllTask(){
             $.ajax({
                 method : 'post',
@@ -329,19 +383,46 @@
                                 <span id="titletask">${task.title}</span>
                                 <div class="info">
                                     <div class="button green">${task.status}</div>
-                                    <div class="button yellow editTask" id=${task.id}>edit</div>
+                                    <div class="editTask button yellow " id=${task._id}>edit</div>
                                     <div class="button red" onclick="deleteTask()" id="deletetask">delete</div>
                                 </div>
                             </li>
                         `)
                     });
+
+                    $('.editTask').click(function(){
+                        var task_id = $(this).attr('id')
+                        getEditedData(task_id)
+                    })
                     
                 })
                 .fail (function(e) {
                     console.log("ERROR: ", e);
                 });
         }
-       
+        function getEditedData(task_id){
+           $.ajax({
+               method: 'GET',
+               url: `http://localhost:3000/tasks/${task_id}`,
+               dataType: 'json',
+               data: {
+                   token: localStorage.getItem("token")
+               }
+           })
+           .done(function(result){
+                $('.viewHeader').empty()
+                $('.viewHeader').append(` <div class="title">Edit Tasks</div> `)
+                $('#form-edit').show()
+                $("#form-edit #title-edit").val(`${result.title}`)
+                $("#form-edit #description-edit").val(`${result.description}`)
+                $("#form-edit #due_date-edit").val(`${result.due_date}`)
+                $('#underlist').hide()
+           })
+           .fail(function(e){
+               console.log("ERROR: ", e);
+           });
+       }
+
         function deleteTask(){
             $.ajax({
                 method : 'DELETE',
@@ -361,23 +442,10 @@
             });
         }
         
-        function checklogin(){
-            if(localStorage.getItem("token")){
-                $('.task').show()
-                getAllTask()
-                $('#manage-task').hide()
-                $('#add-task').hide()
-                $('.signup').hide()
-                $('.sign-in').hide()
-                $('#form-edit').hide()
-            }else{
-                $('.sign-in').show()
-                $('.signup').hide()
-                $('.task').hide()
-            }
-        }
+       
         
         // Login dan Logout
+
         function onSignIn(googleUser) {
 			var id_token = googleUser.getAuthResponse().id_token;
 			statusChangeCallback(id_token)	
@@ -409,20 +477,6 @@
             checklogin()
         }
         
-        function checklogin(){
-            if(localStorage.getItem("token")){
-                $('.task').show()
-                getAllTask()
-                $('#manage-task').hide()
-                $('#add-task').hide()
-                $('.signup').hide()
-                $('.sign-in').hide()
-            }else{
-                $('.sign-in').show()
-                $('.signup').hide()
-                $('.task').hide()
-            }
-        }
         
     </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->

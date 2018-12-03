@@ -31,17 +31,32 @@ module.exports = {
             }
         })
     },
+    findOne:function(req, res, next){
+        let {id} = verifyToken(req.query.token);
+        Todo.findOne({_id : req.params.id}, function(err, todo){
+            if(err){
+                res.status(400).json(err)
+            }else{
+                console.log("Found todo ====");
+                console.log(todo)
+                res.status(200).json(todo)
+            }
+        })
+    },
     update : function(req, res, next){
+        let {id} = verifyToken(req.body.token)
         let {title, description, due_date, status} = req.body
         let input = {title, description, due_date, status}
+        console.log(input)
         for(let key in input) {
             if(key == undefined)
             delete input[key]
         }
-        Todo.findOneAndUpdate({_id: req.params.id}, {$set: input}, function(err, result){
-            console.log("Updated the transaction");
+        console.log(id)
+        console.log(input,"============")
+        Todo.findOneAndUpdate({user: id}, {$set: input}, function(err, result){
+            console.log("Updated the task");
             res.status(200).json({
-                msg : "updated data",
                 data: result
             })
         })
