@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="477287688203-9eatdimpvhm11441279erfgstekqfh9t.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+    <title>Todo Fancy</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">TodoFancy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a href="" class="nav-link" data-toggle="modal" data-target="#modalSignUpForm" id="signup">Sign Up</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="" class="nav-link" data-toggle="modal" data-target="#modalSignInForm" id="signin">Sign In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="" onclick="signOut()" id="signout">Sign out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</head>
+
+<body style="background-color:darkgrey">
+    <!--Sign Up Form-->
+    <div class="modal fade" id="modalSignUpForm" tabindex="-" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+
+                    <h4 class="modal-title w-100 font-weight-bold">Sign Up Form</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body mx-3">
+                    <form action="" id="signUpForm">
+                        <div class="md-form mb-5">
+                            <i class="fa fa-user prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="fullName">Full Name</label>
+                            <input type="text" id="fullName" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fa fa-text prefix grey-text"></i>
+                            <label data-error="wrong " data-success="right" for="username">Username</label>
+                            <input type="text" id="username" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fa fa-envelope prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="email">Your email</label>
+                            <input type="email" id="email" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-4">
+                            <i class="fa fa-lock prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="password">Your password</label>
+                            <input type="password" id="password" class="form-control validate">
+                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="submit" class="btn btn-deep-orange">Sign Up
+                        <i class="fa fa-sign-in ml-1"></i>
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Sign In Form-->
+    <div class="modal fade" id="modalSignInForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Sign In Form</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body mx-3">
+                    <form action="" id="signInForm">
+                        <div class="md-form mb-5">
+                            <i class="fa fa-envelope prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="email">Your email</label>
+                            <input type="email" id="emailLogIn" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-4">
+                            <i class="fa fa-lock prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="password">Your password</label>
+                            <input type="password" id="passwordLogIn" class="form-control validate">
+                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="submit" class="btn btn-deep-orange">Sign In
+                        <i class="fa fa-sign-in ml-1"></i>
+                    </button>
+                    <div class="g-signin2" data-onsuccess="onSignIn">
+                        <button type="submit" class="closeSignIn">
+                        </button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade left" id="newTodoForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <!-- Add class .modal-full-height and then add class .modal-left (or other classes from list above) to set a position to the modal -->
+        <div class="modal-dialog modal-full-height modal-left" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title w-100" id="myModalLabel">Add New Task Form</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="addTodo">
+                        <div class="md-form mb-5">
+                            <i class="fa fa-pencil prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="name">Your Task Category</label>
+                            <input type="text" id="todoName" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-4">
+                            <i class="fa fa-pencil prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="description">Description</label>
+                            <input type="text" id="todoDescription" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-4">
+                            <i class="fa fa-pencil prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="description">Deadline</label>
+                            <input type="date" id="todoDeadline" class="form-control validate">
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add New Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!--Add new Todo-->
+
+            <div class="col-sm-4">
+                <hr>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#newTodoForm" id="addBtn">Add New Task</button>
+                <hr>
+            </div>
+
+
+            <!--list todo-->
+            <div class="col-sm-4">
+                <div class="table-wrapper-scroll-y" id="listTodo">
+
+                    <h1>List Todo</h1>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Actions</th>
+                                <th scope="col">Deadline</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTodo">
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+    const token = localStorage.getItem('token')
+    if (token) {
+        todoList(token)
+        $('#listTodo').show()
+        $('#userTodo').show()
+        $('#addBtn').show()
+        $('#signup').hide()
+        $('#signin').hide()
+        $('#signout').show()
+    } else {
+        $('#signup').show()
+        $('#signin').show()
+        $('#signout').hide()
+        $('#listTodo').hide()
+        $('#addBtn').hide()
+    }
+    $('#signUpForm').on('submit', function (event) {
+        event.preventDefault()
+        $.ajax({
+            url: `http://localhost:3000/users/signup`,
+            type: `POST`,
+            data: {
+                fullName: $('#fullName').val(),
+                username: $('#username').val(),
+                email: $('#email').val(),
+                password: $('#password').val()
+            }
+        })
+            .done(function (user) {
+                $.ajax({
+                    url: `http://localhost:3000/users/signin`,
+                    type: `POST`,
+                    data: {
+                        email: $('#email').val(),
+                        password: $('#password').val()
+                    }
+                })
+                    .done(function (userLogin) {
+                        $('.close').click()
+                        localStorage.setItem('token', userLogin)
+                        console.log(userLogin)
+                        todoList(userLogin)
+                        $('#listTodo').show()
+                        $('#userTodo').show()
+                        $('#addBtn').show()
+                        $('#signup').hide()
+                        $('#signin').hide()
+                        $('#signout').show()
+
+                    })
+                    .fail(function (err) {
+                        console.log(err)
+                    })
+
+
+            })
+            .fail(function (err) {
+                console.log(err)
+            })
+    })
+
+    $('#signInForm').on('submit', function (event) {
+        event.preventDefault()
+        $.ajax({
+            url: `http://localhost:3000/users/signin`,
+            type: `POST`,
+            data: {
+                email: $('#emailLogIn').val(),
+                password: $('#passwordLogIn').val()
+            }
+        })
+            .done(function (userLogin) {
+                $('.close').click()
+                localStorage.setItem('token', userLogin)
+                console.log(userLogin)
+                todoList(userLogin)
+                $('#listTodo').show()
+                $('#userTodo').show()
+                $('#addBtn').show()
+                $('#signup').hide()
+                $('#signin').hide()
+                $('#signout').show()
+
+            })
+            .fail(function (err) {
+                console.log(err)
+            })
+    })
+
+    function todoList(token) {
+        $.ajax({
+            url: `http://localhost:3000/tasks`,
+            type: 'GET',
+            headers: {
+                token: token
+            }
+        })
+            .done(function (todo) {
+                addNewTodo(token)
+                $.each(todo, function (index, value) {
+                    updateTodo(token, value._id)
+                    $('#userTodo').append(` <tr>
+                            <th scope="row ">${index + 1}</th>
+                                <td>${value.name}</td>
+                                <td>${value.description}</td>
+                                <td>
+                                <button onclick="updateTodo( '${token}', '${value._id}')" class="btn btn-success">Complete this task <i class="fa fa-check-square-o " aria-hidden="true "></i>
+                                </button>
+                                <button onclick="deleteTodo( '${token}', '${value._id}')" class="btn btn-danger">Delete
+                                        <i class="fa fa-times-rectangle" aria-hidden="true"></i>
+                        </button>
+                        </td>
+                        <td>${value.due_date}</td>
+                        
+                        <td>
+                                <div id='checkData${value._id}'>
+
+                                    </div>
+                        </td>
+                        
+                        </tr>`)
+
+                })
+
+            })
+            .fail(function (err) {
+                console.log(err)
+            })
+
+    } function addNewTodo(token) {
+        $('#addTodo').on('submit', function (event) {
+            event.preventDefault()
+            $.ajax({
+                url: `http://localhost:3000/tasks/add`,
+                type: 'POST',
+                data: {
+                    name: $('#todoName').val(),
+                    description: $('#todoDescription').val(),
+                    due_date: $('#todoDeadline').val()
+                },
+                headers: {
+                    token: token
+                }
+            })
+                .done(function (todo) {
+                    $('.close').click()
+                    console.log(todo)
+                    $('#userTodo').append(`
+                        <td>${todo.task.name}</td>
+                        <td>${todo.task.description}</td>
+                        <td>${todo.task.due_date}</td>
+                        </tr>`)
+
+                    $('#userTodo').html('')
+                    todoList(token)
+                    $('#userTodo').show()
+
+
+                })
+                .fail(function (err) {
+                    console.log(err)
+                })
+        })
+    }
+    function updateTodo(token, taskId) { // $('#complete').on('click',
+        $.ajax({
+            url: `http://localhost:3000/tasks/${taskId}`,
+            type: 'PUT',
+            headers: {
+                token: token
+            }
+        })
+            .done(function (task) {
+                if (task.status) {
+                    $(`#checkData${taskId}`).html('')
+                    $(`#checkData${taskId}`).html('<p>Complete</p>')
+                } else {
+                    $(`#checkData${taskId}`).html('')
+                    $(`#checkData${taskId}`).html('<p>UnComplete</p>')
+                }
+
+            })
+            .fail(err => {
+                console.log(err)
+            })
+    }
+    function deleteTodo(token, taskId) {
+        $.ajax({
+            url: `http://localhost:3000/tasks/${taskId}`,
+            type: 'DELETE',
+            headers: {
+                token: token
+            }
+        })
+            .done(function (msg) {
+                alert(`${msg.msg}`)
+                $('#userTodo').html('')
+                todoList(token)
+                $('#userTodo').show()
+            })
+            .fail(function (err) {
+                console.log(err)
+            })
+    }
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
+
+        $.ajax({
+            url: `http://localhost:3000/users/signin`,
+            method: `POST`,
+            headers: {
+                googletoken: id_token
+            }
+        })
+            .done(function (googleUser) {
+                console.log(googleUser)
+                localStorage.setItem('token', googleUser)
+            })
+
+    }
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            localStorage.removeItem('token')
+        });
+
+    }
+
+
+
+</script>
+
+</html>
