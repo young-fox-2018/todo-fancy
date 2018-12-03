@@ -623,8 +623,8 @@ function getTaskProject(projectid) {
                                 data-datamodal="edit"
                                 data-taskid="${tasks[i]._id}"
                                 data-name="${tasks[i].name}"
-                                data-name="${tasks[i].description}"
-                                data-name="${tasks[i].due_date}"
+                                data-description="${tasks[i].description}"
+                                data-due_date="${tasks[i].due_date}"
                             >
                                 <i class="fa fa-edit"> Edit</i>
                             </button>
