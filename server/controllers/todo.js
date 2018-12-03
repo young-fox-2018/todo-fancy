@@ -48,13 +48,12 @@ module.exports = {
     },
 
     delete : function(req, res, next){
-        console.log(req.body.title,"------------")
+        console.log(req.body.title)
         let {id} = verifyToken(req.body.token)
         Todo.findOneAndDelete({title: req.body.title}, function(err, result){
             if(err){
                 res.status(400).json({error : err})
             }else{
-                console.log("masuk sini coy")
                 console.log(result)
                 console.log("removed the task");
                 res.status(200).json("removed task")

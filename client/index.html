@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Todo Fancy</title>
-
+    
+    <meta name="google-signin-client_id" content="22604769740-maf2eq1ma41rfaj5i8id6vbb5nulqt8k.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- Font Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
@@ -117,9 +119,7 @@
                         <div class="social-login">
                             <span class="social-label">Or login with</span>
                             <ul class="socials">
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                                <li><a href=""><i class="g-signin2 display-flex-center" data-onsuccess="onSignIn"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -130,11 +130,11 @@
         <section class="task">
             <div class="page">
                 <div class="pageHeader">
-                        <div class="title">Dashboard</div>
-                        <div class="userPanel">
-                            <i class="fa fa-chevron-down"></i><span class="username" onclick="logout()">Logout </span><img src="" width="40" height="40"/><span class="greeting"></span></div>
-                            
-                    </div>
+                    <div class="title">Dashboard</div>
+                    <div class="userPanel">
+                        <i class="fa fa-chevron-down"></i><span class="username" id="logout">Logout </span><img src="" width="40" height="40"/><span class="greeting"></span></div>
+                        
+                </div>
 
                 <div class="main-task"> 
                     <div class="nav">
@@ -148,7 +148,7 @@
                                 <li class="active"> <i class="fa fa-home"></i>Home</li>
                                 <li><i class="fa fa-signal"></i>Activity</li>
                                 <li > <i class="fa fa-tasks"></i>Manage Tasks</li>
-                                <li> <i class="fa fa-envelope"></i>Messages</li>
+                                <li> <i class="fa fa-envelope"></i>X</li>
                             </ul>
                         </div>
                     </div>
@@ -172,7 +172,7 @@
                     </div>
 
                     <div class="view" id="edit-form">
-                         
+                    
                     </div>
 
                     <div class="view" id="add-task">
@@ -191,8 +191,7 @@
                             
                             </form>
                         </div>
-                        </div> 
-                    </div>
+                    </div>  
                 </div>
             </div>
         </section>
@@ -230,6 +229,10 @@
                     console.log(error)
                     alert(error.responseText)
 				})
+            })
+            $('#logout').on('click', function(e){
+                signOut()
+                logout()
             })
             $('#register-form').on('submit', function(e){
                 e.preventDefault();
@@ -290,9 +293,10 @@
 					data: data
 				})
 				.done(function(dataTask){
-					console.log(dataTask)
-                    localStorage.setItem('token', dataTask.token)
+                    console.log(dataTask)
                     checklogin()
+                    getAllTask()
+                    location.reload(true);
 				})
 				.fail(function(error){
                     console.log(error)
@@ -303,17 +307,8 @@
                     alert(error.responseText)
 				})
             })
-        
+            
         })
-
-        
-        function openForm() {
-            document.getElementById("myForm").style.display = "block";
-        }
-
-        function closeForm() {
-            document.getElementById("myForm").style.display = "none";
-        } 
         function getAllTask(){
             $.ajax({
                 method : 'post',
@@ -324,6 +319,7 @@
                 }
                 })
                 .done (function(result){
+                    $('.greeting').append(`Hi, Mr. ${result.lastName}, ${result.firstName}`)
                     $('#lists').empty();
                     result.todo.forEach(task => {
                     $('#lists')
@@ -333,12 +329,13 @@
                                 <span id="titletask">${task.title}</span>
                                 <div class="info">
                                     <div class="button green">${task.status}</div>
-                                    <div class="button yellow" onclick="openForm()" id="edit">edit</div>
+                                    <div class="button yellow editTask" id=${task.id}>edit</div>
                                     <div class="button red" onclick="deleteTask()" id="deletetask">delete</div>
                                 </div>
                             </li>
                         `)
                     });
+                    
                 })
                 .fail (function(e) {
                     console.log("ERROR: ", e);
@@ -363,8 +360,55 @@
                 console.log("ERROR: ", e);
             });
         }
-
-
+        
+        function checklogin(){
+            if(localStorage.getItem("token")){
+                $('.task').show()
+                getAllTask()
+                $('#manage-task').hide()
+                $('#add-task').hide()
+                $('.signup').hide()
+                $('.sign-in').hide()
+                $('#form-edit').hide()
+            }else{
+                $('.sign-in').show()
+                $('.signup').hide()
+                $('.task').hide()
+            }
+        }
+        
+        // Login dan Logout
+        function onSignIn(googleUser) {
+			var id_token = googleUser.getAuthResponse().id_token;
+			statusChangeCallback(id_token)	
+        }
+        function statusChangeCallback(token){
+            console.log("masuk callback")
+            $.ajax({
+                method: "POST",
+                url: 'http://localhost:3000/googlesign',
+                data: {token: token}
+            })
+            .done(function(dataLogin) {
+				console.log(dataLogin)
+                localStorage.setItem('token', dataLogin.token)
+                checklogin()
+            })
+            .fail(function(error){
+                console.log(error)
+            })
+        }
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+			});
+        }
+        function logout(){
+            localStorage.removeItem("token")
+            checklogin()
+        }
+        
         function checklogin(){
             if(localStorage.getItem("token")){
                 $('.task').show()
@@ -379,11 +423,7 @@
                 $('.task').hide()
             }
         }
-
-        function logout(){
-            localStorage.removeItem("token")
-            checklogin()
-        }
+        
     </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
