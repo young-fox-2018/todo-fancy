@@ -215,7 +215,7 @@ function renderButton() {
 getTodo()
 function getTodo(status = 'all') {
     let url = 'http://localhost:3000/todos'
-    // console.log(status)
+    // console.log(status)  
     if (status === 'all') {
         
         $.ajax({
