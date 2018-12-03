@@ -3,8 +3,6 @@ const Todo = require('../models/todo.js')
 const ObjectId = mongoose.Types.ObjectId
 module.exports = {
     create: (req, res) => {
-        console.log("masuk create")
-        console.log(req.body)
         Todo.create({
             name: req.body.name,
             description: req.body.description,
@@ -34,12 +32,13 @@ module.exports = {
     },
     update: (req, res) => {
         console.log(req.body)
+        console.log("masuk update")
         let params = {}
         for (let key in req.body) {
             params[key] = req.body[key]
         }
         console.log(params)
-        Todo.updateOne({_id: ObjectId(req.body.id)}, params)
+        Todo.updateOne({_id: ObjectId(req.params.id)}, params)
             .then(data => {
                 console.log("berhasil update")
                 res.status(200).json({
@@ -51,8 +50,6 @@ module.exports = {
             })
     },
     delete: (req, res) => {
-        console.log(req.body.id)
-        console.log("masuk delete")
         Todo.deleteOne({_id: ObjectId(req.body.id)})
             .then(data => {
                 res.status(200).json({

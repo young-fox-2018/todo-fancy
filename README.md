@@ -51,5 +51,89 @@ API Documentation yang meliputi : url, http method, input, output (success dan e
   * **Code:** 200 <br/>
     **Content:** `message: Sign successfull`
 
+**Create new to do**
+----
+
+* **URL**
+
+  /todo
+
+* **Method:**
+
+  `POST`
+  
+*  **Input:**
+ 
+   `name: String, description: String, dueDate: String` 
+
+* **Success Response:**
+
+  * **Code:** 201 <br/>
+    **Content:** `message: Successfully added to list`
+
+**Read to do list**
+----
+
+* **URL**
+
+  /todo
+
+* **Method:**
+
+  `GET`
+  
+*  **Input:**
+ 
+   `none` 
+
+* **Success Response:**
+
+  * **Code:** 201 <br/>
+    **Content:** `{
+        title: name,
+        description: description,
+        due date; dueDate,
+    }`
+
+**Delete to do**
+----
+
+* **URL**
+
+  /todo
+
+* **Method:**
+
+  `Delete`
+  
+*  **Input:**
+ 
+   `id: ObjectId` 
+
+* **Success Response:**
+
+  * **Code:** 201 <br/>
+    **Content:** `message: Successfully deleted`
+
+**Update to do**
+----
+
+* **URL**
+
+  /todo
+
+* **Method:**
+
+  `PUT`
+  
+*  **Input:**
+ 
+   `id: ObjectId, params: req.body` 
+
+* **Success Response:**
+
+  * **Code:** 201 <br/>
+    **Content:** `message: Successfully update`
+
 
 
