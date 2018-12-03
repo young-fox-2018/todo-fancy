@@ -33,12 +33,15 @@ module.exports = {
             })
     },
     update: (req, res) => {
+        console.log(req.body)
         let params = {}
         for (let key in req.body) {
             params[key] = req.body[key]
         }
-        Todo.update({_id: ObjectId(req.body.id)}, params)
+        console.log(params)
+        Todo.updateOne({_id: ObjectId(req.body.id)}, params)
             .then(data => {
+                console.log("berhasil update")
                 res.status(200).json({
                     msg: "Successfully updated!"
                 })

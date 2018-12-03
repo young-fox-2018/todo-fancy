@@ -67,9 +67,22 @@
             </div>
         </div>
     </div>
+    <div class="container" id="update-page">
+        <h1>Form Update</h1>
+        <form class="form" action="" id="form-update">
+            <label for="name-update">Name:</label>
+            <input type="text" class="form-control" id="name-update">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description-update">
+            <label for="Due date">Due date:</label>
+            <input type="date" class="form-control" id="dueDate-update">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
     <div id="num"></div>
     <script>
         $("#todo-page").hide()
+        $("#update-page").hide()
         window.fbAsyncInit = function() {
           FB.init({
             appId      : '2224197941187312',
@@ -177,21 +190,29 @@
                     $("#list-todo").html(list)
                 })
         })
-        
-        $("#list-todo").on("click", ".update", function(event) {
+        $("#form-update").on("submit", (event) => {
+            event.preventDefault()
+            console.log("berhasil update")
             $.ajax({
                 method: "PUT",
                 url: "http://localhost:3000/todo",
                 data: {
-                    id: $(event.currentTarget).attr("data-name")
+                    id: $(event.currentTarget).attr("data-name"),
+                    name: $("#name-update").val(),
+                    description: $("#description-update").val(),
+                    dueDate: $("#dueDate-update").val()
                 }
             })
                 .done(result => {
-                    console.log("berhasil delete")
+                    console.log("berhasil update")
                 })
                 .fail(err => {
                     console.log(err.message)
                 })
+        })
+        $("#list-todo").on("click", ".update", function(event) {
+            $("#todo-page").hide()
+            $("#update-page").show()
         })
         $("#list-todo").on("click", ".delete", function(event) {
             console.log($(event.currentTarget).attr("data-name"))
