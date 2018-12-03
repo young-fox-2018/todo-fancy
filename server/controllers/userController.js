@@ -99,7 +99,6 @@ module.exports = {
                 else{
                     if(user){
                         let token = genToken(user)
-                        console.log(token,"token JWT existing userFB++++++++++++++")
                         res.status(200).json({token})
                     }
                     else{
@@ -127,7 +126,10 @@ module.exports = {
             })   
         })
         .catch(err => {
-            console.log(err.response.data.message, "INI ERROR")
+            res.status(500).json({
+                message: "Error in axios FB User",
+                details: err.response.data.message
+            })
         })
     }
 }

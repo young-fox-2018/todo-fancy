@@ -48,7 +48,6 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-
         function checkLoginState() {
             FB.getLoginStatus(function(response) {
                 statusChangeCallback(response);
@@ -88,6 +87,9 @@
                 <li class="nav-item">
                     <a class="nav-link" class="options" id="addBut" onclick='showAdd()'>Add New Task</a>
                 </li>
+                <!-- <li class="nav-item">
+                        <a class="nav-link" class="options" id="editBut" onclick='showEdit()'>Edit Task</a>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" id="logOutBut" onclick='logOut()'>Log Out</a>
                 </li>
@@ -151,6 +153,7 @@
         </div>
     </div>
 </form>
+
 
 <section class="taskList">
         <table class="taskTable">
@@ -224,7 +227,6 @@
         let name = $('#taskName').val()
         let description = $('#taskDescription').val()
         let dueDate = $('#taskDueDate').val()
-        console.log(localStorage.token, "ini token")
         $.ajax({
             method: `POST`,
             data: {token: localStorage.token, name, description, dueDate},
@@ -268,7 +270,7 @@
                     <td>${task.description}</td>
                     <td>${task.status}</td>
                     <td>${task.dueDate}</td>
-                    <td><button onclick="finTask('${task._id}')">Finished</button> <button onclick="delTask('${task._id}')">Delete</button></td>
+                    <td><button onclick="finTask('${task._id}')">Finished</button> <button onclick="delTask('${task._id}')">Delete</button></td> <td><button onclick="showEdit('${task._id}')">Edit Task</button></td>
                 </tr>`)
             })
         }).fail(err => {
@@ -315,6 +317,18 @@
             allTasks(localStorage.token)
         }).fail(err =>{
             console.log(err,"Error di delete task")
+        })
+    }
+
+    function editTask(taskId){
+        $.ajax({
+            method: `PUT`,
+            data: {token: localStorage.token, taskId},
+            url: `http://localhost:3000/tasks`
+        }).done(response => {
+            console.log(response, "ini response dari edit task")
+        }).fail(err =>{
+            console.log(err)
         })
     }
 

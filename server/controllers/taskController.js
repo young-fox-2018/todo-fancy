@@ -8,9 +8,7 @@ const axios = require('axios')
 
 module.exports = {
     newTask: function(req, res, next){
-        console.log(req.body.token, "masuk new task loh")
         let data = verToken(req.body.token)
-        console.log(data, "data abis verify di newTask")
         User.findById(data.id,function(err, user){
             if(err){
                 res.status(500).json({
@@ -34,7 +32,6 @@ module.exports = {
                             })
                         }
                         else{
-                            console.log(newJob,"ini input untuk create")
                             res.status(200).json({
                                 message: "You have successfully register a new task up!",
                                 task: newJob
@@ -120,43 +117,47 @@ module.exports = {
         })
     },
 
-    updTask: function(req, res, next){
+    finTask: function(req, res, next){
         let data = verToken(req.body.token)
-
-        User.findById(data.id,function(err, user){
-            if(err){
-                res.status(500).json({
-                    message: "Error di Verify Token",
-                    details: err.message
-                })
-            }
-            else{
-                if(user){
-                    Task.findByIdAndUpdate(req.body.taskId, {status: "Finished"},function(err, task){
-                        if(err){
-                            res.status(400).json({
-                                message: "Error in updating a task",
-                                details: err.message
-                            })
-                        }
-                        else{
-                            if(task){
-                                res.status(200).json({
-                                    message: "You have successfully edited the task"
-                                })
-                            }
-                            else{
-                                res.status(500).json({
-                                    message: "The task doesn't exist"
-                                })
-                            }
-                        } 
+        if(data){
+            User.findById(data.id,function(err, user){
+                if(err){
+                    res.status(500).json({
+                        message: "Error di Verify Token finTask",
+                        details: err.message
                     })
                 }
                 else{
-                    res.status(500).json({message: "User not found!"})
+                    if(user){
+                        Task.findByIdAndUpdate(req.body.taskId, {status: "Finished"},function(err, task){
+                            if(err){
+                                res.status(400).json({
+                                    message: "Error in updating task status",
+                                    details: err.message
+                                })
+                            }
+                            else{
+                                if(task){
+                                    res.status(200).json({
+                                        message: "You have successfully edited the task"
+                                    })
+                                }
+                                else{
+                                    res.status(500).json({
+                                        message: "The task doesn't exist"
+                                    })
+                                }
+                            } 
+                        })
+                    }
+                    else{
+                        res.status(500).json({message: "User not found!"})
+                    }
                 }
-            }
-        })
-    }   
+            })
+        }
+        else{
+            res.status(500).json({message: "You don't have permission!"})
+        }
+    }
 }
