@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 const bcrypt = require("bcryptjs")
-// const validateEmail = require("../helpers/emailValidation")
+const validateEmail = require("../helpers/emailValidation")
 
 const userSchema  = new Schema({
     firstName: {
@@ -27,7 +27,7 @@ const userSchema  = new Schema({
                             }
                         })
                         .catch(function(err){
-                            console.log('masuk')
+                            reject(false)
                         })
                 })
             }, msg: 'Username is already exist'
@@ -37,10 +37,7 @@ const userSchema  = new Schema({
         type: String,
         trim: true,
         lowercase: true,
-        unique: true,
-        required: [true, 'Email address is filled'],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-        
+        required: [true, 'Email address is filled']
     },
     password: {
         type: String,
@@ -50,9 +47,11 @@ const userSchema  = new Schema({
         type: Schema.Types.ObjectId, ref: 'Task'
     }]
 })
-userSchema.pre('save', (next) => {
-    const salt = bcrypt.genSaltSync(10)
-    this.password = bcrypt.hashSync(this.password, salt)
+userSchema.pre('save', function (next) {
+    // const salt = bcrypt.genSaltSync(12)
+    console.log(this.password);
+    
+    this.password = bcrypt.hashSync(this.password, 10)
     next()
 })
 const User = mongoose.model('User', userSchema)

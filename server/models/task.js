@@ -4,11 +4,13 @@ const Schema = mongoose.Schema
 var taskSchema = new Schema({
     name: String,
     description: String,
+    due_date: String,
     status: {
         type: Boolean,
         default: false
-    },
-    due_date: Date
+    }
 });
 
 var Task = mongoose.model('Task', taskSchema)
+
+module.exports = Task
