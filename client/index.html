@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Todo-Fancy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/client/styles/main.css" />
+    <script src="main.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+    
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+            appId      : '2174368016145809',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v3.2'
+            });
+            
+            FB.AppEvents.logPageView();   
+        };
+        
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
+
+        function statusChangeCallback(response) {
+            console.log(response);
+
+            $.ajax({
+                method: 'POST',
+                data: {token: response.authResponse.accessToken},
+                url: 'http://localhost:3000/users/loginfb'
+            })
+            .done(function(user) {
+                localStorage.setItem('token', user.token);
+                checkUserLogin();
+            })
+            .fail(function(err) {
+                console.log(err);
+            })
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Todo-Fancy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse guestPrivileged" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active guestPrivileged">
+                    <a class="nav-link" onclick="document.getElementById('registerform').style.display='block'"><i class="fas fa-user-plus"></i> Register <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item guestPrivileged">
+                    <a class="nav-link" onclick="document.getElementById('loginform').style.display='block'"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+                <li class="nav-item active userPrivileged">
+                    <a class="nav-link" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container-fluid">            
+        <!-- Login form -->
+        <div id="loginform" class="modal">
+            <form id="modal-content" class="modal-content animate login">
+                <div class="container">
+                    <h2>Login</h2>
+                    <label for="email"><b>Email</b></label>
+                    <input type="text" placeholder="Enter Email" name="email" required>
+            
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+                    
+                    <fb:login-button 
+                    scope="public_profile,email"
+                    onlogin="checkLoginState();">
+                    </fb:login-button>
+                    <button type="submit">Login</button>
+                    
+                </div>
+            
+                <div class="container" style="background-color:#f1f1f1">
+                    <button type="button" onclick="document.getElementById('loginform').style.display='none'" class="cancelbtn">Cancel</button>
+                    <span class="psw">Forgot <a href="#">password?</a></span>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register form -->
+        <div id="registerform" class="modal ">
+            <form id="modal-content" class="modal-content animate register">
+                <div class="container">
+                    <h2>Register</h2>                            
+                    <label for="email"><b>Email</b></label>
+                    <input type="text" placeholder="Enter Email" name="email" required>
+            
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+
+                    <label for="password-repeat"><b>Repeat Password</b></label>
+                    <input type="password" placeholder="Repeat Password" name="password-repeat" required>
+                    
+                    <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+                    <div class="clearfix">
+                        <button type="button" onclick="document.getElementById('registerform').style.display='none'" class="cancelbtn">Cancel</button>
+                        <button type="submit" class="signupbtn">Sign Up</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- NEW TODO -->
+        <div class="row userPrivileged">
+            <div class="col-3">
+                <form id="editTodo" style="display: none">
+                    <h3>Edit todo:</h3>
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" class="form-control" id="title" value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" id="description" value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="due_date">Due date:</label>
+                        <input type="date" class="form-control" id="due_date" value="" required>
+                    </div>
+                    <div class="edit">
+                        <button type="button" onclick="document.getElementById('editTodo').style.display='none'" class="btn btn-default">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Edit Todo</button>
+                    </div>
+                </form>
+
+                <form id="addTodo">
+                    <h3>Add new todo:</h3>
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" class="form-control" id="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" id="description" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="due_date">Due date:</label>
+                        <input type="date" class="form-control" id="due_date" required>
+                    </div>
+                    <button type="submit" class="btn btn-default">Add New Todo</button>
+                </form>    
+            </div>
+
+            <!-- CARDS -->
+            <div class="col-9 card-columns">                            
+            </div>
+        </div>
+    </main>
+
+    <script src="/client/scripts/main.js"></script>
+</body>
+</html>
