@@ -1,0 +1,13 @@
+
+
+## env
+
+Google_cllient_id=745161162459-ui6uqk75gc38kat79u8t2p1u1pp04r36.apps.googleusercontent.com
+
+Google_client_secret =BP6d4uHCkaf3WHFX0qe6xNiS
+
+JWT_Secret=rahasia
+
+## Kendala
+1. susah bikin spa nya
+2. masih banyak bug
