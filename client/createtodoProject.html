@@ -58,17 +58,32 @@
 
   <script>
 
-      //check login
-      $(document).ready( function() {
-          checkLogin()
-      })
+		//limit date to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10){
+						dd='0'+dd
+				} 
+				if(mm<10){
+						mm='0'+mm
+				} 
 
-      function checkLogin(){
-          let token = localStorage.getItem('token')
-          if ( !token ) {
-		    window.location='index.html';
-          } 
-      }
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("dueDateToDo").setAttribute("min", today);
+			
+		//check login
+		$(document).ready( function() {
+				checkLogin()
+		})
+
+		function checkLogin(){
+				let token = localStorage.getItem('token')
+				if ( !token ) {
+			window.location='index.html';
+				} 
+		}
 
     $("#signOut").click(function (){
       localStorage.clear()
@@ -86,7 +101,7 @@
 			method: "POST",
 			url: "http://localhost:3000/tasks",
 			headers: { jtoken: localStorage.getItem('token') },
-			data: { project:true; title:$("#titleToDo").val(), description: $("#descToDo").val(), targetDate: new Date($("#dueDateToDo").val())}
+			data: { project:true, title:$("#titleToDo").val(), description: $("#descToDo").val(), targetDate: new Date($("#dueDateToDo").val())}
 		})
 		.done( response => {
 			window.location= 'list.html'

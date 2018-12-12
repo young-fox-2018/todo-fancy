@@ -123,7 +123,37 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script>
+
+		//limit date to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10){
+						dd='0'+dd
+				} 
+				if(mm<10){
+						mm='0'+mm
+				} 
+
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("dueDateToDo").setAttribute("min", today);
   
+	  //limit date to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10){
+						dd='0'+dd
+				} 
+				if(mm<10){
+						mm='0'+mm
+				} 
+
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("dueDateToDo").setAttribute("min", today);
+
   	//insert new todo
 	function createToDo() { 
 		console.log(`masuk create todo`)
@@ -403,13 +433,28 @@
 			</div>
 			<button id="saveEdit" type="button" onclick=saveToDo("${id}"); class="btn btn-primary">Save</button>
 		`)
-	console.log(task)
+				console.log(task)
         $("#editTitle").val(task.title)
-		$("#editDesc").val(task.description)
-		$("#editDueDate").val(populateDate(task.targetDate))
-		populateCompletionStatus(task.status)
-	})
-	.fail(error=> {console.log(error)})
+				$("#editDesc").val(task.description)
+				$("#editDueDate").val(populateDate(task.targetDate))
+				populateCompletionStatus(task.status)
+
+					//limit date to today
+					var today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; //January is 0!
+					var yyyy = today.getFullYear();
+					if(dd<10){
+									dd='0'+dd
+							} 
+							if(mm<10){
+									mm='0'+mm
+							} 
+
+					today = yyyy+'-'+mm+'-'+dd;
+					document.getElementById("editDueDate").setAttribute("min", today);
+			})
+			.fail(error=> {console.log(error)})
 	}
 	
 	function getProjectId(id){

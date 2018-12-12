@@ -5,8 +5,6 @@ const 	Task = require('../models/task.js'),
 class TaskController {
 	
 	static create(req, res){
-		console.log(`masuk create`)
-		console.log(req.body)
 		let task = new Task({
 		  title: req.body.title,
 		  description: req.body.description,
@@ -14,7 +12,6 @@ class TaskController {
 		})
 		task.save().then(taskResult => {
 						    if (req.body.projectId){
-								console.log(`masuk create yang dari project`)
 								Project.findById(req.body.projectId)
 										   .then(project=> {
 											   project.update({$push: {TaskId: taskResult._id}})
@@ -27,8 +24,7 @@ class TaskController {
 										   })
 										   .catch(error=> {res.status(500).json({error: error.message})})
 							} else {
-								console.log(`masuk create dari user`)
-								User.findOne({_id:req.decode.id})
+								/*User.findOne({_id:req.decode.id})
 										   .then( user => {
 												 user.TaskId.push(taskResult._id)
 												 user.save()
@@ -36,13 +32,27 @@ class TaskController {
 													 		res.status(200).json("success create task on user")
 														})
 														.catch( error => {
+															console.log(error)
 															res.status(500).json({"error":"can't vote for your own article or comment! "})
 														})
 										   })
-										    .catch(error=> {res.status(500).json({error: error.message})})
+										    .catch(error=> {
+												console.log(error)
+												res.status(500).json({error: error.message})})*/
+											User.update({_id:req.decode.id},{$push: {TaskId: taskResult._id}}, (err)=>{
+												if (err) {
+														console.log(error)
+														res.status(500).json({"error":"can't vote for your own article or comment! "})													
+												} else {
+													res.status(200).json("success create task on user")
+												}
+											})
 							}
 						})
-						.catch(error=> {res.status(500).json({error: error.message})})
+						.catch(error=> {
+							console.log(error)
+							res.status(500).json({error: error.message})
+						})
 	}
 	/*
   static create(req, res){
@@ -89,7 +99,6 @@ class TaskController {
 	.populate('TaskId')
 	.populate('InvitationId')
 	.then(result => {
-          console.log(result)
 	  let userObj= {}
 	  userObj.invitation= result.InvitationId, 
 	  userObj.task= result.TaskId, 
@@ -107,33 +116,29 @@ class TaskController {
   static readOne(req, res){
     Task.findOne({_id:req.params.id})
         .then(task => {
-	  console.log(task)
-	  console.log(typeof task.targetDate)
-	  res.status(200).json(task)
-	})
-	.catch(error => {
-	  console.log(error)
-	  res.status(500).json({error:"Something wrong, please call developer!"})
-	})
+	  			res.status(200).json(task)
+				})
+				.catch(error => {
+					console.log(error)
+					res.status(500).json({error:"Something wrong, please call developer!"})
+				})
   }
 
   static changeStatus(req, res){
-	  console.log(`masuk change status`)
-	  console.log(req.params)
     Task.findOne({_id:req.params.id})
         .then(task => {
         if (task.status === 'done'){
-	  task.status = 'not done'
-	} else {
-	  task.status = 'done'
-	  task.doneDate = new Date()
-	}
-	task.save().then(result_task =>{
-	 	     res.status(200).json(result_task) 
+					task.status = 'not done'
+				} else {
+					task.status = 'done'
+					task.doneDate = new Date()
+				}
+				task.save().then(result_task =>{
+	 	    res.status(200).json(result_task) 
 	           })
 		   .catch(err =>{
-		     console.log(error)
-	             res.status(500).json({error:"Something wrong, please call developer!"})
+		     	console.log(error)
+	        res.status(500).json({error:"Something wrong, please call developer!"})
 		   })
       })
       .catch(error => {
@@ -144,7 +149,6 @@ class TaskController {
 
 
   static update(req, res){
-	  console.log(req.body)
     Task.findOne({_id:req.params.id})
 	  .then(task => {
 	    task.title= req.body.title,

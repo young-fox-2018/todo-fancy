@@ -4,7 +4,10 @@ const mongoose = require('mongoose'),
 
 const UserSchema = mongoose.Schema({
 	username : {type:String, required:[true, 'What is your name?']},
-	email: {type:String, required:[true, 'What is your email?']},
+	email: {
+      type: String, 
+      required: [true, 'What is your email?']
+    },
 	password: {type:String, required:[true, 'Where your password?']},
 	TaskId: [{type:'ObjectId', ref:'Task'}],
 	InvitationId: [{type:'ObjectId', ref:'Project'}],

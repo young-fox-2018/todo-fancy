@@ -4,8 +4,6 @@ require('dotenv').config();
 
 class UserController {
   static read(req, res){
-	  console.log(`masuk read`)
-	  console.log(req.decode.id)
     User.findById(req.decode.id)
         .then(user => {res.status(200).json(user)})
 	.catch(error => {res.status(500).json({"error":error.message})})
@@ -37,12 +35,8 @@ class UserController {
   }
 	
   static login(req, res){
-	  console.log(`masuk login`)
-	  console.log(req.body)
     User.findOne({ $or:[{username:req.body.identity},{email:req.body.identity}]})
       .then(user => {
-	      console.log(`masuk hasil find user`)
-	      console.log(user)
         user.comparePassword(req.body.password, (err, isMatch)=>{
 	  if (err) res.status(500).json({error:"email or password didn't match, please try again!"})
 	  else{
@@ -169,7 +163,6 @@ class UserController {
       let data = JSON.parse(body);
       User.findOne({email: data.email})
           .then( user => {
-	    console.log('email sudah terdaftar')
             if (user){
   	       let decodeData = {id:user._id}
                jwt.sign(decodeData, process.env.jSecret,(err, token)=>{
@@ -182,7 +175,6 @@ class UserController {
               })
 	    }
             else {
-	      console.log(`email belum terdaftar`)
 	      let randomPswd = Math.random().toString(36).slice(-8);    
               let newUser = new User ({
                 username: data.name,

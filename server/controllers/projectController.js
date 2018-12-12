@@ -16,12 +16,9 @@ class ProjectController{
   }
 
   static readProject(req, res){
-	  console.log(`masuk read project`)
-	  console.log(req.params)
     Project.findOne({_id:req.params.id})
         .populate('TaskId')
         .then(result => {
-           console.log(result)
            res.status(200).json(result.TaskId)
         })
         .catch(error => {
@@ -35,8 +32,6 @@ class ProjectController{
 	   .populate('InvitedId')
 	   .populate('MemberId')
 	   .then(projects=> {
-		   console.log(`masuk list project`)
-		   console.log(projects)
 	     let projectsArr=[]
 	     let MemberIdArr=[]
 	     let InvitedIdArr=[]
@@ -57,9 +52,7 @@ class ProjectController{
 	       MemberIdArr=[]
 	       InvitedIdArr=[]
 	     }
-	     
-	     console.log(`hasil modif list project`)
-	     console.log(projectsArr)	   
+	        
 	     res.status(200).json(projectsArr)
 	   })
 	   .catch(error=> {
@@ -78,7 +71,6 @@ class ProjectController{
 		   if (resultInvited === -1 && resultMember === -1){
 		     project.update({$push: {InvitedId: user._id}, $pull: {RejectedId: user._id}})
 			   .then(result=> {
-				   console.log(req.body.projectId)
 			     user.update({$push: {InvitationId: req.body.projectId}})
 				   .then(result=> res.status(200).json("Invitation send success..!")
 				   .catch(error=> res.status(500).json({error: error.message}))

@@ -13,10 +13,10 @@ class Middleware{
 	res.status(500).json({error:"Something wrong, please contact developer!"})
       } else {
 	  req.decode = result
-	      console.log(`masuk ke decode`)
-	      console.log(req.decode)
 	  User.findById(req.decode.id)
 	      .then(result => {
+					console.log(`======================================`)
+					console.log(result)
 	        if (result){
 		  next()
 		} else {
@@ -48,13 +48,8 @@ class Middleware{
   }
 	  
 	static authorizationProjectMember(req, res, next){
-	  console.log(`==================================`)
-		  console.log(req.headers.projectid)
-		  console.log(req.params)
-		  console.log(`masuk project`)
 		  Project.findOne({_id:req.headers.projectid})
 		  .then(project => {
-			  console.log(project)
 		  let isUserCreatedProject = project.CreatedId == req.decode.id
 		  let isUserMemberProject = project.MemberId.filter(project => project._id == req.decode.id)
 		  if (isUserCreatedProject || isUserMemberProject.length !== 0 ){

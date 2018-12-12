@@ -62,6 +62,21 @@
 
   <script>
 
+    //limit date to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10){
+						dd='0'+dd
+				} 
+				if(mm<10){
+						mm='0'+mm
+				} 
+
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("editDueDate").setAttribute("min", today);
+
       //check login
       $(document).ready( function() {
           checkLogin()
@@ -80,7 +95,6 @@
       location.reload();
 	  let auth2 = gapi.auth2.getAuthInstance();
                 auth2.signOut().then(function () {
-                console.log('User signed out.');
                 });
     });
     
@@ -99,11 +113,10 @@
         headers:{jtoken: localStorage.getItem('token')}
       })
       .done(function( task ) {
-	console.log(task)
         $("#editTitle").val(task.title)
-	$("#editDesc").val(task.description)
-	$("#editDueDate").val(populateDate(task.targetDate))
-	populateCompletionStatus(task.status)
+        $("#editDesc").val(task.description)
+        $("#editDueDate").val(populateDate(task.targetDate))
+        populateCompletionStatus(task.status)
       });
     }
     
