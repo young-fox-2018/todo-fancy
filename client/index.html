@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Done</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Image and text -->
+    
+    <!-- end of navbar -->
+
+    <!-- beginning of todos -->
+   
+    <div id="main">
+        <div class="container">
+                <nav class="navbar navbar-light bg-light" id="navbar">
+                        <a class="navbar-brand" href="/">
+                          <img src="C:/Users/yondu/Desktop/navbar-icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                          DONE
+                        </a>
+                    </nav>
+            <br>
+            <div class="row">
+                <button id="newTaskButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">+ task</button>       
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <h2>Task List :</h2>
+                    <div id="allTask">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of todos -->
+
+ <!-- newTask modal beginning -->
+    <div class="modal fade" id="newTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">   Task Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addNewTaskForm">
+                    <div class="modal-body">
+                        <label for="newTaskName">
+                            Name: 
+                        </label>
+                        <input id="newTaskName" class="form-control" type="text">
+
+                        <label for="newTaskDescription">
+                            Description:  
+                        </label>
+                        <textarea id="newTaskDescription" class="form-control" type="text"></textarea>
+
+                        <label for="newTaskDeadline">
+                            Deadline:  
+                        </label>
+                        <input id="newTaskDeadline" class="form-control" type="date">
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>  
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- newTask modal end -->
+
+<!-- login beginning -->
+<div class ="container justifiy-content-center" >
+    <form id="signin" class="form-signin" >
+        <img class="mb-4" src="../../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="loginUsername" class="sr-only" >Email address</label>
+        <input type="email" id="loginUsername" class="form-control" placeholder="Email address or Username" required autofocus>
+        <label for="loginPassword" class="sr-only">Password</label>
+        <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox mb-3">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button><br>
+        <h6>if you haven't register yet, register <a href="" data-toggle="modal" data-target="#signupModal">here</a></h6>
+        <p class="mt-3 mb-3 text-muted">&copy; 2017-2018</p>
+    </form>    
+</container>
+<!-- login end -->
+
+<!-- signup beginning -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">   Signup</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="signup">
+                    <div class="modal-body">
+                        <label for="newUserFirstName">
+                            First Name: 
+                        </label>
+                        <input id="newUserFirstName" class="form-control" type="text">
+
+                        <label for="newUserLastName">
+                            Last Name:  
+                        </label>
+                        <input id="newUserLastName" class="form-control" type="text">
+
+                        <label for="newUserUsername">
+                                Username:  
+                            </label>
+                            <input id="newUserUserName" class="form-control" type="text">
+
+                        <label for="newUserEmail">
+                            Email:  
+                        </label>
+                        <input  id="newUserEmail" class="form-control" type="email">
+
+                        <label for="newUserPassword">
+                            Password:  
+                        </label>
+                        <input type="password" id="newUserPassword" class="form-control">
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button id="submitNewUser" type="submit" class="btn btn-primary" >Submit</button>
+                        </div>  
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- signup end -->
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        $("#main").hide()
+        $("#navbar").hide()
+        $("#signin").show()
+        getAllData()
+        function getAllData(){
+            $.ajax({
+                    type: "GET",       
+                    url: 'http://localhost:3000/task/all'
+            })
+            .done(function(allTask) {
+                console.log(allTask);
+                $("#allTask").empty()
+                $.each(allTask, function(index,task) {
+                    $("#allTask").append(`
+                    <br>
+                    <h5> Name: ${task.name} </h5>
+                    <h5> Description: ${task.description} </h5>
+                    <h5> Due date: ${task.due_date} </h5>
+                    <h5> Status: ${task.status} </h5>
+                    <button id="updateButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">Update</button>
+                    <button id="deleteButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">Delete</button>       
+                    <br>
+                    `)
+                })
+            })
+            .fail(function(err) {
+                console.log(err)
+            })
+        }
+        $('#signin').on('submit', function(event) {
+            event.preventDefault()
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/users/signin",
+                data: {
+                    email: $("#loginUsername").val(),
+                    password: $("#loginPassword").val()
+                }
+            })
+            .done(function(token) {
+                localStorage.setItem('token',token)
+                $("#main").show()
+                $("#navbar").show()
+                $("#signin").hide()
+            })
+            .fail(function(err) {
+                console.log(err)
+            })
+        })
+        $('#signup').on('submit', function(event) {
+            event.preventDefault()
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/users/signup",
+                    data: {
+                        firstName: $("#newUserFirstName").val(),
+                        lastName: $("#newUserLastName").val(),
+                        email: $("#newUserEmail").val(),                    
+                        userName: $("#newUserUserName").val(),
+                        password: $("#newUserPassword").val()
+                    }
+                })
+                .done(function (token) {
+                    localStorage.setItem('token', token)
+                    $("#main").show()
+                    $("#navbar").show()
+                    $("#signin").hide()
+                    $("#signupModal").modal('hide')
+                    getAllData()
+                })
+                .fail(function(err) {
+                    console.log(err)
+                })
+        })
+        $('#addNewTaskForm').on('submit', function(event) {
+            event.preventDefault()
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/task/",
+                data: {
+                    name: $("#newTaskName").val(),
+                    description: $("#newTaskDescription").val(),
+                    due_date: $("#newTaskDeadline").val(),
+                    status: false
+                }
+            })
+            .done(function (task) {
+                $("#allTask").append(`
+                    <br>
+                    <h5> Name: ${task.name} </h5>
+                    <h5> Description: ${task.description} </h5>
+                    <h5> Due date: ${task.due_date} </h5>
+                    <h5> Status: ${task.status} </h5>
+                    <button id="updateButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">Update</button>
+                    <button id="deleteButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">Delete</button>       
+                    <br>
+                    `)
+                $("#newTaskModal").modal("hide")
+                getAllData()
+            })
+            // $('#updateTaskForm').on('submit', function(event) {
+            // event.preventDefault()
+            // $.ajax({
+            //     type: "POST",
+            //     url: "http://localhost:3000/task/",
+            //     data: {
+            //         name: $("#newTaskName").val(),
+            //         description: $("#newTaskDescription").val(),
+            //         due_date: $("#newTaskDeadline").val(),
+            //         status: false
+            //     }
+            // })
+            // .done(function (task) {
+            //     $("#allTask").append(`
+            //         <br>
+            //         <h5> Name: ${task.name} </h5>
+            //         <h5> Description: ${task.description} </h5>
+            //         <h5> Due date: ${task.due_date} </h5>
+            //         <h5> Status: ${task.status} </h5>
+            //         <button id="updateButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">Update</button>
+            //         <button id="deleteButton" type="button submit" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">Delete</button>       
+            //         <br>
+            //         `)
+            //     $("#newTaskModal").modal("hide")
+            //     getAllData()
+            // })
+            // .fail(function(err) {
+            //     console.log(err)
+            // })
+        })
+        
+        
+        </script>
+</body>
+</html>
