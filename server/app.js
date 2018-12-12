@@ -11,7 +11,7 @@ const projectRouter = require('./routes/project');
 var app = express();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/team-ToDo', { useNewUrlParser: true });
+mongoose.connect(`mongodb://${process.env.mName}:${process.env.mSecret}@ds149763.mlab.com:49763/teamtodo`, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
