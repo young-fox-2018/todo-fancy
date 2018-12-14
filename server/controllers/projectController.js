@@ -1,5 +1,7 @@
 const 	Project = require('../models/project.js'),
-	User = require('../models/user.js');
+				User = require('../models/user.js'),
+				mailer = require('../helpers/mailer.js');
+require('dotenv').config()
 
 class ProjectController{
 
@@ -41,7 +43,7 @@ class ProjectController{
 	       projectObj.title= projects[i].title,
 	       projectObj.description= projects[i].description
 	       for(let j=0; j<projects[i].MemberId.length; j++){
-		  MemberIdArr.push(projects[i].MemberId[j].email)
+		  		MemberIdArr.push(projects[i].MemberId[j].email)
 	       }
 	       projectObj.MemberId= MemberIdArr
 	       for(let j=0; j<projects[i].InvitedId.length; j++){
@@ -62,33 +64,44 @@ class ProjectController{
   
   static inviteMember(req, res){
     User.findOne({$or:[{username:req.body.identity},{email:req.body.identity}]})
-	.then(user=> {
-	  if (user){
-	     Project.findById(req.body.projectId)
-              .then(project => {
-                 let resultInvited = project.InvitedId.indexOf(user._id);
-		 let resultMember = project.MemberId.indexOf(user._id);
-		   if (resultInvited === -1 && resultMember === -1){
-		     project.update({$push: {InvitedId: user._id}, $pull: {RejectedId: user._id}})
-			   .then(result=> {
-			     user.update({$push: {InvitationId: req.body.projectId}})
-				   .then(result=> res.status(200).json("Invitation send success..!")
-				   .catch(error=> res.status(500).json({error: error.message}))
-			   )})
-			   .catch(error=> {
-			     res.status(500).json({error: error.message})
-			   })
-		   }else{
-		     res.status(500).json({error: "user already invited or being this project member"})
-		   }
-              })
-	  }else{
-	    res.status(500).json({error:"user not found!"})
-	  }
-	})
-	.catch(error=> {
-	  res.status(500).json(error)
-	})
+				.then(user=> {
+					if (user){
+						Project.findById(req.body.projectId)
+										.then(project => {
+											let resultInvited = project.InvitedId.indexOf(user._id);
+											let resultMember = project.MemberId.indexOf(user._id);
+												if (resultInvited === -1 && resultMember === -1){
+													project.update({$push: {InvitedId: user._id}, $pull: {RejectedId: user._id}})
+																	.then(result=> {
+																			user.update({$push: {InvitationId: req.body.projectId}})
+																					.then(result=>  {
+																						let subject = `You have invited to join todoteam project!`
+																						let resultText = `You receive this email cause ${req.decode.email} invite you to join ${project.title} todoteam project at teamtodo.grouppoint.online. Please check your invitation in teamtodo.grouppoint.online`
+																						mailer ( user.email, subject, resultText, (err ) => {
+																								if ( err) {
+																										console.log(err)
+																										res.status(500).json({'found error':err})
+																								}
+																								else res.status(200).json('To complete the sign up process, you need to check your emails and click a link' )
+																						})
+																						res.status(200).json("Invitation send success..!")
+																					})
+																					.catch(error=> res.status(500).json({error: error.message}))
+																	})
+																	.catch(error=> {
+																			res.status(500).json({error: error.message})
+																	})
+												}else{
+													res.status(500).json({error: "user already invited or being this project member"})
+												}
+										})
+					}else{
+						res.status(500).json({error:"user not found!"})
+					}
+				})
+				.catch(error=> {
+					res.status(500).json(error)
+				})
   }
 
   static accept(req, res){
@@ -97,10 +110,10 @@ class ProjectController{
 		    user.update({$pull: {InvitationId: req.body.projectId}, $push: {ProjectId: req.body.projectId}})
 		         .then(()=> {
 			         Project.findById(req.body.projectId)
-	                           .then(project=> {
- 		                            project.update({$pull: {InvitedId: req.decode.id}, $push: {MemberId: req.decode.id}})
-			                                  .then(result=> {res.status(200).json("Acception process success")})
-				                              .catch(error=> {res.status(500).json({error: error.message})})
+											.then(project=> {
+											project.update({$pull: {InvitedId: req.decode.id}, $push: {MemberId: req.decode.id}})
+															.then(result=> {res.status(200).json("Acception process success")})
+														.catch(error=> {res.status(500).json({error: error.message})})
 								})
 								.catch(error=> {res.status(500).json({error: error.message})})
 				 })

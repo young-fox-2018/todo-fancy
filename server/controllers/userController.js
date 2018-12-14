@@ -38,23 +38,26 @@ class UserController {
     User.findOne({ $or:[{username:req.body.identity},{email:req.body.identity}]})
       .then(user => {
         user.comparePassword(req.body.password, (err, isMatch)=>{
-	  if (err) res.status(500).json({error:"email or password didn't match, please try again!"})
-	  else{
-	    if (isMatch){
-	      let data = {id:user._id}
-	      jwt.sign(data, process.env.jSecret,(err, token)=>{
-	        if(err) {
-		  console.log(err)
-		  res.status(500).json({error:"Something wrong, please contact developer!"})
-		} else {
-		  res.status(200).json(token)
-		}
-	      });
-	    } else {
-	      res.status(500).json({error:"email or password didn't match, please try again!"})
-	    };
-	  };
-	});
+          if (err) res.status(500).json({error:"email or password didn't match, please try again!"})
+          else{
+            if (isMatch){
+              let data = {
+                id: user._id, 
+                email: user.email
+              }
+              jwt.sign(data, process.env.jSecret,(err, token)=>{
+                if(err) {
+            console.log(err)
+            res.status(500).json({error:"Something wrong, please contact developer!"})
+          } else {
+            res.status(200).json(token)
+          }
+              });
+            } else {
+              res.status(500).json({error:"email or password didn't match, please try again!"})
+            };
+          };
+        });
       })
       .catch(error => {
 	console.log(error)
@@ -72,15 +75,15 @@ class UserController {
             } else {
 	      if (isMatch){
 	        user.password = req.body.passwordNew
-		user.save().then( result => {
+		      user.save().then( result => {
 		              res.status(200).json(result)
 		            })
 		           .catch( error => {
-			      res.status(500).json({error:"Something wrong, please contact developer!"})
-			   })
-	      } else {
-	        res.status(500).json({error:"email or password didn't match, please try again!"})
-	      }
+                    res.status(500).json({error:"Something wrong, please contact developer!"})
+                })
+                } else {
+                  res.status(500).json({error:"email or password didn't match, please try again!"})
+                }
             }; 
 	  })})
   }
@@ -107,8 +110,11 @@ class UserController {
                 User.findOne({ email : result.payload['email']})
                 .then( user => {
                     if ( user !== null ){
-                        let data = { id : user._id}
-                        let jToken = jwt.sign( data, process.env.jSecret,(err, token)=>{
+                        let data = { 
+                          id : user._id,
+                          email: user.email
+                        }
+                        jwt.sign( data, process.env.jSecret,(err, token)=>{
                           if(err) {
                             console.log(err)
                             res.status(500).json({error:"Something wrong, please contact developer!"})
@@ -127,8 +133,11 @@ class UserController {
                                 console.log( err )
                                 res.status(500).json({ "error found" : err})
                             } if ( data ) {
-                                let data = { id : user._id}
-                                let jToken = jwt.sign( data, process.env.jSecret,(err, token)=>{
+                                let data = { 
+                                  id : user._id,
+                                  email: user.email
+                                }
+                                jwt.sign( data, process.env.jSecret,(err, token)=>{
                                 if(err) {
                                   console.log(err)
                                   res.status(500).json({error:"Something wrong, please contact developer!"})
@@ -164,7 +173,10 @@ class UserController {
       User.findOne({email: data.email})
           .then( user => {
             if (user){
-  	       let decodeData = {id:user._id}
+  	       let decodeData = {
+             id:user._id,
+             email: user.email
+            }
                jwt.sign(decodeData, process.env.jSecret,(err, token)=>{
                if(err) {
                   console.log(err)

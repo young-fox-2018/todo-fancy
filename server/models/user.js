@@ -3,7 +3,7 @@ const mongoose = require('mongoose'),
       SALT_WORK_FACTOR = 10;
 
 const UserSchema = mongoose.Schema({
-	username : {type:String, required:[true, 'What is your name?']},
+	username : {type:String},
 	email: {
       type: String, 
       required: [true, 'What is your email?']

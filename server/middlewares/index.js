@@ -10,23 +10,23 @@ class Middleware{
     jwt.verify(token,process.env.jSecret,(err, result)=>{
       if(err){
         console.log(err)
-	res.status(500).json({error:"Something wrong, please contact developer!"})
+				res.status(500).json({error:"Something wrong, please contact developer!"})
       } else {
-	  req.decode = result
-	  User.findById(req.decode.id)
-	      .then(result => {
-					console.log(`======================================`)
-					console.log(result)
-	        if (result){
-		  next()
-		} else {
-		  res.status(500).json({error:"Something wrong, please contact developer!"})
-		}
-	      })
-	      .catch(error => {
-		console.log(error)
-	        res.status(500).json({error:"Something wrong, please contact developer!"})
-	      })
+				req.decode = result
+				User.findById(req.decode.id)
+						.then(result => {
+							console.log(`======================================`)
+							console.log(result)
+							if (result){
+								next()
+							} else {
+								res.status(500).json({error:"Something wrong, please contact developer!"})
+							}
+									})
+							.catch(error => {
+								console.log(error)
+								res.status(500).json({error:"Something wrong, please contact developer!"})
+							})
       };
     });
   }
