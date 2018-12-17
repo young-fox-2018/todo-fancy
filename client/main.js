@@ -139,6 +139,7 @@ function checkLogin() {
                 $('#loginPage').hide()
                 $('#registerPage').hide()
                 $('#mainPage').show()
+                getTodo()
             }
         })
         .fail((err) => {
