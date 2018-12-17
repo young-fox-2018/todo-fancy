@@ -13,7 +13,7 @@ $(document).ready(function() {
 $('#addTodoForm').submit(function(event){
     event.preventDefault()
     
-    let url = 'http://localhost:3000/todos'
+    let url = 'https://api-todo.ranggakusuma.site/todos'
     let data = {
         name: $('#nameAddTodo').val(),
         description: $('#descAddTodo').val(),
@@ -43,7 +43,7 @@ $('#loginPage').submit(function(event){
 
     $.ajax({
         method: "POST",
-        url: "http://localhost:3000/login",
+        url: "https://api-todo.ranggakusuma.site/login",
         data: {
             email: $('#email').val(),
             password: $('#password').val()
@@ -71,7 +71,7 @@ $('#loginPage').submit(function(event){
 $('#registerForm').submit(function(event){
     event.preventDefault()
 
-    let url = 'http://localhost:3000/register'
+    let url = 'https://api-todo.ranggakusuma.site/register'
     let data = {
         name: $('#nameRegister').val(),
         email: $('#emailRegister').val(),
@@ -130,7 +130,7 @@ function checkLogin() {
     } else {
         $.ajax({
             method: "POST",
-            url: "http://localhost:3000/users",
+            url: "https://api-todo.ranggakusuma.site/users",
             headers: { auth: token}
         })
         .done(function( data ) {
@@ -183,7 +183,7 @@ function signOutGoogle() {
 function onSuccess(googleUser) {
     // console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
     let id_token = googleUser.getAuthResponse().id_token;
-    let url = `http://localhost:3000/users/?token=${id_token}`
+    let url = `https://api-todo.ranggakusuma.site/users/?token=${id_token}`
     // console.log(url)
     $.ajax({
         method: "GET",
@@ -215,7 +215,7 @@ function renderButton() {
 
 getTodo()
 function getTodo(status = 'all') {
-    let url = 'http://localhost:3000/todos'
+    let url = 'https://api-todo.ranggakusuma.site/todos'
     // console.log(status)  
     if (status === 'all') {
         
@@ -342,7 +342,7 @@ function getTodo(status = 'all') {
 
 function deleteTodo(id) {
     console.log(id)
-    let url = `http://localhost:3000/todos/${id}`
+    let url = `https://api-todo.ranggakusuma.site/todos/${id}`
     $.ajax({
         method: "DELETE",
         url: url,
@@ -359,7 +359,7 @@ function deleteTodo(id) {
 }
 
 function finishTodo(id) {
-    let url = `http://localhost:3000/todos/finish/${id}`
+    let url = `https://api-todo.ranggakusuma.site/todos/finish/${id}`
     $.ajax({
         method: "PATCH",
         url: url,
@@ -378,7 +378,7 @@ function finishTodo(id) {
 
 function editTodo(id) {
     // alert('hai hai')
-    let url = 'http://localhost:3000/todos/'+id
+    let url = 'https://api-todo.ranggakusuma.site/todos/'+id
     
     $.ajax({
         method: "GET",
@@ -406,7 +406,7 @@ function editTodo(id) {
 $('#editTodoForm').submit(function(event){
     event.preventDefault()
 
-    let url = 'http://localhost:3000/todos/'+$('#idEditTodo').val()
+    let url = 'https://api-todo.ranggakusuma.site/todos/'+$('#idEditTodo').val()
     let data = {
         name: $('#nameEditTodo').val(),
         description: $('#descEditTodo').val(),
