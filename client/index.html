@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todo Fancy</title>
+    
+    <meta name="google-signin-client_id" content="22604769740-maf2eq1ma41rfaj5i8id6vbb5nulqt8k.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .type-text, .type-select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .type-submit {
+            width: 90%;
+            background-color: #a9b9d8;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0 ;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }   
+        
+        .type-submit:hover {
+            background-color: #7080a1;
+        }
+        
+        .main-add {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main">
+
+        <!-- Sign up form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Sign up</h2>
+                        <form method="POST" class="register-form" id="register-form">
+                            <div class="form-group">
+                                <label><i class="zmdi zmdi-email"></i></label>
+                                <input type="email"  id="emailsignup" placeholder="Your Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="pass" id="passwordsignup" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text"  id="firstName" placeholder="First Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="zmdi material-icons-name"></i></label>
+                                <input type="text"  id="lastName" placeholder="Last Name"/>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
+                        <a href="#" class="signin-image-link">I am already member</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sing in  Form -->
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="images/signin-image.jpg" alt="sing up image"></figure>
+                        <a href="#" class="signup-image-link">Create an account</a>
+                    </div>
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Sign In</h2>
+                        <form method="POST" class="register-form" id="login-form">
+                            <div class="form-group">
+                                <label><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="email"  id="emaillogin" placeholder="Your Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" id="passwordlogin" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                            </div>
+                        </form>
+                        <div class="social-login">
+                            <span class="social-label">Or login with</span>
+                            <ul class="socials">
+                                <li><a href=""><i class="g-signin2 display-flex-center" data-onsuccess="onSignIn"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="task">
+            <div class="page">
+                <div class="pageHeader">
+                    <div class="title">Dashboard</div>
+                    <div class="userPanel">
+                        <i class="fa fa-chevron-down"></i><span class="username" id="logout">Logout </span><img src="" width="40" height="40"/><span class="greeting"></span>
+                    </div>     
+                </div>
+
+                <div class="main-task"> 
+                    <div class="nav">
+                        <form class="example" action="action_page.php">
+                            <input type="text" placeholder="Search.." name="search">
+                        </form>
+                        
+                        <div class="menu">
+                            <div class="title">Navigation</div>
+                            <ul>
+                                <li class="active" id="home-button"> <i class="fa fa-home"></i>Home</li>
+                                <li><i class="fa fa-signal"></i>Activity</li>
+                                <li > <i class="fa fa-tasks"></i>Manage Tasks</li>
+                                <li> <i class="fa fa-envelope"></i>X</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="view" id="home">
+                        <div class="viewHeader">
+                            <div class="title">List Tasks</div>
+                            <div class="functions">
+                                <div class="button active" id="add-new">Add New Task</div>
+                            </div>
+                        </div>
+
+                        <div class="content" id="underlist">
+                            <div class="list">
+                                <div class="title" id="getListTask">Task</div>
+                                <ul id="lists">
+                                  
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="view" id="add-task">
+                        <div class="main-add">
+                            <form action="POST" id="form-create">
+                                <input class="type-text" type="text" id="title-add" name="title" placeholder="Title task.."> <br>
+                                
+                                <textarea class="type-submit" id="description-add" name="description" placeholder="Description task.." style="height:100px"></textarea>
+
+                                <!-- <label>Last Name</label> -->
+                                <input type="date" id="due_date-add" name="trip-start" value="due date">
+                            
+                                <!-- <label>Subject</label> -->
+                            
+                                <input type="submit" value="Submit">
+                            
+                            </form>
+                        </div>
+                    </div> 
+                    <div class="view" id="edit-form">
+                        <div class="main-edit">
+                            <form action="POST" id="form-edit">
+                                <input class="type-text" type="text" id="title-edit" name="title" placeholder="Title task.."> <br>
+                                <textarea class="type-submit" id="description-edit" placeholder="Description task.." style="height:100px"></textarea>
+                        
+                                <input type="date" id="due_date-edit" name="trip-start" value="due date">
+                        
+                                <input type="submit" value="Submit">
+                            
+                            </form>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        $(document).ready(function(event){
+            checklogin()
+            $('#login-form').on('submit', function(e){
+                e.preventDefault();
+
+                var data ={
+					email : $('#emaillogin').val(),
+					password : $('#passwordlogin').val()
+                }
+                console.log(data)
+				$.ajax({
+					type: 'POST',
+					url: 'http://localhost:3000/login/',
+					dataType: 'json',
+					data: data
+				})
+				.done(function(dataLogin){
+					console.log(dataLogin)
+                    localStorage.setItem('token', dataLogin.token)
+                    checklogin()
+				})
+				.fail(function(error){
+                    console.log(error)
+                    alert(error.responseText)
+				})
+            })
+            $('#logout').on('click', function(e){
+                signOut()
+                logout()
+            })
+            $('#register-form').on('submit', function(e){
+                e.preventDefault();
+                var data ={
+					email : $('#emailsignup').val(),
+                    password : $('#passwordsignup').val(),
+                    firstName : $('#firstName').val(),
+                    lastName : $('#lastName').val()
+                }
+                // console.log(data)
+				$.ajax({
+					type: 'POST',
+					url: 'http://localhost:3000/register/',
+					dataType: 'json',
+					data: data
+				})
+				.done(function(dataRegister){
+					console.log(dataRegister)
+                    localStorage.setItem('token', dataRegister.token)
+                    checklogin()
+				})
+				.fail(function(error){
+                    console.log(error)
+                    $('#register-form').append(`<div class="alert">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                    <strong>Error!</strong> ${error.responseText}.
+                    </div>`)
+                    alert(error.responseText)
+				})
+            })
+
+            $('.signin-image-link').on('click', function(e){
+                $('.sign-in').show()
+                $('.signup').hide()
+            })
+            $('.signup-image-link').on('click', function(e){
+                $('.sign-in').hide()
+                $('.signup').show()
+            })
+            $('#add-new').on('click', function(e){
+                $('.title').html('Create new task')
+                $('#add-task').show()
+                $('#underlist').hide()
+            })
+            $('#form-create').on('submit', function(e){
+                e.preventDefault();
+                var data ={
+					title : $('#title-add').val(),
+                    description : $('#description-add').val(),
+                    due_date : $('#due_date-add').val()
+                }
+                // console.log(data)
+				$.ajax({
+					type: 'POST',
+					url: 'http://localhost:3000/tasks/',
+					dataType: 'json',
+                    data: data,
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+				})
+				.done(function(dataTask){
+                    console.log(dataTask)
+                    checklogin()
+                    getAllTask()
+                    location.reload(true);
+				})
+				.fail(function(error){
+                    console.log(error)
+                    $('#register-form').append(`<div class="alert">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                    <strong>Error!</strong> ${error.responseText}.
+                    </div>`)
+                    alert(error.responseText)
+				})
+            })
+            $('#home-button').on('click', function(e){
+                checklogin()
+            })
+            $('#form-edit').on('submit', function(e){
+                e.preventDefault();
+                console.log("lagiii disini")
+                var data ={
+                    title : $('#title-edit').val(),
+                    description : $('#description-edit').val(),
+                    due_date: $('#due_date-edit').val()
+                }
+                console.log(data)
+                $.ajax({
+                    type: 'PUT',
+                    url: 'http://localhost:3000/tasks/',
+                    dataType: 'json',
+                    data: data,
+                    headers: {
+                        token: localStorage.getItem('token'),
+                        task_id: localStorage.getItem('idTask'),
+                        title: $('#title-edit').val()
+                    }
+                })
+                .done(function(dataEdit){
+                    console.log("berhasil update:",dataEdit)
+                    location.reload(true)
+                })
+                .fail(function(error){
+                    console.log(error)
+                    console.log(error.responseText)
+                })
+            })
+            
+
+
+        })
+        function checklogin(){
+            if(localStorage.getItem("token")){
+                $('.task').show()
+                getAllTask()
+                $('#form-edit').hide()
+                $('#manage-task').hide()
+                $('#add-task').hide()
+                $('.signup').hide()
+                $('.sign-in').hide()
+            }else{
+                $('.sign-in').show()
+                $('.signup').hide()
+                $('.task').hide()
+            }
+        }
+        
+        function getAllTask(){
+            $.ajax({
+                method : 'post',
+                url : 'http://localhost:3000/users',
+                dataType: 'json',
+                headers: {
+                        token: localStorage.getItem('token')
+                }
+                })
+                .done (function(result){
+                    $('.greeting').append(`Hi, Mr. ${result.lastName}, ${result.firstName}`)
+                    $('#lists').empty();
+                    result.todo.forEach(task => {
+                    $('#lists')
+                        .append(
+                            `<li class="checked">
+                                <i class="fa fa-check-square-o"></i>
+                                <span id="titletask">${task.title}</span>
+                                <div class="info">
+                                    <div class="button green">${task.status}</div>
+                                    <div class="editTask button yellow " id=${task._id}>edit</div>
+                                    <div class="button red" onclick="deleteTask()" id="deletetask">delete</div>
+                                </div>
+                            </li>
+                        `)
+                    });
+
+                    $('.editTask').click(function(){
+                        var task_id = $(this).attr('id')
+                        getEditedData(task_id)
+                    })
+                    
+                })
+                .fail (function(e) {
+                    console.log("ERROR: ", e);
+                });
+        }
+        function getEditedData(task_id){
+           $.ajax({
+               method: 'GET',
+               url: `http://localhost:3000/tasks/${task_id}`,
+               dataType: 'json',
+               headers: {
+                        token: localStorage.getItem('token')
+                }
+           })
+           .done(function(result){
+                $('.viewHeader').empty()
+                $('.viewHeader').append(` <div class="title">Edit Tasks</div> `)
+                $('#form-edit').show()
+                $("#form-edit #title-edit").val(`${result.title}`)
+                $("#form-edit #description-edit").val(`${result.description}`)
+                $("#form-edit #due_date-edit").val(`${result.due_date}`)
+                $('#underlist').hide()
+                localStorage.setItem('idTask', task_id)
+           })
+           .fail(function(e){
+               console.log("ERROR: ", e);
+           });
+       }
+
+        function deleteTask(){
+            $.ajax({
+                method : 'DELETE',
+                url : 'http://localhost:3000/tasks',
+                dataType: 'json',
+                data: {
+                    title: $('#titletask').text()
+                },
+                headers: {
+                        token: localStorage.getItem('token')
+                }
+            })
+            .done (function(result){
+                location.reload(true); 
+                console.log(result,"===============")
+            })
+            .fail (function(e) {
+                console.log("ERROR: ", e);
+            });
+        }
+        
+       
+        
+        // Login dan Logout
+
+        function onSignIn(googleUser) {
+			var id_token = googleUser.getAuthResponse().id_token;
+			statusChangeCallback(id_token)	
+        }
+        function statusChangeCallback(token){
+            console.log("masuk callback")
+            $.ajax({
+                method: "POST",
+                url: 'http://localhost:3000/googlesign',
+                data: {token: token}
+            })
+            .done(function(dataLogin) {
+				console.log(dataLogin)
+                localStorage.setItem('token', dataLogin.token)
+                checklogin()
+            })
+            .fail(function(error){
+                console.log(error)
+            })
+        }
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+			});
+        }
+        function logout(){
+            localStorage.removeItem("token")
+            checklogin()
+        }
+        
+        
+    </script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
