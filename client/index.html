@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="426295277228-2kf0t768loblkk1813u7ja1srrv2pm2b.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <title>Todo Fancy</title>
+    <style>
+        
+        .container {
+            overflow:hidden;
+            min-height:500px !important;
+        }
+        
+        body {
+            background-color: #d8d2d2
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loginPage">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <h1>Login Page</h1>
+                    <div id="alertLogin"></div>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                          <label for="email">Email address</label>
+                          <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                          <label for="password">Password</label>
+                          <input type="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                        <small class="form-text text-muted text-right"><a href="#" onclick="registerPage()">Create new account</a></small>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="my-signin2"></div>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="registerPage">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <h1>Register Form</h1>
+                    <div id="alertRegister"></div>
+                    <form id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nameRegister">Name</label>
+                                    <input type="text" id="nameRegister" class="form-control" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="emailRegister">Email</label>
+                                    <input type="text" id="emailRegister" class="form-control" placeholder="Email">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="passwordRegister">Password</label>
+                                    <input type="password" id="passwordRegister" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="confirmRegister">Confirm</label>
+                                    <input type="password" id="confirmRegister" class="form-control" placeholder="Confirm password">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted text-right"><a href="#" onclick="checkLogin()">Sign in</a></small>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainPage">
+            <nav class="navbar navbar-expand-lg navbar navbar-dark" style="background-color: #c44e4e">
+                    <a class="navbar-brand" href="#" onclick="checkLogin()">Todos</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                  
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <ul class="navbar-nav mr-auto">
+                        <!-- <li class="nav-item active">
+                          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li> -->
+                        <li class="nav-item">
+                          <!-- <a class="nav-link" href="#">Add Todo</a> -->
+                          <a href="#" class="btn btn-success my-2 my-sm-0" data-toggle="modal" data-target="#addTodoModal">Add Todo</a href="#">
+                        </li>
+                        <!-- <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                          </div>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                          <a class="nav-link disabled" href="#">Disabled</a>
+                        </li> -->
+                      </ul>
+                      <a href="#" class="btn btn-outline-warning my-2 my-sm-0" onclick="logOut()">Logout</a href="#">
+                    </div>
+                  </nav>
+
+
+        <div class="container my-2 rounded" style="background-color:#eeeef0">
+            <div class="row">
+                <div class="col-md-4 my-2 border-right">
+                    <div class="list-group">
+                        <button type="button" class="list-group-item list-group-item-action" id="allTodo" onclick="getTodo('all')">All Todos</button>
+                        <button type="button" class="list-group-item list-group-item-action" id="unFinish" onclick="getTodo('unfinish')">Unfinished</button>
+                        <button type="button" class="list-group-item list-group-item-action" id="finish" onclick="getTodo('finish')">Finished</button>
+                    </div>
+                </div>
+
+                <div class="col-md-8 my-2">
+                    <table class="table " id="listTodos">
+                        <thead>
+                            <td>Name</td>
+                            <td>Description</td>
+                            <td>Due Date</td>
+                            <td>Action</td>                            
+                        </thead>
+                        <tbody>
+                            <!-- <tr><td>testing</td></tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+            <!-- Modal Add Todo -->
+            <div class="modal fade" id="addTodoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Todo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addTodoForm" method="POST" action="">
+                                <div class="form-group">
+                                    <label for="nameAddTodo">Name</label>
+                                    <input type="text" id="nameAddTodo" class="form-control" placeholder="Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="descAddTodo">Description</label>
+                                    <input type="text" id="descAddTodo" class="form-control" placeholder="Description">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateAddTodo">Due Date</label>
+                                    <input id="dateAddTodo" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal edit todo -->
+            <div class="modal fade" id="editTodoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Edit Todo</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editTodoForm" method="POST" action="">
+                                    <div class="form-group">
+                                        <input type="hidden" id="idEditTodo" class="form-control">
+                                        <label for="nameEditTodo">Name</label>
+                                        <input type="text" id="nameEditTodo" class="form-control" placeholder="Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descEditTodo">Description</label>
+                                        <input type="text" id="descEditTodo" class="form-control" placeholder="Description">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dateEditTodo">Due Date</label>
+                                        <input id="dateEditTodo" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+</body>
+</html>
