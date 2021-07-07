@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="601481270136-k8nppkr4b3pgnnid05kntlrickot562c.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+    <div class="container">
+	
+		<!--navbar-->
+		<nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+		  </button>
+			  <a class="navbar-brand" href="#">ToDo by poll developPoint</a>
+
+			  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+			  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+				<li class="nav-item">
+				  <a class="nav-link" href="#" onclick="listToDo()" >Your todo List</a>
+				</li>
+			 </ul>
+			 <div class="nav-item">
+				<a class="nav-link" href="#" id="signOut">Sign Out</a>
+			 </div>
+		   </div>
+		 </nav>
+		<!--end of navbar-->
+
+		<!--Create-->
+		<div class="container-fluid" id="createProject">
+			<div class="form-group">
+				<h3>Create new project</h3>
+				<label for="exampleInputEmail1">Title</label>
+				<input type="email" class="form-control" id="titleProject" aria-describedby="emailHelp" placeholder="your 'to do' title here..">
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword1">Description</label>
+				<input type="text" class="form-control" id="descProject" placeholder="your 'to do' description here..">
+			</div>
+			<button id="doCreate" type="button" onclick="createProject();" class="btn btn-primary">Save this project</button>
+		</div>
+		<!--end create-->
+		
+		<!--list project-->
+		<div class="container-fluid" id="todoList">
+			<div class="form-group">
+				<h3>Your Project List ...</h3>
+				<div id="list"></div>
+			</div>
+		</div>
+		<!--end of list project-->
+		
+		<!--detail project todo-->
+		<div class="container-fluid" id="todoList">
+			<div class="form-group">
+				<div id="detail"></div>
+			</div>
+		</div>
+		<!--end of detail project todo-->
+
+		<!--edit project todo-->
+		<div class="container-fluid" id="todoList">
+			<div class="form-group">
+				<div id="editToDo"></div>
+			</div>
+		</div>
+		<!--end of edit project todo-->
+		
+		<!-- Modal Invitation -->
+		<div class="modal fade" id="invitationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Invite a new member</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body">
+			    <input id="projectId" hidden></input>
+				enter member name or email address :
+				<br>
+				<input id="identity" ></input>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary btn-sm" onclick=inviteMember() data-dismiss="modal">Send invitation</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<!--end of Modal Invitation -->
+		
+		<!--Create-->
+		<div class="container-fluid" id="createToDo">
+			<div class="form-group">
+				<h3>Create new todo</h3>
+				 <input id="projectIdCreate" hidden></input>
+				<label for="exampleInputEmail1">Title</label>
+				<input type="email" class="form-control" id="titleToDo" aria-describedby="emailHelp" placeholder="your 'to do' title here..">
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword1">Description</label>
+				<input type="text" class="form-control" id="descToDo" placeholder="your 'to do' description here..">
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword1">due date</label>
+				<input type="date" id="dueDateToDo">
+			</div>
+			<button id="doCreate" type="button" onclick=createToDo() class="btn btn-primary">Save</button>
+		</div>
+		<!--end create-->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script>
+
+		//limit date to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10){
+						dd='0'+dd
+				} 
+				if(mm<10){
+						mm='0'+mm
+				} 
+
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("dueDateToDo").setAttribute("min", today);
+  
+	  //limit date to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10){
+						dd='0'+dd
+				} 
+				if(mm<10){
+						mm='0'+mm
+				} 
+
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("dueDateToDo").setAttribute("min", today);
+
+  	//insert new todo
+	function createToDo() { 
+		console.log(`masuk create todo`)
+		console.log($("#projectIdCreate").val())
+		$.ajax({
+			method: "POST",
+			url: "http://localhost:3000/tasks",
+			headers: { jtoken: localStorage.getItem('token') },
+			data: { projectId:$("#projectIdCreate").val(), title:$("#titleToDo").val(), description: $("#descToDo").val(), targetDate: new Date($("#dueDateToDo").val())}
+		})
+		.done( response => {
+			detailToDo($("#projectIdCreate").val()) 
+		})
+		.fail( err => {
+			$("#error").text(JSON.stringify(err))
+		})
+	}
+  
+	function doCreateToDo(projectIdCreate){
+		$( "#detail" ).empty()
+		$("#createToDo").show()
+		console.log(projectIdCreate)
+		console.log(`masuk create todo`)
+		$("#projectIdCreate").val(projectIdCreate)
+		console.log($("#projectIdCreate").val())
+	}
+	
+	function inviteMember(){
+	console.log(`masuk invite member`)
+	console.log(`methodnya post`)
+		$.ajax({
+		  method: "post",
+		  url: "http://localhost:3000/projects/invite",
+		  headers: { jtoken: localStorage.getItem('token') },
+		  data: { identity:$("#identity").val(), projectId:$("#projectId").val()}
+		})
+		.done((response)=> {
+		  console.log(response)
+		  listProject()
+		})
+		.fail(err=> {
+		  console.log(err)
+		})
+	}
+
+      //check login
+      $(document).ready( function() {
+	      listProject()
+          checkLogin()
+		  $("#createToDo").hide()
+      })
+
+      function checkLogin(){
+          let token = localStorage.getItem('token')
+          if ( !token ) {
+		    window.location='index.html';
+          } 
+      }
+
+    $("#signOut").click(function (){
+      localStorage.clear()
+      location.reload();
+	  let auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                console.log('User signed out.');
+                });
+    });
+	
+	//insert new todo
+	function createProject() { 
+		$.ajax({
+			method: "POST",
+			url: "http://localhost:3000/projects",
+			headers: { jtoken: localStorage.getItem('token') },
+			data: { title:$("#titleProject").val(), description: $("#descProject").val()}
+		})
+		.done( response => {
+		    $("#titleProject").empty()
+			$("#descProject").empty()
+			listProject()
+		})
+		.fail( err => {
+			$("#error").text(JSON.stringify(err))
+		})
+	}
+	
+	function listToDo(){
+		window.location='list.html'
+	}
+	
+	 //read all project
+	function listProject() { 
+		$.ajax({
+			method: "GET",
+			url: "http://localhost:3000/projects",
+			headers: { jtoken: localStorage.getItem('token') }
+		})
+		.done( projects => {
+		console.log(projects)
+			if ( projects.length === 0 ) {
+				$( "#list" ).empty()
+				$( "#list" ).append(`
+					You don't have any project...
+				`)
+			} else {
+				$( "#list" ).empty()
+				$( "#list" ).append(`
+					<table class="table table-stripped">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>Title</th>
+								<th>Desc</th>
+								<th>Member Invited</th>
+								<th>Joined Member</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody id="listProject">
+						</tbody>
+					</table>
+				` )
+				for ( let i = 0; i < projects.length; i++ ){ 
+				    
+					$( "#listProject" ).append(`
+						<tr>
+							<td> ${i+1}</td> 
+							<td> ${projects[i].title}</td> 
+							<td> ${projects[i].description}</td> 
+							
+							if (projects[i].InvitedId.length === 0){
+								<!--<td> No member invited.. </td>-->
+							} else {
+								<td> ${projects[i].InvitedId}</td>
+							}
+							
+							if (projects[i].MemberId.length === 0){
+								<!--<td> No member joined.. </td>-->
+							} else {
+							<td> ${projects[i].MemberId}</td>
+							}
+							<td>
+							       <button type="button" class="btn btn-success btn-sm mr-2" data-toggle="modal" data-target="#invitationModal" onclick=getProjectId("${projects[i]._id}")>Invite new member</button>
+							       <button type="button" class="btn btn-success btn-sm mr-2" onclick=detailToDo("${projects[i]._id}")>View Todo</button>
+								   <button type="button" class="btn btn-success btn-sm mr-2" onclick=doCreateToDo("${projects[i]._id}")>Create Todo</button>
+							</td>
+						</tr>
+					` )
+				}
+			}
+		})
+		.fail( err => {
+			$("#error").text(JSON.stringify(err))
+		})
+	}
+	
+	//read all  todo
+	function detailToDo(prjctId) { 
+	$("#editToDo").empty()
+	$("#createToDo").hide()
+	console.log(`masuk detail todo`)
+	console.log(prjctId)
+		console.log(localStorage.getItem('token'))
+		$.ajax({
+			method: "GET",
+			url: `http://localhost:3000/projects/project/${prjctId}`,
+			headers: { jtoken: localStorage.getItem('token') },
+			data: { projectId:prjctId }
+		})
+		.done( todos => {
+			if ( todos.length === 0 ) {
+				$( "#detail" ).empty()
+				$( "#detail" ).append(`
+					nothing to do, please press insert new "to do" to create one in your project..
+				`)
+			} else {
+				$( "#detail" ).empty()
+				$( "#detail" ).append(`
+					Not Done...!!!
+					<input id="detailProjectId"  hidden value=${prjctId}>
+					<table class="table table-stripped">
+						<thead>
+							<tr>
+								<!--<th>No.</th>-->
+								<th>Name</th>
+								<th>Desc</th>
+								<th>Days left..</th>
+								<th>Target Date</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody id="notDoneToDo">
+						</tbody>
+					</table>
+				` )
+				for ( let i = 0; i < todos.length; i++ ){ 
+					if (todos[i].status !== "done"){
+						$( "#notDoneToDo" ).append(`
+							<tr>
+							<!--<td> ${i+1}</td> -->
+							<td> ${todos[i].title}</td> 
+							<td> ${todos[i].description}</td> 
+							<td> ${dateCount(new Date(), todos[i].targetDate)}</td>
+							<td> ${formatTanggal(todos[i].targetDate)}</td> 
+							<td> ${todos[i].status}</td> 
+								<td><button type="button" class="btn btn-success btn-sm mr-2" onclick=changeStatus("${todos[i]._id}")>${labelStatus(todos[i].status)}</button><button class="btn btn-warning btn-sm mr-2" onclick=editToDo("${todos[i]._id}")> Edit</button> <button class="btn btn-danger btn-sm" onclick=deleteToDo("${todos[i]._id}")> Delete</button></td>
+							</tr>
+						` )
+					}
+				}
+				//done
+				$( "#detail" ).append(`
+					Done...
+					<table class="table table-stripped">
+						<thead>
+							<tr>
+								<!--<th>No.</th>-->
+								<th>Name</th>
+								<th>Desc</th>
+								<th>Target Date</th>
+								<th>It's done on..</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody id="doneToDo"
+						</tbody>
+					</table>
+				` )
+				for ( let i = 0; i < todos.length; i++ ){ 
+					if (todos[i].status ==="done"){
+						$( "#doneToDo" ).append(`
+							<tr>
+							<!--<td> ${i+1}</td> -->
+							<td> ${todos[i].title}</td> 
+							<td> ${todos[i].description}</td> 
+							<td> ${formatTanggal(todos[i].targetDate)}</td> 
+							<td> ${formatTanggal(todos[i].doneDate)}</td> 
+								<td><button class="btn btn-warning btn-sm mr-2" onclick=editToDo("${todos[i]._id}")> Edit</button> </td>
+							</tr>
+						` )
+					}
+				}
+			}
+		})
+		.fail( err => {
+			$("#error").text(JSON.stringify(err))
+		})
+	}
+	
+	function editToDo(id){
+		
+      $.ajax({
+        method: "GET",
+		url: `http://localhost:3000/tasks/project/${id}`,
+        headers:{jtoken: localStorage.getItem('token'), projectId: $("#detailProjectId").val()}
+      })
+      .done(function( task ) {
+			$("#editToDo").empty()
+	  	    $( "#editToDo" ).append(`
+			<div class="form-group">
+				<h3>Edit todo</h3>
+				<label for="exampleInputEmail1">Title</label>
+				<input type="email" class="form-control" id="editTitle" aria-describedby="emailHelp" placeholder="your 'to do' title here..">
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword1">Description</label>
+				<input type="text" class="form-control" id="editDesc" placeholder="your 'to do' description here..">
+			</div>
+			<div>
+				<div id="completionStatus">
+				</div>
+			</div><br>
+			<div class="form-group">
+				<label for="exampleInputPassword1">due date</label>
+				<input type="date" id="editDueDate" value=''>
+			</div>
+			<button id="saveEdit" type="button" onclick=saveToDo("${id}"); class="btn btn-primary">Save</button>
+		`)
+				console.log(task)
+        $("#editTitle").val(task.title)
+				$("#editDesc").val(task.description)
+				$("#editDueDate").val(populateDate(task.targetDate))
+				populateCompletionStatus(task.status)
+
+					//limit date to today
+					var today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; //January is 0!
+					var yyyy = today.getFullYear();
+					if(dd<10){
+									dd='0'+dd
+							} 
+							if(mm<10){
+									mm='0'+mm
+							} 
+
+					today = yyyy+'-'+mm+'-'+dd;
+					document.getElementById("editDueDate").setAttribute("min", today);
+			})
+			.fail(error=> {console.log(error)})
+	}
+	
+	function getProjectId(id){
+		$("#projectId").val(id)
+	}
+	
+	function labelStatus(v){
+		if(v === 'not done'){
+		  return 'done'
+		} else {
+		  return 'not done'
+		}
+	}
+	
+	function dateCount(date1, date2){
+	   var timeDiff = Math.abs(new Date(date2).getTime() - date1.getTime());
+	   var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+	   return diffDays
+	}
+	
+	function formatTanggal(date) {
+		return `${new Date(date).getDate()} - ${new Date(date).getMonth()+1} - ${new Date(date).getFullYear()}`
+	}
+	
+	function changeStatus(id){
+	console.log(`masuk change status`)
+	console.log($("#detailProjectId").val())
+         $.ajax({
+			method: "PATCH",
+			url: `http://localhost:3000/tasks/project/${id}`,
+			headers: {jtoken: localStorage.getItem('token'), projectId: $("#detailProjectId").val() }
+		})
+		.done( response => {
+			detailToDo($("#detailProjectId").val())
+		})
+        .fail( err => {
+            $("#error").text(JSON.stringify(err)) 
+		})
+	}
+	
+	function populateDate(valDate){
+      let year= new Date(valDate).getFullYear()
+      let month= new Date(valDate).getMonth()+1
+      let isDate= new Date(valDate).getDate()
+	  if (isDate<10 && month>9){
+	    return `${year}-${month}-0${isDate}`
+	  }else if(isDate>9 && month<10){
+	    return `${year}-0${month}-${isDate}`
+	  }else if(isDate<10 && month<10){
+	    return `${year}-0${month}-0${isDate}`
+	  }else{
+	    return `${year}-${month}-${isDate}`
+	  }
+    }
+	
+	function populateCompletionStatus(valStatus){
+     if(valStatus === 'done'){
+       $("#completionStatus").append(`
+          <select>
+            <option value="done" selected>Done</option>
+            <option value="not done">Not done</option>
+          </select>
+       `)
+     }else{
+       $("#completionStatus").append(`
+         <select>
+           <option value="done">Done</option>
+           <option value="not done" selected>Not done</option>
+         </select>
+       `)
+     }
+   }
+
+	function saveToDo(id) {
+	console.log(`masuk save todo`)
+	console.log(id)
+	console.log($("#detailProjectId").val())
+      $.ajax({
+        method: "PUT",
+        url: `http://localhost:3000/tasks/project/${id}`,
+        headers: { jtoken: localStorage.getItem('token'), projectId: $("#detailProjectId").val() },
+        data: { title:$("#editTitle").val(), description: $("#editDesc").val(), targetDate: new Date($("#editDueDate").val()), status:$("#completionStatus :selected").val()}
+      })
+      .done( response => {
+	  $("#editToDo").empty()
+	  console.log(`masuk response save todo`)
+        detailToDo($("#detailProjectId").val())
+      })
+      .fail( err => {
+        $("#error").text(JSON.stringify(err))
+      })
+    }
+  </script>
+</body>
+</html>
