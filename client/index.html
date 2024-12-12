@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <meta name="google-signin-client_id" content="41412806340-mn87rmn3kcph7b72o544nbcq4s3bf7qg.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous">
+    </script>
+
+<script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '929426517445206',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v3.2'
+          });
+            
+          FB.AppEvents.logPageView();   
+            
+        };
+      
+        (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "https://connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+
+         FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+
+        function statusChangeCallback(response){
+            console.log(response.authResponse.accessToken)
+            let input = {
+                token: response.authResponse.accessToken
+            }
+            $.ajax({
+                type: "POST",
+                url: `http://localhost:3000/users/fbSignin`,
+                data: input
+            })
+            .done(function(data){
+                localStorage.setItem("token", data.token)
+                console.log("masuk done")
+                checkToken()
+            })
+            .fail(function(err){
+                console.log("masuk fail")
+                console.log(err)
+            })
+        }
+
+        function checkLoginState() {
+           FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+            });
+        }
+      </script>
+</head>
+<body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                <a class="navbar-brand" href="#">Fancy ToDo</a>
+                </div>
+                <ul class="nav navbar-nav">
+                <li><a id="addTask" href="#">add Task</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                <li class="userPriviledge"><a id="logOut" href="#"><span class="glyphicon glyphicon-log-out "></span> Logout</a></li>
+                <li id="signUp" class="signIn"><a href="#"><span class="glyphicon glyphicon-user "></span> Sign Up</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="container">
+            <div class="signIn">
+                    <form id="signInForm">
+                            <h1>Sign In</h1>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <fb:login-button 
+                        scope="public_profile,email"
+                        onlogin="checkLoginState();">
+                        </fb:login-button>
+                    </form>
+            </div>
+                    <form id="signUpForm">
+                        <h1>Register</h1>
+                        
+                                    <div class="form-group">
+                                      <label for="exampleInputEmail1">Name</label>
+                                      <input type="name" class="form-control" id="nameRegister" aria-describedby="emailHelp" placeholder="Enter full name">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="exampleInputEmail1">Email address</label>
+                                      <input type="email" class="form-control" id="emailRegister" aria-describedby="emailHelp" placeholder="Enter email">
+                                      <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="exampleInputPassword1">Password</label>
+                                      <input type="password" class="form-control" id="passwordRegister" placeholder="Password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+            </div>
+            <div  class="row userPriviledge">
+                <div class="col-sm-4">
+                    <ul id="taskList" class="list-group">
+                    </ul>
+                    <h3>FINISHED:</h3>
+                    <ul id="finishedTaskList" class="list-group">
+
+                    </ul>
+                </div>
+                <div id="canvas" class="col-sm-8">
+                    <div id="taskDisplay">
+                        <button id="editTask" type="button" class="btn btn-default">Edit</button>
+                        <button id="finishTask" type="button" class="btn btn-success">Finish</button>
+                        <button id="deleteTask" type="button" class="btn btn-danger">Delete</button>
+                        <div id="taskDetail"></div>
+                    </div>
+                    <form id="taskForm" class="form-inline" action="/action_page.php">
+                        <div class="form-group">
+                          <label for="title">Title:</label>
+                          <input type="text" class="form-control" id="title">
+                        </div><br>
+                        <div class="form-group">
+                          <label for="description">description:</label>
+                          <input type="text" class="form-control" id="description">
+                        </div><br>
+                        <div class="form-group">
+                          <label for="dueDate">dueDate:</label>
+                          <input type="date" class="form-control" id="dueDate">
+                        </div><br>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                      </form>
+                </div>
+            </div>
+        </main>
+
+        
+        <script>
+            function onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            }
+
+            let users_data
+            let currentTask
+
+            $(document).ready(function(){
+
+                $("#signUpForm").hide()
+                
+                checkToken()
+
+                console.log(users_data)
+
+                // if(localStorage.token){
+                //     let input ={
+                //         token: localStorage.getItem("token")
+                //     }
+                //     $.ajax({
+                //         type: "POST",
+                //         url: `http://www.localhost:3000/users/signIn`,
+                //         data: input
+                //     })
+                //     .done(function(data){
+                        
+                //     })
+                //     .fail(function(err){
+                //         console.log(err)
+                //     })
+                // }
+
+                $("#signInForm").submit(function(event){
+                    event.preventDefault()
+                    console.log("masuk submit form")
+                    let input ={
+                            email : $("#email").val(),
+                            password : $("#password").val()
+        
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: `http://www.localhost:3000/users/signIn`,
+                        data: input
+                    })
+                    .done(function(data){
+                        console.log(data)
+                        localStorage.setItem("token", data.token)
+                        checkToken()
+                    })
+                    .fail(function(err){
+                        console.log(err)
+                    })
+                })
+
+                $("#addTask").click(function(event){
+                    event.preventDefault()
+                    console.log("gw di klik ")
+                    $("#taskDisplay").hide()
+                    $("#taskForm").show()
+                })
+
+                $("#taskForm").submit(function(event){
+                    console.log("disini oteetet")
+                    event.preventDefault()
+                    let input ={
+                            title : $("#title").val(),
+                            description : $("#description").val(),
+                            dueDate : $("#dueDate").val(),
+                            user: users_data.id
+                    }
+                    console.log("ini input", input)
+                    $.ajax({
+                        type: "POST",
+                        url: `http://www.localhost:3000/tasks`,
+                        data: input
+                    })
+                    .done(function(data){
+                        console.log(data)
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                        checkToken()
+                    })
+                    .fail(function(err){
+                        console.log(err)
+                    })
+                })
+
+                $("#editTask").click(function(event){
+                    event.preventDefault()
+                    $("#taskDetail").html("<span></span>")
+                    $("#taskDetail").append(`
+                    <form id="editTaskForm" class="form-inline" action="/action_page.php">
+                        <div class="form-group">
+                          <label for="title">Title:</label>
+                          <input type="text" class="form-control" id="titleEdit" value="${currentTask.title}">
+                        </div><br>
+                        <div class="form-group">
+                          <label for="description">description:</label>
+                          <input type="text" class="form-control" id="descriptionEdit" value="${currentTask.description}">
+                        </div><br>
+                        <div class="form-group">
+                          <label for="dueDate">dueDate:</label>
+                          <input type="date" class="form-control" id="dueDateEdit" value="${currentTask.dueDate}">
+                        </div><br>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                      </form>
+                      `)
+
+                    $("#editTaskForm").submit(function(event){
+                    event.preventDefault()
+                    console.log("oet")
+                    let input ={
+                        title: $("#titleEdit").val(),
+                        description: $("#descriptionEdit").val(),
+                        dueDate: new Date($("#dueDateEdit").val())
+                    }
+                    console.log("=====",input)
+                    $.ajax({
+                            type: "PUT",
+                            url: `http://www.localhost:3000/tasks/${currentTask._id}`,
+                            data: input
+                        })
+                        .done(function(data){
+                            console.log("dkfjkdfjkd", data)
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                        checkToken()
+                        })
+                        .fail(function(err){
+                            console.log(err)
+                            
+                        })
+                    
+                    })
+
+                })
+
+
+
+                $("#deleteTask").click(function(event){
+                    event.preventDefault()
+                    $.ajax({
+                            type: "DELETE",
+                            url: `http://www.localhost:3000/tasks/${currentTask._id}`,
+                        })
+                        .done(function(data){
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                        checkToken()
+                        })
+                        .fail(function(err){
+                            console.log(err)
+                            
+                        })
+                })
+
+                $("#finishTask").click(function(event){
+                    event.preventDefault()
+                    $.ajax({
+                            type: "PUT",
+                            url: `http://www.localhost:3000/tasks/${currentTask._id}`,
+                            data: {status: "finished"}
+                        })
+                        .done(function(data){
+                            console.log("dkfjkdfjkd", data)
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                        checkToken()
+                        })
+                        .fail(function(err){
+                            console.log(err)
+                            
+                        })
+                })
+
+                $("#logOut").click(function(event){
+                    event.preventDefault()
+                    localStorage.clear()
+                    checkToken()
+                })
+
+                $("#signUp").click(function(event){
+                    event.preventDefault()
+
+                    $("#signUpForm").show()
+                    $("#signInForm").hide()
+
+                    $("#signUpForm").submit(function(event){
+                        event.preventDefault()
+                        let input ={
+                            name: $("#nameRegister").val(),
+                            email : $("#emailRegister").val(),
+                            password : $("#passwordRegister").val()
+                            
+                        }
+                        console.log("disini ", input)
+                    $.ajax({
+                        type: "POST",
+                        url: `http://www.localhost:3000/users/`,
+                        data: input
+                    })
+                    .done(function(data){
+                        $(".container").append(`
+                        <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Success!</strong> ${data.msg}.
+                        </div>
+                        `)
+                    })
+                    .fail(function(err){
+                        console.log(err)
+                    })
+                    })
+                })
+            })
+
+            function checkToken(){
+                if(localStorage.token){
+                    let input = {
+                        token: localStorage.getItem("token")
+                     }
+                    console.log("input pas cek", input)
+                    $.ajax({
+                            type: "POST",
+                            url: `http://www.localhost:3000/users/checkToken`,
+                            data: input
+                        })
+                        .done(function(data){
+                            console.log("udah cek", data)
+                            $(".userPriviledge").show()
+                            $(".signIn").hide()
+                            
+                            users_data = data
+
+                            $("#taskDisplay").show()
+                            $("#taskForm").hide()
+
+                            printList()
+                        })
+                        .fail(function(err){
+                            console.log(err)
+                            
+                        })
+                } else {
+                    $(".userPriviledge").hide()
+                    $(".signIn").show()
+                    
+                }
+            }
+
+            function printList(){
+                
+                $("#taskList").html("<span></span>")
+                $("#finishedTaskList").html("<span></span>")
+                users_data.taskList.forEach(element => {
+                    if(element.status === "pending"){
+                        $("#taskList").append(`<li id="${element._id}" class="list-group-item">${element.title}</li>`)
+                    }
+                    else{
+                        $("#finishedTaskList").append(`<li id="${element._id}" class="list-group-item">${element.title}</li>`)
+                    }
+                });
+
+                $(".list-group-item").click(function(event){
+                    $("#taskDetail").html("<span></span>")
+                    $("#taskDisplay").show()
+                    $("#taskForm").hide()
+                    // console.log($(this).attr("id"))
+                    currentTask = users_data.taskList.filter(element => element._id == $(this).attr("id"))[0]
+                    // console.log(currentTask)
+                    $("#taskDetail").append(`
+                    <h2>${currentTask.title}</h2>
+                    <h4>${currentTask.description}<h4>
+                    duedate: ${currentTask.dueDate} </br>
+                    status: ${currentTask.status}`)
+                })
+            }
+        </script>
+    
+</body>
+</html>
